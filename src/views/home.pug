@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+  body
+    h2(style='text-align:center') User Profile Card
+    .card
+      img(src='/w3images/team2.jpg' alt='John' style='width:100%')
+      h1= example.name
+      p.title=example.position
+      p=example.university
+      div(style='margin: 24px 0;')
+        a(href='#')
+          i.fa.fa-dribbble
+        a(href='#')
+          i.fa.fa-twitter
+        a(href='#')
+          i.fa.fa-linkedin
+        a(href='#')
+          i.fa.fa-facebook
+      p
+        button Contact
+    script.
+      const data = {
+          name: '#{example.name}',
+          category: '#{example.category}',
+          position: "${example.position}",
+          university: '#{example.university}',
+      };
+
