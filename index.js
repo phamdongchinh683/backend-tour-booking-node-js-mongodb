@@ -1,17 +1,20 @@
-const path = require("path");
 const express = require("express");
-const app = express();
-const port = process.env.PORT || 8888;
+const mongodb = require("./src/config");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const port = process.env.PORT;
 const router = require("./src/routers/router");
-const configureMiddleware = require("./src/middlewares");
-const viewsPath = path.join(__dirname, "src/views");
-const publicPath = path.join(__dirname, "src", "public");
+const app = express();
 
-app.use(express.static(publicPath));
-configureMiddleware(app);
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("combined"));
+
 router(app);
-app.set("views", viewsPath);
-app.set("view engine", "pug");
+mongodb();
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
