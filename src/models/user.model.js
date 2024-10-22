@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
   phoneNumber: String,
   email: String,
   age: Number,
+  role_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Role",
+    required: [ true, "Please Select a Role"],
+  },
   city: String,
   createdAt: Date,
   updatedAt: Date,

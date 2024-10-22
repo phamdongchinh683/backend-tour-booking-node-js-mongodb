@@ -1,8 +1,11 @@
 const {
   checkPasswordStrength,
   checkUsername,
+  verifyToken,
 } = require("../../controllers/auth/auth.method");
-
+const UserService = require("../../services/auth/user.service");
+const { responseStatus } = require("../../utils/handler");
+const { _tokenSecret } = require("../../utils/secretKey");
 class AuthMiddleware {
   async inputInfoUser(req, res, next) {
     let {
@@ -70,6 +73,40 @@ class AuthMiddleware {
     }
   }
 
+  async authorization(req, res, next) {
+    const authorizationToken = req.headers["token"];
+    if (!authorizationToken) {
+      responseStatus(res, 401, "failed", "Invalid authorization!");
+    }
+    try {
+      const verified = await verifyToken(authorizationToken, _tokenSecret);
+      if (!verified) {
+        responseStatus(res, 403, "failed", "You do not have access!");
+      }
+      const payload = {
+        username: verified.payload,
+      };
+      req.user = payload;
+      next();
+    } catch (error) {
+      responseStatus(res, 403, "failed", "Failed to authenticate token.");
+    }
+  }
+
+  async roleUser(req, res, next) {
+    try {
+      let getRole = await UserService.userRole(req.user.username, res);
+      let role = getRole[0].role[0];
+
+      if (role.name === "user") {
+        next();
+      } else {
+        responseStatus(res, 403, "failed", "Access Denied. User only route!");
+      }
+    } catch (error) {
+      responseStatus(res, 400, "failed", error.message);
+    }
+  }
 }
 
 module.exports = new AuthMiddleware();
