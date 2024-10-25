@@ -13,8 +13,35 @@ router.get(
   authController.getProfile
 );
 
+router.get(
+  "/my-curriculum-vitae",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.getCurriculumVitae
+);
+
+router.post(
+  "/my-curriculum-vitae/add-curriculum-vitae",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.addCurriculumVitae
+);
+
+router.put(
+  "/my-curriculum-vitae/update-curriculum-vitae",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.updateCurriculumVitae
+);
+
+router.delete(
+  "/my-curriculum-vitae/delete-curriculum-vitae",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.deleteCurriculumVitae
+);
+
 router.get("/user-list", authController.userList);
 router.post("/create-role", authController.createRole);
-// router.get("/get-role", authController.roleUser);
 
 module.exports = router;

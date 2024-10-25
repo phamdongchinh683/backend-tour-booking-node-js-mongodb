@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 const blogSchema = new mongoose.Schema({
+  user_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: [true, "Please Select a Role"],
+  },
   title: String,
   slug: String,
   published: Boolean,
@@ -17,3 +22,5 @@ const blogSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Blog", blogSchema);
+
+setTimeout;

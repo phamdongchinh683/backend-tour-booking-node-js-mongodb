@@ -96,9 +96,8 @@ class AuthMiddleware {
   async roleUser(req, res, next) {
     try {
       let getRole = await UserService.userRole(req.user.username, res);
-      let role = getRole[0].role[0];
-
-      if (role.name === "user") {
+      if (getRole.role === "User") {
+        req.user = getRole;
         next();
       } else {
         responseStatus(res, 403, "failed", "Access Denied. User only route!");

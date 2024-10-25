@@ -19,7 +19,6 @@ class AuthController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async getProfile(req, res) {
     try {
       await UserService.profile(req.user.username, res);
@@ -27,6 +26,37 @@ class AuthController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
+  async getCurriculumVitae(req, res) {
+    try {
+      await UserService.myCurriculumVitae(req.user.id, res);
+    } catch (e) {
+      responseStatus(res, 400, "failed", e.message);
+    }
+  }
+
+  async addCurriculumVitae(req, res) {
+    let userId = req.user.id;
+    const {
+      name,
+      address,
+      phoneNumber,
+      email,
+      gitHubLink,
+      website,
+      skills,
+      education,
+    } = req.body;
+
+    try {
+      await UserService.createCurriculumVitae(req.body, userId, res);
+    } catch (e) {
+      responseStatus(res, 400, "failed", e.message);
+    }
+  }
+
+  async updateCurriculumVitae(req, res) {}
+
+  async deleteCurriculumVitae(req, res) {}
 
   // manage
   async userList(req, res) {

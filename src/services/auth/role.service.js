@@ -13,6 +13,9 @@ class RoleService {
       createdAt: nowDate(),
       updatedAt: nowDate(),
     });
+    if (!roleCreated) {
+      return;
+    }
     return responseStatus(res, 200, "success", "Create role successful");
   }
 }
