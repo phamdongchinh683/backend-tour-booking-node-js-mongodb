@@ -3,9 +3,11 @@ const {
   checkUsername,
   verifyToken,
 } = require("../../controllers/auth/auth.method");
-const UserService = require("../../services/auth/user.service");
+const userService = require("../../services/auth/user.service");
+const otpService = require("../../services/auth/otp.service");
 const { responseStatus } = require("../../utils/handler");
 const { _tokenSecret } = require("../../utils/secretKey");
+
 class AuthMiddleware {
   async inputInfoUser(req, res, next) {
     let {
@@ -95,7 +97,7 @@ class AuthMiddleware {
 
   async roleUser(req, res, next) {
     try {
-      let getRole = await UserService.userRole(req.user.username, res);
+      let getRole = await userService.userRole(req.user.username, res);
       if (getRole.role === "User") {
         req.user = getRole;
         next();
@@ -104,6 +106,19 @@ class AuthMiddleware {
       }
     } catch (error) {
       responseStatus(res, 400, "failed", error.message);
+    }
+  }
+
+  async verifyOtp(req, res, next) {
+    const { otp } = req.body;
+    try {
+      let verify = await otpService.verifyOtp(otp, res);
+      if (verify) {
+        req.user = verify;
+        next();
+      }
+    } catch (e) {
+      responseStatus(res, 400, "failed", e.message);
     }
   }
 }

@@ -1,5 +1,6 @@
 const User = require("../../models/user.model");
 const CurriculumVitae = require("../../models/curriculumVitae.model");
+const Tour = require("../../models/tour.model");
 const { _tokenLife, _tokenSecret } = require("../../utils/secretKey");
 const { comparePassword } = require("../../utils/hashHelper");
 const {
@@ -73,41 +74,15 @@ class UserService {
     }
     return responseStatus(res, 200, "success", userInfo);
   }
-  async myCurriculumVitae(id, res) {
-    let myCv = await CurriculumVitae.findOne({
-      user_id: id,
-    });
-    if (!myCv || myCv.length === 0) {
-      return responseStatus(res, 400, "failed", "No users found");
+  async newPasswordByOtp(email, newPassword, res) {
+    let updatePassword = await User.updateOne(
+      { email: email },
+      { $set: { password: newPassword } }
+    );
+    if (!updatePassword) {
+      return responseStatus(res, 402, "failed", "Update failed");
     }
-    return responseStatus(res, 200, "success", myCv);
-  }
-  async createCurriculumVitae(info, id, res) {
-    
-    const educations = info.education.map((value) => {
-      return value;
-    });
-    let infoDetails = info.personal_details;
-    let infoSkills = info.skills;
-
-    let createCv = await CurriculumVitae.create({
-      user_id: id,
-      personal_details: {
-        name: infoDetails.name,
-        address: infoDetails.address,
-        email: infoDetails.email,
-        phone: infoDetails.phoneNumber,
-        github: infoDetails.github,
-        website: infoDetails.website,
-      },
-      education: educations,
-      skills: infoSkills,
-    });
-
-    if (!createCv) {
-      return responseStatus(res, 402, "failed", "Enter complete information");
-    }
-    return responseStatus(res, 200, "success", "Upload completed successfully");
+    return responseStatus(res, 200, "success", "Update password successfully");
   }
 }
 

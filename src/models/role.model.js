@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const roleSchema = new mongoose.Schema({
+const otpSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please Add Role"],
@@ -8,4 +8,4 @@ const roleSchema = new mongoose.Schema({
   updatedAt: Date,
 });
 
-module.exports = mongoose.model("Role", roleSchema);
+module.exports = mongoose.model("Role", otpSchema);

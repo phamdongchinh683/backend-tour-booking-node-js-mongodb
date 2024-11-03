@@ -17,6 +17,13 @@ const blogSchema = new mongoose.Schema({
       user: String,
       content: String,
       votes: Number,
+      reply: [
+        {
+          userId: String,
+          comment: String,
+          votes: Number,
+        },
+      ],
     },
   ],
 });

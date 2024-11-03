@@ -7,7 +7,6 @@ const _dbConnect = async () => {
   await mongoose
     .connect(`${_url}/${_dbName}`)
     .then(() => {
-      console.log(mongoose.connections.length);
       console.log("Database connected! ".yellow.bold);
     })
     .catch((err) => {

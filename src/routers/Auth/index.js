@@ -27,18 +27,26 @@ router.post(
   authController.addCurriculumVitae
 );
 
-router.put(
-  "/my-curriculum-vitae/update-curriculum-vitae",
+router.get(
+  "/tour-list",
   authMiddleware.authorization,
   authMiddleware.roleUser,
-  authController.updateCurriculumVitae
+  authController.getTour
 );
 
-router.delete(
-  "/my-curriculum-vitae/delete-curriculum-vitae",
+router.post(
+  "/create-tour",
   authMiddleware.authorization,
   authMiddleware.roleUser,
-  authController.deleteCurriculumVitae
+  authController.addTour
+);
+
+router.post("/send-otp", authController.forgotPassword);
+
+router.post(
+  "/new-password",
+  authMiddleware.verifyOtp,
+  authController.newPassword
 );
 
 router.get("/user-list", authController.userList);
