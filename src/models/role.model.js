@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const otpSchema = new mongoose.Schema({
+const roleSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please Add Role"],
+    required: true,
   },
   createdAt: Date,
   updatedAt: Date,
 });
 
-module.exports = mongoose.model("Role", otpSchema);
+module.exports = mongoose.model("Role", roleSchema);

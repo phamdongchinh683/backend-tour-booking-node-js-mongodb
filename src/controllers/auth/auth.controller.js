@@ -1,9 +1,8 @@
 const UserService = require("../../services/auth/user.service");
-const roleService = require("../../services/auth/role.service");
+const roleService = require("../../services/admin/role.service");
 const { responseStatus } = require("../../utils/handler");
 const { hashPassword } = require("../../utils/hashHelper");
-const TourService = require("../../services/auth/tour.service");
-const curriculumVitaeService = require("../../services/auth/curriculumVitae.service");
+const TourService = require("../../services/admin/tour.service");
 const otpService = require("../../services/auth/otp.service");
 class AuthController {
   async signUp(req, res) {
@@ -29,33 +28,6 @@ class AuthController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-  async getCurriculumVitae(req, res) {
-    try {
-      await curriculumVitaeService.myCurriculumVitae(req.user.id, res);
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async addCurriculumVitae(req, res) {
-    let userId = req.user.id;
-    const {
-      name,
-      address,
-      phoneNumber,
-      email,
-      gitHubLink,
-      website,
-      skills,
-      education,
-    } = req.body;
-
-    try {
-      await UserService.createCurriculumVitae(req.body, userId, res);
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
-
   async forgotPassword(req, res) {
     const { email } = req.body;
     try {
@@ -66,7 +38,6 @@ class AuthController {
     }
   }
   async newPassword(req, res) {
-    console.log("this is req.user from middleware", req.user);
     const { password } = req.body;
     let newPassword = await hashPassword(password);
     try {
@@ -76,40 +47,6 @@ class AuthController {
     }
   }
 
-  // manage
-  async userList(req, res) {
-    try {
-      await UserService.getAllUsers(res);
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
-
-  async createRole(req, res) {
-    const { nameRole } = req.body;
-    try {
-      await roleService.createRole(nameRole, res);
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
-
-  async getTour(req, res) {
-    try {
-      await TourService.tourList(res);
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
-
-  async addTour(req, res) {
-    const { cityName, days, price, avatar } = req.body;
-    try {
-      await TourService.createTour(req.body, res);
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
 }
 
 module.exports = new AuthController();

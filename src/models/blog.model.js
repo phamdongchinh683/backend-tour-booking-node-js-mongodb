@@ -3,31 +3,37 @@ const blogSchema = new mongoose.Schema({
   user_id: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
-    required: [true, "Please Select a Role"],
+    required: true,
   },
-  title: String,
-  slug: String,
-  published: Boolean,
-  author: String,
-  content: String,
-  createdAt: Date,
-  updatedAt: Date,
+  title: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+  },
   comments: [
     {
-      user: String,
-      content: String,
-      votes: Number,
-      reply: [
-        {
-          userId: String,
-          comment: String,
-          votes: Number,
-        },
-      ],
+      user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      comment_content: {
+        type: String,
+        trim: true,
+      },
+      createAt: {
+        type: Date,
+      },
     },
   ],
+  updateAt: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("Blog", blogSchema);
-
-setTimeout;

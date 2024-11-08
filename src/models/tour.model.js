@@ -1,20 +1,40 @@
 const mongoose = require("mongoose");
 const tourSchema = new mongoose.Schema({
-  cityName: {
+  city: {
     type: String,
-    required: true,
   },
+  attractions: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   days: {
     type: String,
-    required: true,
   },
-  price: {
-    type: String,
-    required: true,
+  prices: {
+    adult: {
+      type: String,
+    },
+    child: {
+      type: String,
+    },
   },
-  avatar: {
-    type: String,
-    required: true,
+  guides: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
+  images: [
+    {
+      type: String,
+      required: [true, "Please select a image"],
+    },
+  ],
+  createAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

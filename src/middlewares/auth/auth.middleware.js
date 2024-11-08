@@ -16,7 +16,7 @@ class AuthMiddleware {
       username,
       password,
       address,
-      phoneNumber,
+      phone,
       email,
       age,
       city,
@@ -55,7 +55,7 @@ class AuthMiddleware {
       if (typeof firstName !== "string" || typeof lastName !== "string") {
         return res.json("firstName or lastName is not valid");
       }
-      if (typeof phoneNumber !== "string") {
+      if (typeof phone !== "string") {
         return res.json({ Error: "type of phoneNumber must be string" });
       }
       const numericAge = Number(age);
@@ -97,12 +97,17 @@ class AuthMiddleware {
 
   async roleUser(req, res, next) {
     try {
-      let getRole = await userService.userRole(req.user.username, res);
-      if (getRole.role === "User") {
-        req.user = getRole;
+      let role = await userService.userRole(req.user.username, res);
+      if (role === "Traveler") {
+        req.user;
         next();
       } else {
-        responseStatus(res, 403, "failed", "Access Denied. User only route!");
+        responseStatus(
+          res,
+          403,
+          "failed",
+          "Access Denied. Traveler only route!"
+        );
       }
     } catch (error) {
       responseStatus(res, 400, "failed", error.message);

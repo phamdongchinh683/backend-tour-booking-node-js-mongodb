@@ -13,34 +13,6 @@ router.get(
   authController.getProfile
 );
 
-router.get(
-  "/my-curriculum-vitae",
-  authMiddleware.authorization,
-  authMiddleware.roleUser,
-  authController.getCurriculumVitae
-);
-
-router.post(
-  "/my-curriculum-vitae/add-curriculum-vitae",
-  authMiddleware.authorization,
-  authMiddleware.roleUser,
-  authController.addCurriculumVitae
-);
-
-router.get(
-  "/tour-list",
-  authMiddleware.authorization,
-  authMiddleware.roleUser,
-  authController.getTour
-);
-
-router.post(
-  "/create-tour",
-  authMiddleware.authorization,
-  authMiddleware.roleUser,
-  authController.addTour
-);
-
 router.post("/send-otp", authController.forgotPassword);
 
 router.post(
@@ -48,8 +20,5 @@ router.post(
   authMiddleware.verifyOtp,
   authController.newPassword
 );
-
-router.get("/user-list", authController.userList);
-router.post("/create-role", authController.createRole);
 
 module.exports = router;
