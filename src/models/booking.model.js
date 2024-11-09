@@ -42,4 +42,6 @@ const bookingSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
+bookingSchema.index({ user_id: 1, guide_id: 1, tour_id: 1 });
+
 module.exports = mongoose.model("Booking", bookingSchema);

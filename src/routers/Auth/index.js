@@ -42,12 +42,39 @@ router.post(
   authController.commentBlog
 );
 
+router.put(
+  "/edit-comment/:id",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.updateComment
+);
+router.delete(
+  "/remove-comment/:id",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.removeComment
+);
+
 router.post(
-  "/book-tour/:tourId/",
+  "/book-tour/:tourId",
   authMiddleware.authorization,
   authMiddleware.roleUser,
   authMiddleware.createTour,
   authController.tourPayment
+);
+
+router.get(
+  "/my-book-tour",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.getBookedList
+);
+
+router.post(
+  "/evaluate-guide/:guideId",
+  authMiddleware.authorization,
+  authMiddleware.roleUser,
+  authController.evaluateGuide
 );
 
 router.post("/send-otp", authController.forgotPassword);
