@@ -98,8 +98,8 @@ class AuthMiddleware {
   async roleUser(req, res, next) {
     try {
       let role = await userService.userRole(req.user.username, res);
-      if (role === "Traveler") {
-        req.user;
+      if (role.role_id.name === "Traveler" || "Guide") {
+        req.user = role;
         next();
       } else {
         responseStatus(
@@ -122,6 +122,27 @@ class AuthMiddleware {
         req.user = verify;
         next();
       }
+    } catch (e) {
+      responseStatus(res, 400, "failed", e.message);
+    }
+  }
+
+  async createTour(req, res, next) {
+    let tourId = req.params.tourId;
+    let userId = req.user._id;
+    let { guideId, numberVisitor, startTour, startTime, endTime } = req.body;
+    try {
+      let infoBook = {
+        userId,
+        tourId,
+        guideId,
+        numberVisitor,
+        startTour,
+        startTime,
+        endTime,
+      };
+      req.infoBook = infoBook;
+      next();
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
     }

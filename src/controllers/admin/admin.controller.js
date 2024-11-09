@@ -68,10 +68,10 @@ class AdminController {
     }
   }
 
-  async updateTours(req, res) {
-    const { tours } = req.body;
+  async updateTour(req, res) {
+    const { tour } = req.body;
     try {
-      await tourService.updateTour(tours, res);
+      await tourService.updateTour(tour, res);
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
     }
@@ -80,7 +80,7 @@ class AdminController {
   async deleteTours(req, res) {
     const { tours } = req.body;
     try {
-      await tourService.deleteTours(tours, res);
+      await tourService.deleteTour(tours, res);
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
     }

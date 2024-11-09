@@ -45,6 +45,20 @@ router.post(
   adminController.addTour
 );
 
+router.put(
+  "/manage-tour/update-tour",
+  authMiddleware.authorization,
+  adminMiddleware.adminRole,
+  adminController.updateTour
+);
+
+router.delete(
+  "/manage-tour/remove-tour",
+  authMiddleware.authorization,
+  adminMiddleware.adminRole,
+  adminController.deleteTours
+);
+
 router.get(
   "/manage-tour/tour-list",
   authMiddleware.authorization,

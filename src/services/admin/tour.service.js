@@ -1,6 +1,6 @@
 const Tour = require("../../models/tour.model");
 const { responseStatus } = require("../../utils/handler");
-
+const { nowDate } = require("../../controllers/auth/auth.method");
 class TourService {
   async tourList(res) {
     let tours = await Tour.find().populate("guides", "fullName").lean();
@@ -45,9 +45,37 @@ class TourService {
     return responseStatus(res, 200, "success", "Tour created successfully");
   }
 
-  async updateTours(infoTour, res) {}
+  async updateTour(infoTour, res) {
+    const result = await Tour.updateOne(
+      { _id: infoTour.id },
+      {
+        $set: {
+          city: infoTour.city,
+          attractions: infoTour.attractions,
+          days: infoTour.days,
+          prices: {
+            adult: infoTour.prices.adult,
+            child: infoTour.prices.child,
+          },
+          guides: infoTour.guides,
+          images: infoTour.images,
+          updateAt: nowDate(),
+        },
+      }
+    );
 
-  async deleteTour(infoTour, res) {}
+    if (result.matchedCount === 0) {
+      return responseStatus(res, 400, "failed", "No tours were updated");
+    }
+    return responseStatus(res, 200, "success", "Updated");
+  }
+  async deleteTour(list, res) {
+    let removeTours = await Tour.deleteMany({ _id: { $in: list } });
+    if (removeTours.modifiedCount > 0) {
+      return responseStatus(res, 400, "failed", "No tours were Deleted");
+    }
+    return responseStatus(res, 200, "success", "Deleted");
+  }
 }
 
 module.exports = new TourService();

@@ -25,7 +25,7 @@ class OtpService {
   }
 
   async verifyOtp(otp, res) {
-    let checkOtp = await Otp.find({ otp: otp }, { email: 1, _id: 0 });
+    let checkOtp = await Otp.find({ otp: otp }, { email: 1, _id: 0 }).lean();
     if (checkOtp.length === 0) {
       return responseStatus(res, 402, "failed", "Invalid otp");
     }

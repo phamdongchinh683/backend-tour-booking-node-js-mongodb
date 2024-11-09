@@ -64,12 +64,17 @@ class AdminService {
   }
 
   async updateUser(info, res) {
+    const [hashPassword, roleId] = await Promise.all([
+      hashPassword(info.password),
+      this.getRoleIdByName(info.role),
+    ]);
+
     const result = await User.updateOne(
       { _id: info.id },
       {
         $set: {
           username: info.username,
-          password: await hashPassword(value.password),
+          password: hashPassword,
           fullName: {
             firstName: info.firstName,
             lastName: info.lastName,
@@ -80,25 +85,25 @@ class AdminService {
             email: info.email,
             phone: info.phone,
           },
-          role_id: await this.getRoleIdByName(value.role),
-          createdAt: nowDate(),
+          role_id: roleId,
+          updateAt: nowDate(),
         },
       }
     );
 
-    if (result.modifiedCount > 0) {
-      return responseStatus(res, 200, "success", "Users updated successfully");
-    } else {
+    if (result.matchedCount === 0) {
       return responseStatus(res, 400, "failed", "No users were updated");
+    } else {
+      return responseStatus(res, 200, "success", "Users updated successfully");
     }
   }
 
   async deleteUsers(list, res) {
     let deleteUsers = await User.deleteMany({ _id: { $in: list } });
     if (deleteUsers.modifiedCount > 0) {
-      return responseStatus(res, 200, "success", "Deleted");
+      return responseStatus(res, 400, "failed", "No users were updated");
     }
-    return responseStatus(res, 400, "failed", "No users were updated");
+    return responseStatus(res, 200, "success", "Deleted");
   }
 
   // manage guide

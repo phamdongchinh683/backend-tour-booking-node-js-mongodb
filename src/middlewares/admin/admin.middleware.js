@@ -23,18 +23,7 @@ class AdminMiddleware {
     }
   }
 
-  async verifyOtp(req, res, next) {
-    const { otp } = req.body;
-    try {
-      let verify = await otpService.verifyOtp(otp, res);
-      if (verify) {
-        req.user = verify;
-        next();
-      }
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
+
 }
 
 module.exports = new AdminMiddleware();
