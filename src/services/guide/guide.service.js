@@ -13,7 +13,6 @@ class GuildService {
     }
     return getRole.role_id.name;
   }
-
   async profile(username, res) {
     let userInfo = await Guide.findOne({ username: username }).lean();
     if (!userInfo) {

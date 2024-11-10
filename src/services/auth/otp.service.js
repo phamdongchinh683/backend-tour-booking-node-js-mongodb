@@ -23,7 +23,6 @@ class OtpService {
       await mailSender(emailContent, res);
     }
   }
-
   async verifyOtp(otp, res) {
     let checkOtp = await Otp.find({ otp: otp }, { email: 1, _id: 0 }).lean();
     if (checkOtp.length === 0) {

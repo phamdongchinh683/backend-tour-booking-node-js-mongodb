@@ -16,5 +16,5 @@ const otpSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
-
+otpSchema.index = { email: 1 };
 module.exports = mongoose.model("Otp", otpSchema);

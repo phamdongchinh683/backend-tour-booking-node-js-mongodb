@@ -55,5 +55,4 @@ const userSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
-
 module.exports = mongoose.model("User", userSchema);

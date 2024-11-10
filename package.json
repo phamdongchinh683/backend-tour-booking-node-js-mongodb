@@ -27,7 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "jsonwebtoken-promisified": "^1.0.3",
     "mongodb": "^6.9.0",
-    "mongoose": "^8.7.2",
+    "mongoose": "^5.13.22",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.5",

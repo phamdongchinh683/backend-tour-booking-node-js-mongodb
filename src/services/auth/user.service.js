@@ -5,13 +5,10 @@ const Comment = require("../../models/comment.model");
 const Payment = require("../../models/payment.model");
 const Booking = require("../../models/booking.model");
 const Review = require("../../models/review.model");
-
 const { _tokenLife, _tokenSecret } = require("../../utils/secretKey");
 const { comparePassword } = require("../../utils/hashHelper");
-const {
-  nowDate,
-  generateToken,
-} = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../controllers/auth/auth.method");
+const { generateToken } = require("../../utils/tokenGenerator");
 const { responseStatus } = require("../../utils/handler");
 
 class UserService {
@@ -22,7 +19,6 @@ class UserService {
     }
     return role._id;
   }
-
   async userRole(username, res) {
     let getRole = await User.findOne({ username: username })
       .select("role_id")
@@ -33,10 +29,8 @@ class UserService {
     }
     return getRole;
   }
-
   async saveUser(param, password, res) {
-    const roleId = await this.getRoleIdByName(param.role).lean();
-
+    const roleId = await this.getRoleIdByName(param.role);
     let userCreated = await User.create({
       username: param.username,
       password: password,
@@ -54,12 +48,10 @@ class UserService {
       role_id: roleId,
       createdAt: nowDate(),
     });
-    if (!userCreated) {
-      return responseStatus(res, 402, "failed", "User already exists");
+    if (userCreated) {
+      return responseStatus(res, 200, "success", "Signup successful");
     }
-    return responseStatus(res, 200, "success", "Signup successful");
   }
-
   async findUser(username, password, res) {
     let user = await User.findOne({ username: username })
       .select("username password")
@@ -87,10 +79,9 @@ class UserService {
     let accessToken = await generateToken(data, _tokenSecret, _tokenLife);
     return responseStatus(res, 200, "success", accessToken);
   }
-
   async profile(id, res) {
     let userInfo = await User.findOne({ _id: id })
-      .select("-role_id -username -password")
+      .select("-role_id -username -password -__v")
       .lean();
     if (!userInfo) {
       return responseStatus(res, 402, "failed", "Not found your profile");
@@ -114,7 +105,6 @@ class UserService {
       "New password updated successfully"
     );
   }
-
   async addBlog(id, infoBlog, res) {
     let create = await Blog.create({
       user_id: id,
@@ -127,7 +117,25 @@ class UserService {
       return responseStatus(res, 200, "success", "Post a blog successfully");
     }
   }
-
+  async editBlog(id, newInfo, res) {
+    let updateBlog = await Blog.findByIdAndUpdate(id, {
+      title: newInfo.title,
+      content: newInfo.newContent,
+      images: newInfo.images,
+      updateAt: nowDate(),
+    });
+    if (!updateBlog) {
+      return responseStatus(res, 400, "failed", "Nothing has changed");
+    }
+    return responseStatus(res, 200, "success", "updated my blog");
+  }
+  async deleteBlog(id, res) {
+    let removeBlog = await Blog.findByIdAndDelete(id);
+    if (removeBlog) {
+      return responseStatus(res, 200, "success", "The blog has been deleted");
+    }
+    return responseStatus(res, 400, "failed", "This blog does not exist");
+  }
   async commentBlog(blogId, userId, commentContent, res) {
     let comment = await Comment.create({
       blog_id: blogId,
@@ -143,7 +151,6 @@ class UserService {
       return responseStatus(res, 200, "success", "commented");
     }
   }
-
   async editComment(id, comment, res) {
     let updateComment = await Comment.updateOne(
       {
@@ -158,11 +165,10 @@ class UserService {
     );
 
     if (updateComment.modifiedCount > 0) {
-      return responseStatus(res, 200, "success", "updatedComment");
+      return responseStatus(res, 200, "success", "updated comment");
     }
-    return responseStatus(res, 400, "success", "Nothing has changed");
+    return responseStatus(res, 400, "failed", "Nothing has changed");
   }
-
   async deleteComment(id, res) {
     let removeComment = await Comment.findByIdAndDelete(id);
     if (removeComment) {
@@ -175,7 +181,6 @@ class UserService {
     }
     return responseStatus(res, 400, "failed", "This comment does not exist");
   }
-
   async getAllBlog(id, res) {
     let blogs = await Blog.find({
       user_id: id,
@@ -193,7 +198,6 @@ class UserService {
     }
     return responseStatus(res, 200, "success", blogs);
   }
-
   async detailBlog(id, res) {
     let blog = await Blog.findById(id)
       .select("-user_id -updatedAt")
@@ -212,7 +216,6 @@ class UserService {
     }
     return responseStatus(res, 200, "success", blog);
   }
-
   async bookTour(tourId, userId, infoBooking, res) {
     let bookingTour = await Booking.create({
       tour_id: tourId,
@@ -229,7 +232,6 @@ class UserService {
       ? responseStatus(res, 200, "success", "Successfully booked the tour")
       : null;
   }
-
   async tourPayment(infoBook, req, res) {
     const { status, cardNumber, totalAmount } = req.body;
 
@@ -257,7 +259,6 @@ class UserService {
     });
     return responseStatus(res, 200, "success", createPayment);
   }
-
   async bookedList(id, res) {
     let getBooked = await Booking.find({ user_id: id })
       .populate([
@@ -277,7 +278,6 @@ class UserService {
           "You haven't booked any tours yet, try booking one"
         );
   }
-
   async evaluateGuide(guideId, id, review, res) {
     let postEvaluate = new Review({
       user_id: id,

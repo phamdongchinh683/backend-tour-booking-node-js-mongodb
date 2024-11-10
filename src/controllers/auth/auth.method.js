@@ -78,62 +78,6 @@ function checkUsername(username) {
   }
 }
 
-async function generateToken(payload, secretSignature, tokenLife) {
-  try {
-    return await sign(
-      {
-        payload,
-      },
-      secretSignature,
-      {
-        algorithm: "HS256",
-        expiresIn: tokenLife,
-      }
-    );
-  } catch (error) {
-    if (error instanceof TypeError) {
-      console.error("Type Error occurred:", error.message);
-    } else if (error instanceof ReferenceError) {
-      console.error("Reference error occurred:", error.message);
-    } else {
-      console.error("Not create accessToken");
-    }
-    return null;
-  }
-}
-
-async function verifyToken(token, secretKey) {
-  try {
-    return await verify(token, secretKey);
-  } catch (error) {
-    if (error instanceof TypeError) {
-      console.error("Type Error occurred:", error.message);
-    } else if (error instanceof ReferenceError) {
-      console.error("Reference error occurred:", error.message);
-    } else {
-      console.error("Error in verifying access token:", error.message);
-    }
-    return null;
-  }
-}
-
-async function decodeToken(token, secretKey) {
-  try {
-    return await verify(token, secretKey, {
-      ignoreExpiration: false,
-    });
-  } catch (error) {
-    if (error instanceof TypeError) {
-      console.error("Type Error occurred:", error.message);
-    } else if (error instanceof ReferenceError) {
-      console.error("Reference error occurred:", error.message);
-    } else {
-      console.error(`Error in decode access token: ${error}`);
-    }
-    return null;
-  }
-}
-
 function nowDate() {
   const dateObj = new Date();
   const month = dateObj.getUTCMonth() + 1;
@@ -147,7 +91,4 @@ module.exports = {
   checkPasswordStrength,
   checkUsername,
   nowDate,
-  decodeToken,
-  verifyToken,
-  generateToken,
 };

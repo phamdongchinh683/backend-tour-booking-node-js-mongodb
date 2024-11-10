@@ -12,7 +12,6 @@ class AdminService {
     }
     return role._id;
   }
-
   // role
   async adminRole(username, res) {
     let getRole = await User.findOne({ username: username })
@@ -24,7 +23,6 @@ class AdminService {
     }
     return getRole.role_id.name;
   }
-
   //manage user
   async getAllUsers(res) {
     let users = await User.find();
@@ -33,7 +31,6 @@ class AdminService {
     }
     return responseStatus(res, 200, "success", users);
   }
-
   async saveUsers(info, res) {
     let users = await Promise.all(
       info.map(async (value) => {
@@ -62,7 +59,6 @@ class AdminService {
     }
     return responseStatus(res, 200, "success", "Created");
   }
-
   async updateUser(info, res) {
     const [hashPassword, roleId] = await Promise.all([
       hashPassword(info.password),
@@ -97,7 +93,6 @@ class AdminService {
       return responseStatus(res, 200, "success", "Users updated successfully");
     }
   }
-
   async deleteUsers(list, res) {
     let deleteUsers = await User.deleteMany({ _id: { $in: list } });
     if (deleteUsers.modifiedCount > 0) {
@@ -105,7 +100,6 @@ class AdminService {
     }
     return responseStatus(res, 200, "success", "Deleted");
   }
-
   // manage guide
   async getAllGuides(res) {
     let roleGuide = await Role.findOne({ name: "Guide" }).lean();

@@ -10,5 +10,5 @@ const roleSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
-
+roleSchema.index = ({ name: 1 });
 module.exports = mongoose.model("Role", roleSchema);

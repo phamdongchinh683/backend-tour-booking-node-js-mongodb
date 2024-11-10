@@ -25,11 +25,17 @@ const blogSchema = new mongoose.Schema(
         ref: "Comment",
       },
     ],
+    createAt: {
+      type: Date,
+    },
+    updateAt: {
+      type: Date,
+    },
   },
   {
     versionKey: false,
     timestamps: true,
   }
 );
-
+blogSchema.index({ user_id: 1 });
 module.exports = mongoose.model("Blog", blogSchema);

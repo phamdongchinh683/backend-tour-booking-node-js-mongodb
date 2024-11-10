@@ -1,12 +1,5 @@
-const { Admin } = require("mongodb");
-const {
-  checkPasswordStrength,
-  checkUsername,
-} = require("../../controllers/auth/auth.method");
 const adminService = require("../../services/admin/admin.service");
-const otpService = require("../../services/auth/otp.service");
 const { responseStatus } = require("../../utils/handler");
-const roleModel = require("../../models/role.model");
 
 class AdminMiddleware {
   async adminRole(req, res, next) {
@@ -22,8 +15,6 @@ class AdminMiddleware {
       responseStatus(res, 400, "failed", error.message);
     }
   }
-
-
 }
 
 module.exports = new AdminMiddleware();

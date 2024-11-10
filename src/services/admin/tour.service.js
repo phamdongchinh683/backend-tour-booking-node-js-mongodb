@@ -9,7 +9,6 @@ class TourService {
     }
     return responseStatus(res, 200, "success", tours);
   }
-
   async createTours(infoTours, res) {
     let tours = infoTours.map((tour) => {
       let locations = tour.attractions.map((attraction) => {
@@ -44,7 +43,6 @@ class TourService {
     }
     return responseStatus(res, 200, "success", "Tour created successfully");
   }
-
   async updateTour(infoTour, res) {
     const result = await Tour.updateOne(
       { _id: infoTour.id },

@@ -40,5 +40,4 @@ const tourSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
-
 module.exports = mongoose.model("Tour", tourSchema);

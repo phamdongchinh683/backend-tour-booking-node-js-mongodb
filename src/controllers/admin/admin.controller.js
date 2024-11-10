@@ -1,5 +1,4 @@
 const { responseStatus } = require("../../utils/handler");
-
 const adminService = require("../../services/admin/admin.service");
 const roleService = require("../../services/admin/role.service");
 const tourService = require("../../services/admin/tour.service");
@@ -22,7 +21,6 @@ class AdminController {
       }
     }
   }
-
   async updateUsers(req, res) {
     const { users } = req.body;
     try {
@@ -39,7 +37,6 @@ class AdminController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   // manage role
   async createRole(req, res) {
     const { nameRole } = req.body;
@@ -49,7 +46,6 @@ class AdminController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   // manage tour
   async addTour(req, res) {
     const { tours } = req.body;
@@ -59,7 +55,6 @@ class AdminController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async getTours(req, res) {
     try {
       await tourService.tourList(res);
@@ -67,7 +62,6 @@ class AdminController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async updateTour(req, res) {
     const { tour } = req.body;
     try {
@@ -76,7 +70,6 @@ class AdminController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async deleteTours(req, res) {
     const { tours } = req.body;
     try {
@@ -85,7 +78,6 @@ class AdminController {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-
   // manage guides
   async guideList(req, res) {
     try {

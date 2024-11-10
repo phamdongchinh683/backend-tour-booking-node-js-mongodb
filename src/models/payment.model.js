@@ -28,5 +28,4 @@ const paymentSchema = new Schema(
   },
   { versionKey: false }
 );
-
 module.exports = mongoose.model("Payment", paymentSchema);
