@@ -36,12 +36,18 @@ class TourService {
         createdAt: tour.createAt || nowDate(),
       };
     });
-
     let createTour = await Tour.insertMany(tours);
     if (!createTour) {
       return responseStatus(res, 402, "failed", "Enter complete information");
     }
     return responseStatus(res, 200, "success", "Tour created successfully");
+  }
+  async detailTour(id, res) {
+    let tour = await Tour.findById(id).lean();
+    if (!tour) {
+      return responseStatus(res, 400, "failed", "No tours were updated");
+    }
+    return responseStatus(res, 200, "success", tour);
   }
   async updateTour(infoTour, res) {
     const result = await Tour.updateOne(
@@ -69,7 +75,7 @@ class TourService {
   }
   async deleteTour(list, res) {
     let removeTours = await Tour.deleteMany({ _id: { $in: list } });
-    if (removeTours.modifiedCount > 0) {
+    if (removeTours.deletedCount === 0) {
       return responseStatus(res, 400, "failed", "No tours were Deleted");
     }
     return responseStatus(res, 200, "success", "Deleted");

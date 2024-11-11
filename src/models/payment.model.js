@@ -25,6 +25,9 @@ const paymentSchema = new Schema(
     createAt: {
       type: Date,
     },
+    updateAt: {
+      type: Date,
+    },
   },
   { versionKey: false }
 );

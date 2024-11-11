@@ -18,7 +18,6 @@ class AuthMiddleware {
         username: verified.payload,
       };
       req.user = payload;
-      console.log(payload);
       next();
     } catch (error) {
       return responseStatus(

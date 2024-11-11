@@ -21,11 +21,11 @@ class AdminService {
     if (!getRole) {
       return responseStatus(res, 400, "failed", "You have not role");
     }
-    return getRole.role_id.name;
+    return getRole;
   }
   //manage user
   async getAllUsers(res) {
-    let users = await User.find();
+    let users = await User.find().lean().exec();
     if (!users || users.length === 0) {
       return responseStatus(res, 400, "failed", "No users found");
     }
@@ -59,18 +59,25 @@ class AdminService {
     }
     return responseStatus(res, 200, "success", "Created");
   }
+  async userDetailById(id, res) {
+    let user = await User.findById(id).lean();
+    if (!user) {
+      return responseStatus(res, 400, "failed", "Not Found");
+    } else {
+      return responseStatus(res, 200, "success", user);
+    }
+  }
   async updateUser(info, res) {
-    const [hashPassword, roleId] = await Promise.all([
+    const [hashedPassword, roleId] = await Promise.all([
       hashPassword(info.password),
       this.getRoleIdByName(info.role),
     ]);
-
     const result = await User.updateOne(
       { _id: info.id },
       {
         $set: {
           username: info.username,
-          password: hashPassword,
+          password: hashedPassword,
           fullName: {
             firstName: info.firstName,
             lastName: info.lastName,
@@ -86,7 +93,6 @@ class AdminService {
         },
       }
     );
-
     if (result.matchedCount === 0) {
       return responseStatus(res, 400, "failed", "No users were updated");
     } else {
@@ -95,10 +101,10 @@ class AdminService {
   }
   async deleteUsers(list, res) {
     let deleteUsers = await User.deleteMany({ _id: { $in: list } });
-    if (deleteUsers.modifiedCount > 0) {
-      return responseStatus(res, 400, "failed", "No users were updated");
+    if (deleteUsers.deletedCount > 0) {
+      return responseStatus(res, 200, "success", "Deleted");
     }
-    return responseStatus(res, 200, "success", "Deleted");
+    return responseStatus(res, 400, "failed", "No users were updated");
   }
   // manage guide
   async getAllGuides(res) {

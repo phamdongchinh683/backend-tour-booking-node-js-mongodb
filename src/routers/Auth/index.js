@@ -21,7 +21,7 @@ router.get("/blog/:id", authController.detailBlog);
 router.put("/edit-blog/:id", authController.editBlog);
 router.delete("/remove-blog/:id", authController.removeBlog);
 router.post("/comment-blog/:id", authController.commentBlog);
-router.put("/edit-comment/:id", authController.updateComment);
+router.patch("/edit-comment/:id", authController.updateComment);
 router.delete("/remove-comment/:id", authController.removeComment);
 router.post(
   "/book-tour/:tourId",

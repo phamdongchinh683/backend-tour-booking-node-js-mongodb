@@ -2,6 +2,7 @@ const { responseStatus } = require("../../utils/handler");
 const { hashPassword } = require("../../utils/hashHelper");
 const UserService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
+const commentService = require("../../services/admin/comment.service");
 class AuthController {
   // auth
   async signUp(req, res) {
@@ -97,9 +98,9 @@ class AuthController {
     }
   }
   async removeComment(req, res) {
-    let commentId = req.params.id;
+    let { commentIds } = req.body;
     try {
-      await UserService.deleteComment(commentId, res);
+      await commentService.deleteComments(commentIds, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

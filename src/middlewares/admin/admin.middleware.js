@@ -5,8 +5,8 @@ class AdminMiddleware {
   async adminRole(req, res, next) {
     try {
       let role = await adminService.adminRole(req.user.username, res);
-      if (role === "Admin") {
-        req.user;
+      if (role.role_id.name === "Admin") {
+        req.user = role;
         next();
       } else {
         responseStatus(res, 403, "failed", "Access Denied. Admin only route!");
