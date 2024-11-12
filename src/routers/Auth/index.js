@@ -5,14 +5,13 @@ const authMiddleware = require("../../middlewares/auth/auth.middleware");
 const { infoUser } = require("../../validations/board.validation");
 // public routers
 router.post("/sign-up", infoUser, authController.signUp);
-router.get("/login", authController.login);
+router.post("/login", authController.login);
 router.post("/send-otp", authController.forgotPassword);
 router.post(
   "/new-password",
   authMiddleware.verifyOtp,
   authController.newPassword
-);
-// protected router
+); // protected router
 router.use(authMiddleware.authorization, authMiddleware.roleUser);
 router.get("/profile", authController.getProfile);
 router.post("/post-blog", authController.postBlog);

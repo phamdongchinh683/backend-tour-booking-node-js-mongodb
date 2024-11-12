@@ -27,7 +27,12 @@ class BlogService {
     }
   }
   async detailBlog(id, res) {
-    let blog = await Blog.findById(id).populate("comments").lean().exec();
+    let blog = await Blog.findById(id)
+      .populate({
+        path: "comments",
+      })
+      .lean()
+      .exec();
     if (!blog) {
       return responseStatus(
         res,
