@@ -14,14 +14,14 @@ class AdminController {
     try {
       await adminService.getAllUsers(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async guideList(req, res) {
     try {
       await adminService.getAllGuides(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async userDetail(req, res) {
@@ -29,7 +29,7 @@ class AdminController {
     try {
       await adminService.userDetailById(userId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async addUsers(req, res) {
@@ -38,8 +38,9 @@ class AdminController {
       await adminService.saveUsers(users, res);
     } catch (e) {
       if (e.code === 11000) {
-        responseStatus(res, 400, "failed", "Exited");
+        return responseStatus(res, 400, "failed", "Exited");
       }
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updateUser(req, res) {
@@ -47,15 +48,16 @@ class AdminController {
     try {
       await adminService.updateUser(user, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
+
   async deleteUsers(req, res) {
     const { users } = req.body;
     try {
       await adminService.deleteUsers(users, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage role
@@ -63,7 +65,7 @@ class AdminController {
     try {
       await roleService.roleList(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async createRole(req, res) {
@@ -71,7 +73,7 @@ class AdminController {
     try {
       await roleService.saveRole(name, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updateRole(req, res) {
@@ -80,7 +82,7 @@ class AdminController {
     try {
       await roleService.updateRole(roleId, name, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deleteRole(req, res) {
@@ -88,7 +90,7 @@ class AdminController {
     try {
       await roleService.deleteRole(roleId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage tour
@@ -97,14 +99,14 @@ class AdminController {
     try {
       await tourService.createTours(tours, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async getTours(req, res) {
     try {
       await tourService.tourList(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async tourDetail(req, res) {
@@ -112,7 +114,7 @@ class AdminController {
     try {
       await tourService.detailTour(tourId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
 
@@ -121,7 +123,7 @@ class AdminController {
     try {
       await tourService.updateTour(tour, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deleteTours(req, res) {
@@ -129,7 +131,7 @@ class AdminController {
     try {
       await tourService.deleteTour(tours, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage booking
@@ -137,7 +139,7 @@ class AdminController {
     try {
       await bookingService.getAllBooking(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async bookingDetail(req, res) {
@@ -145,7 +147,7 @@ class AdminController {
     try {
       await bookingService.detailBooking(bookingId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
 
@@ -173,7 +175,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updateBooking(req, res) {
@@ -202,7 +204,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deleteBooking(req, res) {
@@ -210,7 +212,7 @@ class AdminController {
     try {
       await bookingService.deleteBookings(bookings, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage blog
@@ -218,7 +220,7 @@ class AdminController {
     try {
       await blogService.getAllBlog(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async blogDetail(req, res) {
@@ -226,7 +228,7 @@ class AdminController {
     try {
       await blogService.detailBlog(blogId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async createBlog(req, res) {
@@ -238,7 +240,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updateBlog(req, res) {
@@ -247,7 +249,7 @@ class AdminController {
     try {
       await blogService.updateBlog(blogId, { title, content, images }, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deleteBlogs(req, res) {
@@ -255,7 +257,7 @@ class AdminController {
     try {
       await blogService.deleteBlogs(deleteList, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage comment
@@ -263,7 +265,7 @@ class AdminController {
     try {
       await commentService.getAllComment(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async commentDetail(req, res) {
@@ -271,7 +273,7 @@ class AdminController {
     try {
       await commentService.detailComment(commentId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
 
@@ -280,7 +282,7 @@ class AdminController {
     try {
       await commentService.createComment({ blogId, userId, comment }, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updateComment(req, res) {
@@ -293,7 +295,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deleteComment(req, res) {
@@ -301,7 +303,7 @@ class AdminController {
     try {
       await commentService.deleteComments(commentIds, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage review
@@ -309,7 +311,7 @@ class AdminController {
     try {
       await reviewService.getAllReview(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async reviewDetail(req, res) {
@@ -317,7 +319,7 @@ class AdminController {
     try {
       await reviewService.detailReview(reviewId, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async createReview(req, res) {
@@ -328,7 +330,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updateReview(req, res) {
@@ -341,7 +343,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deleteReview(req, res) {
@@ -349,7 +351,7 @@ class AdminController {
     try {
       await reviewService.deleteReview(ids, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   // manage payment
@@ -357,7 +359,7 @@ class AdminController {
     try {
       await paymentService.getAllPayment(res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async paymentDetail(req, res) {
@@ -382,7 +384,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async updatePayment(req, res) {
@@ -395,7 +397,7 @@ class AdminController {
         res
       );
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
   async deletePayment(req, res) {
@@ -403,7 +405,7 @@ class AdminController {
     try {
       await paymentService.deletePayments(ids, res);
     } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
 }

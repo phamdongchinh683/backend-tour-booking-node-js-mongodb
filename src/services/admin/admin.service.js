@@ -47,7 +47,7 @@ class AdminService {
             email: value.email,
             phone: value.phone,
           },
-          role_id: await this.getRoleIdByName(value.role),
+          role_id: value.role_id,
           createdAt: nowDate(),
         };
       })
