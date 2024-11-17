@@ -68,10 +68,7 @@ class AdminService {
     }
   }
   async updateUser(info, res) {
-    const [hashedPassword, roleId] = await Promise.all([
-      hashPassword(info.password),
-      this.getRoleIdByName(info.role),
-    ]);
+    const [hashedPassword] = await hashPassword(info.password);
     const result = await User.updateOne(
       { _id: info.id },
       {
@@ -88,7 +85,7 @@ class AdminService {
             email: info.email,
             phone: info.phone,
           },
-          role_id: roleId,
+          role_id: info.role_id,
           updateAt: nowDate(),
         },
       }
