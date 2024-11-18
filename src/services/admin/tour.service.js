@@ -43,7 +43,7 @@ class TourService {
     return responseStatus(res, 200, "success", "Tour created successfully");
   }
   async detailTour(id, res) {
-    let tour = await Tour.findById(id).lean();
+    let tour = await Tour.findById(id).populate("guides", "fullName").lean();
     if (!tour) {
       return responseStatus(res, 400, "failed", "No tours were updated");
     }
@@ -51,7 +51,7 @@ class TourService {
   }
   async updateTour(infoTour, res) {
     const result = await Tour.updateOne(
-      { _id: infoTour.id },
+      { _id: infoTour.id || infoTour._id },
       {
         $set: {
           city: infoTour.city,
@@ -68,7 +68,7 @@ class TourService {
       }
     );
 
-    if (result.matchedCount === 0) {
+    if (result.nModified === 0) {
       return responseStatus(res, 400, "failed", "No tours were updated");
     }
     return responseStatus(res, 200, "success", "Updated");
