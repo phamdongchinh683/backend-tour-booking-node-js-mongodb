@@ -3,10 +3,12 @@ const mongodb = require("./src/config");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const port = process.env.PORT;
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 const router = require("./src/routers/router");
 const app = express();
 const corsOptions = require("./src/config/corsOptions");
+const options = require("./src/config/swagger");
 
 const START_SERVER = () => {
   app.use(cors(corsOptions));
@@ -14,6 +16,9 @@ const START_SERVER = () => {
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(morgan("combined"));
+  const specs = swaggerJsdoc(options);
+
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
   router(app);
 
   if (process.env.BUILD_MODE === "production") {
