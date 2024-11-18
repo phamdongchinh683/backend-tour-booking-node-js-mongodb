@@ -17,6 +17,10 @@ const START_SERVER = () => {
 
   router(app);
 
+  app.get("/", (req, res) => {
+    res.json({ message: "Hello world" });
+  });
+
   if (process.env.BUILD_MODE === "production") {
     app.listen(PORT, () => {
       console.log(

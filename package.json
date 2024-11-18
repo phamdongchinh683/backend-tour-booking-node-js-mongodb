@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
+    "start": "nodemon index.js",
     "sass": "sass -w src/public/scss/style.scss src/public/css/style.css"
   },
   "keywords": [],
