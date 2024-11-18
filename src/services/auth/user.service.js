@@ -93,7 +93,6 @@ class UserService {
       { "contact.email": email },
       { $set: { password: newPassword } }
     );
-    console.log(updatePassword);
     if (updatePassword.matchedCount === 0) {
       return responseStatus(res, 402, "failed", "Update failed");
     }

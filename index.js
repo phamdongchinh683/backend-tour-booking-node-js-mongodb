@@ -16,9 +16,9 @@ const START_SERVER = () => {
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(morgan("combined"));
-  const specs = swaggerJsdoc(options);
+  // const specs = swaggerJsdoc(options);
 
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+  // app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
   router(app);
 
   if (process.env.BUILD_MODE === "production") {
