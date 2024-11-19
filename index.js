@@ -5,11 +5,11 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const router = require("./src/routers/router");
 const app = express();
-const corsOptions = require("./src/config/corsOptions");
+// const corsOptions = require("./src/config/corsOptions");
 const PORT = process.env.PORT || 3000;
 
 const START_SERVER = () => {
-  app.use(cors(corsOptions));
+  app.use(cors());
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
