@@ -57,7 +57,7 @@ module.exports = infoUser = async (req, res, next) => {
         "string.pattern.base":
           "Phone number must contain only digits and be 10-15 characters long",
       }),
-    role: Joi.string().valid("Traveler", "Guide").required().messages({
+    role: Joi.string().valid("Traveler", "Guide", "Admin").required().messages({
       "any.required": "Role is required",
       "any.only": "Role must be one of traveler, guide, or moderator",
     }),
@@ -67,10 +67,13 @@ module.exports = infoUser = async (req, res, next) => {
     const value = await correctCondition.validateAsync(req.body, {
       abortEarly: false,
     });
+
     req.user = value;
+
     next();
   } catch (error) {
     const errorDetail = error.details.map((err) => err.message).join(", ");
+
     return responseStatus(res, 422, "failed", errorDetail);
   }
 };

@@ -4,19 +4,17 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const app = express();
-// const corsOptions = require("./src/config/corsOptions");
+const corsOptions = require("./src/config/corsOptions");
 const routerAuth = require("./src/routers/Auth");
 const routerAdmin = require("./src/routers/Admin");
 const PORT = process.env.PORT || 3000;
-// const router = require("./src/routers/router");
 
 const START_SERVER = () => {
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(morgan("combined"));
-  // router(app);
 
   app.use("/api/v1/auth", routerAuth);
   app.use("/api/v1/admin", routerAdmin);
