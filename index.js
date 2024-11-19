@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 3000;
 
 const START_SERVER = () => {
   app.use(cors(corsOptions));
-  app.use(bodyParser.json());
   app.use(express.json());
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(morgan("combined"));
 
@@ -25,6 +25,12 @@ const START_SERVER = () => {
     app.listen(PORT, () => {
       console.log(
         `Production: Hi ${process.env.AUTHOR}, Back-end Server is running successfully at Port: ${PORT}`
+      );
+    });
+  } else {
+    app.listen(PORT, () => {
+      console.log(
+        `Development: Back-end Server is running successfully at Port: ${PORT}`
       );
     });
   }
