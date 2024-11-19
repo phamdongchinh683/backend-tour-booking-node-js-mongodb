@@ -1,0 +1,34 @@
+# Exported from Render on 2024-11-19T05:30:18Z
+services:
+- type: web
+  name: backend-tour-booking-deploy
+  runtime: node
+  repo: https://github.com/phamdongchinh683/backend-tour-booking-deploy
+  plan: free
+  envVars:
+  - key: MAIL_PASS
+    sync: false
+  - key: MAIL_USER
+    sync: false
+  - key: MAIL_HOST
+    sync: false
+  - key: ACCESS_TOKEN_LIFE
+    sync: false
+  - key: BUILD_MODE
+    sync: false
+  - key: ACCESS_TOKEN_SECRET
+    sync: false
+  - key: DB_URL
+    sync: false
+  - key: DB_NAME
+    sync: false
+  - key: DB_PASSWORD
+    sync: false
+  - key: DB_USER
+    sync: false
+  - key: PORT
+    sync: false
+  region: oregon
+  buildCommand: npm install
+  startCommand: npm start
+version: "1"
