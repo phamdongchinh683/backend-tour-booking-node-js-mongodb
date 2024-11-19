@@ -6,9 +6,7 @@ const morgan = require("morgan");
 const app = express();
 // const corsOptions = require("./src/config/corsOptions");
 const PORT = process.env.PORT || 3000;
-
-const routerAuth = require("./src/routers/Auth");
-const routerAdmin = require("./src/routers/Admin");
+const router = require("./src/routers/router");
 
 const START_SERVER = () => {
   app.use(cors());
@@ -16,13 +14,7 @@ const START_SERVER = () => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(morgan("combined"));
-
-  app.use("/api/v1/auth", routerAuth);
-  app.use("/api/v1/admin", routerAdmin);
-
-  app.get("/", (req, res) => {
-    res.json({ message: "Hello world" });
-  });
+  router(app);
 
   if (process.env.BUILD_MODE === "production") {
     app.listen(PORT, () => {

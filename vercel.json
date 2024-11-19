@@ -8,8 +8,14 @@
  ],
  "routes": [
   {
-   "src": "/(.*)",
+   "src": "/api/(.*)",
    "dest": "index.js"
   }
- ]
+ ],
+ "env": {
+  "PORT": "3000",
+  "BUILD_MODE": "production",
+  "AUTHOR": "Chinh"
+ },
+ "ignoreCommand": "git diff --quiet HEAD^ HEAD ."
 }
