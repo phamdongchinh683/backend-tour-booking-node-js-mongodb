@@ -5,10 +5,6 @@ const { _dbName, _url } = require("../utils/secretKey");
 const _dbConnect = async () => {
   try {
     await mongoose.connect(`${_url}/${_dbName}`, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
       maxPoolSize: 10,
     });
     console.log("Database connected! ".yellow.bold);

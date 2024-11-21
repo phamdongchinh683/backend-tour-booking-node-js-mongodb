@@ -3,15 +3,8 @@ const { nowDate } = require("../../controllers/auth/auth.method");
 const { responseStatus } = require("../../utils/handler");
 
 class RoleService {
-  async saveRole(nameRole, res) {
-    let roleExists = await Role.findOne({ name: nameRole });
-    if (roleExists) {
-      return responseStatus(res, 402, "failed", "Role already exists");
-    }
-    let roleCreated = await Role.create({
-      name: nameRole,
-      createdAt: nowDate(),
-    });
+  async saveRole(roles, res) {
+    let roleCreated = await Role.insertMany(roles);
     if (!roleCreated) {
       return;
     }
@@ -42,6 +35,14 @@ class RoleService {
       return responseStatus(res, 402, "failed", "This role does not exist");
     }
     return responseStatus(res, 200, "success", "Deleted role");
+  }
+
+  async deleteRoles(list, res) {
+    let remove = await Role.deleteMany({ _id: { $in: list } });
+    if (!remove) {
+      return responseStatus(res, 402, "failed", "This role does not exist");
+    }
+    return responseStatus(res, 200, "success", "Deleted this role ");
   }
 }
 

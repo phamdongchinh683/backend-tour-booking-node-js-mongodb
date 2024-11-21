@@ -1,0 +1,2107 @@
+{
+	"info": {
+		"_postman_id": "405cdb22-7675-49d3-8141-a225e5fa721f",
+		"name": "backend-booking-tour",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27382888",
+		"_collection_link": "https://dark-spaceship-566068.postman.co/workspace/Team-Workspace~c5cfe44e-abe1-44e5-8e5a-1006bb6f4ab3/collection/27382888-405cdb22-7675-49d3-8141-a225e5fa721f?action=share&source=collection_link&creator=27382888"
+	},
+	"item": [
+		{
+			"name": "manage-user",
+			"item": [
+				{
+					"name": "user-list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/user-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"user-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMwOTA3MTk5LCJleHAiOjE3MzA5OTM1OTl9.ofBjW7IJWYnkdmXIATEXDhGTlzyvzAsulO530Ag5y20",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"users\": [\n        {\n            \"firstName\": \"Alice\",\n            \"lastName\": \"Smith\",\n            \"username\": \"alice_smith\",\n            \"password\": \"hashed_password_1\",\n            \"address\": \"456 Elm St, Anytown\",\n            \"phone\": \"987-654-3210\",\n            \"email\": \"alice@example.com\",\n            \"age\": 28,\n            \"role\": \"Traveler\",\n            \"city\": \"Springfield\"\n        },\n        {\n            \"firstName\": \"Bob\",\n            \"lastName\": \"Johnson\",\n            \"username\": \"bob_johnson\",\n            \"password\": \"hashed_password_2\",\n            \"address\": \"789 Oak St, Othertown\",\n            \"phone\": \"555-123-4567\",\n            \"email\": \"bob@example.com\",\n            \"age\": 35,\n            \"role\": \"Guide\",\n            \"city\": \"Metropolis\"\n        },\n        {\n            \"firstName\": \"Catherine\",\n            \"lastName\": \"Brown\",\n            \"username\": \"catherine_brown\",\n            \"password\": \"hashed_password_3\",\n            \"address\": \"101 Maple St, Newcity\",\n            \"phoneNumber\": \"444-555-6666\",\n            \"email\": \"catherine@example.com\",\n            \"age\": 29,\n            \"role\": \"Admin\",\n            \"city\": \"Uptown\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-user/create-user",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-user",
+								"create-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-user/update-user",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-user",
+								"update-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMwOTA3MTk5LCJleHAiOjE3MzA5OTM1OTl9.ofBjW7IJWYnkdmXIATEXDhGTlzyvzAsulO530Ag5y20",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"users\": [\n        {\n            \"_id\": \"672b9cfec289929c29153b14\"\n        },\n        {\n            \"_id\": \"672b9cfec289929c29153b13\"\n        },\n        {\n            \"_id\": \"672b9cfec289929c29153b12\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-user/delete-user",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-user",
+								"delete-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "guide-list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-guide/guide-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-guide",
+								"guide-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-user/user-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-user",
+								"user-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6731aa4b2dfa29345e3335e2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-role",
+			"item": [
+				{
+					"name": "create-role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nameRole",
+									"value": "Admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-role/create-role",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-role",
+								"create-role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "role-list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-role/role-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-role",
+								"role-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-role",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "normal",
+									"description": "name role",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-role/edit-role/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-role",
+								"edit-role",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6731afbe5dc1f6674b0780b9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-role",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-role/delete-role/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-role",
+								"delete-role",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6731afbe5dc1f6674b0780b9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-blog",
+			"item": [
+				{
+					"name": "blog-list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nameRole",
+									"value": "Admin",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-blog/blog-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-blog",
+								"blog-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-blog",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-blog/blog-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-blog",
+								"blog-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "672e350a47224ec22b3f61c0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-blog",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"First Blog about my trip\",\n    \"content\": \"Trip is quite interesting\",\n    \"images\": [\n        \"image1\",\n        \"image2\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-blog/create-blog",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-blog",
+								"create-blog"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-blog",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"First Blog about my trip\",\n    \"content\": \"Trip is quite interesting\",\n    \"images\": [\n        \"image1\",\n        \"image2\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-blog/edit-blog/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-blog",
+								"edit-blog",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "672e350a47224ec22b3f61c0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-blog",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"deleteList\": [\n        {\n            \"_id\": \"67320282e5a929596047dc39\"\n        },\n        {\n            \"_id\": \"67320283e5a929596047dc3d\"\n        },\n        {\n            \"_id\": \"67320283e5a929596047dc41\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-blog/delete-blog",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-blog",
+								"delete-blog"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-booking",
+			"item": [
+				{
+					"name": "booking-list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-booking-tour/booking-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-booking-tour",
+								"booking-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-booking-tour/create-booking-tour",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-booking-tour",
+								"create-booking-tour"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-booking",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-booking-tour/edit-booking/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-booking-tour",
+								"edit-booking",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-booking",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-booking/booking-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-booking",
+								"booking-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-booking",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-booking-tour/delete-booking",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-booking-tour",
+								"delete-booking"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-tour",
+			"item": [
+				{
+					"name": "tourList",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-tour/tour-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-tour",
+								"tour-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-tour",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tours\": [\n        {\n            \"city\": \"Paris\",\n            \"attractions\": [\n                \"Eiffel Tower\",\n                \"Louvre Museum\",\n                \"Notre-Dame Cathedral\"\n            ],\n            \"days\": \"3\",\n            \"prices\": {\n                \"adult\": \"200\",\n                \"child\": \"100\"\n            },\n            \"guides\": [\n                \"672b9fd4041d7643abab83fe\",\n                \"672b8baa2e0fd88240d92092\"\n            ],\n            \"images\": [\n                \"paris1.jpg\",\n                \"paris2.jpg\",\n                \"paris3.jpg\"\n            ],\n            \"createAt\": \"2023-11-06T14:33:26.000Z\"\n        },\n        {\n            \"city\": \"New York\",\n            \"attractions\": [\n                \"Statue of Liberty\",\n                \"Central Park\",\n                \"Times Square\"\n            ],\n            \"days\": \"5\",\n            \"prices\": {\n                \"adult\": \"300\",\n                \"child\": \"150\"\n            },\n            \"guides\": [\n                \"672b9fd4041d7643abab83fe\",\n                \"672b8baa2e0fd88240d92092\"\n            ],\n            \"images\": [\n                \"nyc1.jpg\",\n                \"nyc2.jpg\",\n                \"nyc3.jpg\"\n            ]\n        },\n        {\n            \"city\": \"Tokyo\",\n            \"attractions\": [\n                \"Tokyo Tower\",\n                \"Meiji Shrine\",\n                \"Shibuya Crossing\"\n            ],\n            \"days\": \"4\",\n            \"prices\": {\n                \"adult\": \"250\",\n                \"child\": \"120\"\n            },\n            \"guides\": [\n                \"672b9fd4041d7643abab83fe\",\n                \"672b8baa2e0fd88240d92092\"\n            ],\n            \"images\": [\n                \"tokyo1.jpg\",\n                \"tokyo2.jpg\",\n                \"tokyo3.jpg\"\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-tour/create-tour",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-tour",
+								"create-tour"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-tour",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tour\": {\n        \"id:\": \"672c6db9b1f5a6a5954cae52\",\n        \"city\": \"Paris\",\n        \"attractions\": [\n            \"Eiffel Tower\",\n            \"Louvre Museum\",\n            \"Notre-Dame Cathedral\"\n        ],\n        \"days\": \"3\",\n        \"prices\": {\n            \"adult\": \"200\",\n            \"child\": \"100\"\n        },\n        \"guides\": [\n            \"672b9fd4041d7643abab83fe\",\n            \"672b8baa2e0fd88240d92092\"\n        ],\n        \"images\": [\n            \"paris1.jpg\",\n            \"paris2.jpg\",\n            \"paris3.jpg\"\n        ],\n        \"createAt\": \"2023-11-06T14:33:26.000Z\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-tour/update-tour",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-tour",
+								"update-tour"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-tour",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tours\": [\n        {\n            \"_id\": \"6731b160ee879572d62d70f6\"\n        },\n        {\n            \"_id\": \"6731b160ee879572d62d70f5\"\n        },\n        {\n            \"_id\": \"6731b160ee879572d62d70f4\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-tour/remove-tour",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-tour",
+								"remove-tour"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-tour",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-tour/tour-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-tour",
+								"tour-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "672ebef2dbadbc61a064f48d"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-payment",
+			"item": [
+				{
+					"name": "payment-list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nameRole",
+									"value": "Admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-payment/payment-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-payment",
+								"payment-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-payment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-payment/payment-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-payment",
+								"payment-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "672f020db8770fe4f6863c09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "bookingId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "cardNumber",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "totalAmount",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-payment/create-payment",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-payment",
+								"create-payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-payment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "bookingId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "cardNumber",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "totalAmount",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-payment/edit-payment/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-payment",
+								"edit-payment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-payment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [\n        {\n            \"_id\":\n        },\n        {\n            \"_id\":\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-payment/delete-payment",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-payment",
+								"delete-payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-review",
+			"item": [
+				{
+					"name": "review-list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nameRole",
+									"value": "Admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-review/review-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-review",
+								"review-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-review",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-review/review-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-review",
+								"review-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "672f8f6668cc876cea7ae029"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "guideId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-review/create-review",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-review",
+								"create-review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-review",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "guideId",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-review/edit-review/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-review",
+								"edit-review",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [\n        {\n            \"_id\":\n        },\n        {\n            \"_id\":\n        },\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-review/delete-review",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-review",
+								"delete-review"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage-comment",
+			"item": [
+				{
+					"name": "comment-list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzI5NDU5LCJleHAiOjE3MzE0MTU4NTl9.mm4HCFFRt8TjXXftP_Q2ZGJ3lfcNhIC1NmlMQuwaXT8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-comment/comment-list",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-comment",
+								"comment-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-comment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzI5NDU5LCJleHAiOjE3MzE0MTU4NTl9.mm4HCFFRt8TjXXftP_Q2ZGJ3lfcNhIC1NmlMQuwaXT8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-comment/comment-detail/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-comment",
+								"comment-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzI5NDU5LCJleHAiOjE3MzE0MTU4NTl9.mm4HCFFRt8TjXXftP_Q2ZGJ3lfcNhIC1NmlMQuwaXT8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-comment/create-comment",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-comment",
+								"create-comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-comment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzI5NDU5LCJleHAiOjE3MzE0MTU4NTl9.mm4HCFFRt8TjXXftP_Q2ZGJ3lfcNhIC1NmlMQuwaXT8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-comment/edit-comment/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-comment",
+								"edit-comment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-comment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzI5NDU5LCJleHAiOjE3MzE0MTU4NTl9.mm4HCFFRt8TjXXftP_Q2ZGJ3lfcNhIC1NmlMQuwaXT8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"commentIds\": [\n        {\n            \"_id\": \"672e19bc1a3fee8ec097432e\"\n        },\n        {\n            \"_id\": \"672e19cf855b73b01575b365\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-comment/delete-comment",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-comment",
+								"delete-comment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "blog",
+					"item": [
+						{
+							"name": "my-blogs",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTA3MDM0MywiZXhwIjoxNzMxMTU2NzQzfQ.-ZnUbDDowM2iUdOO0uCpQ0UvqhTAH5mx_ZJX19Kz2y4",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/my-blogs",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"my-blogs"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-blog",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMjEyMDA2LCJleHAiOjE3MzEyOTg0MDZ9.ZUiLGarcoiobfKzbbrMGm0iGG8nL0Cst2TVZk0V_xnQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/remove-blog/:id",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"remove-blog",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "672e0f41c6c8a0497340a108"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit-blog",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMjEyMDA2LCJleHAiOjE3MzEyOTg0MDZ9.ZUiLGarcoiobfKzbbrMGm0iGG8nL0Cst2TVZk0V_xnQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\" : \"Hello22223\",\n    \"newContent\": \"Hello Chinh23123212\",\n    \"images\": [\n        \"danang.33221jpg\",\n        \"brigd321321e_dragon.jpg\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/edit-blog/:id",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"edit-blog",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "672e350a47224ec22b3f61c0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post-blog",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTA3MDM0MywiZXhwIjoxNzMxMTU2NzQzfQ.-ZnUbDDowM2iUdOO0uCpQ0UvqhTAH5mx_ZJX19Kz2y4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"First Blog about my trip\",\n    \"content\": \"Trip is quite interesting\",\n    \"images\": [\n        \"image1\",\n        \"image2\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/post-blog",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"post-blog"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "detail-blog",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTA3MDM0MywiZXhwIjoxNzMxMTU2NzQzfQ.-ZnUbDDowM2iUdOO0uCpQ0UvqhTAH5mx_ZJX19Kz2y4",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/blog/:id",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"blog",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "672e0f41c6c8a0497340a108"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "comment",
+					"item": [
+						{
+							"name": "delete-comment",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMTY5NjUwLCJleHAiOjE3MzEyNTYwNTB9.3dT3hFlsj9147W6gsoVpetIXZDYermB6neR-9e3M0T4",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/remove-comment/:id",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"remove-comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "672e41decff433bba00282bc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "comment-blog",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTA3MDM0MywiZXhwIjoxNzMxMTU2NzQzfQ.-ZnUbDDowM2iUdOO0uCpQ0UvqhTAH5mx_ZJX19Kz2y4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "contentComment",
+											"value": "That is a pretty",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit-comment",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMTY5NjUwLCJleHAiOjE3MzEyNTYwNTB9.3dT3hFlsj9147W6gsoVpetIXZDYermB6neR-9e3M0T4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "newComment",
+											"value": "You can do it",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/edit-comment/:id",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"edit-comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "672e41dccff433bba00282b6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "evaluate-guide",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMTY5NjUwLCJleHAiOjE3MzEyNTYwNTB9.3dT3hFlsj9147W6gsoVpetIXZDYermB6neR-9e3M0T4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "evaluateContent",
+											"value": "enthusiasm, speak japanese so good",
+											"type": "text"
+										},
+										{
+											"key": "rating",
+											"value": "3",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/evaluate-guide/:guideId",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"evaluate-guide",
+										":guideId"
+									],
+									"variable": [
+										{
+											"key": "guideId",
+											"value": "672b8baa2e0fd88240d92092"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Booking",
+					"item": [
+						{
+							"name": "my booked",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTA3MDM0MywiZXhwIjoxNzMxMTU2NzQzfQ.-ZnUbDDowM2iUdOO0uCpQ0UvqhTAH5mx_ZJX19Kz2y4",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/my-book-tour",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"my-book-tour"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "book-tour",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTExMzMwMywiZXhwIjoxNzMxMTk5NzAzfQ.SUjP-XAL6P9u8CvwerBTNGzuH1WBo4wN_QThK79SW4g",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "guideId",
+											"value": "672b8baa2e0fd88240d92092",
+											"type": "text"
+										},
+										{
+											"key": "numberVisitor",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "startTour",
+											"value": "11-9-2024",
+											"type": "text"
+										},
+										{
+											"key": "startTime",
+											"value": "8:00",
+											"type": "text"
+										},
+										{
+											"key": "endTime",
+											"value": "20:00",
+											"type": "text"
+										},
+										{
+											"key": "status",
+											"value": "pending",
+											"type": "text"
+										},
+										{
+											"key": "cardNumber",
+											"value": "0722132132",
+											"type": "text"
+										},
+										{
+											"key": "totalAmount",
+											"value": "20.00",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{NodeJS-TS}}/api/v1/auth/book-tour/:tourId",
+									"host": [
+										"{{NodeJS-TS}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"book-tour",
+										":tourId"
+									],
+									"variable": [
+										{
+											"key": "tourId",
+											"value": "672ebef2dbadbc61a064f48d"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"johndoe123\",\n  \"password\": \"strongpassword123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"age\": 25,\n  \"city\": \"New York\",\n  \"email\": \"johndoe@example.com\",\n  \"phone\": \"1234567890\",\n  \"role\": \"Traveler\"\n}\n"
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/sign-up",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "chinh6823",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Chinh.789123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/login",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/profile",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send otp",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "phamdongchinh789@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/send-otp",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"send-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "newPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "otp",
+									"value": "717524",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/new-password",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"new-password"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "user can do"
+		}
+	]
+}

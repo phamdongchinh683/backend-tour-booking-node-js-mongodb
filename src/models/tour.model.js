@@ -4,12 +4,10 @@ const tourSchema = new mongoose.Schema(
     city: {
       type: String,
     },
-    attractions: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    attractions: {
+      type: String,
+      required: true,
+    },
     days: {
       type: String,
     },
@@ -21,12 +19,10 @@ const tourSchema = new mongoose.Schema(
         type: String,
       },
     },
-    guides: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-      },
-    ],
+    guide: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
     images: [
       {
         type: String,

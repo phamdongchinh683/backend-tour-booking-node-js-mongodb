@@ -10,32 +10,23 @@ class TourService {
     return responseStatus(res, 200, "success", tours);
   }
   async createTours(infoTours, res) {
-    let tours = infoTours.map((tour) => {
-      let locations = tour.attractions.map((attraction) => {
-        return attraction;
-      });
-
-      let imageAttractions = tour.images.map((image) => {
-        return image;
-      });
-
-      let guideTour = tour.guides.map((guide) => {
-        return guide;
-      });
+    const tours = infoTours.map((tour) => {
+      const imageAttractions = tour.images.map((image) => image);
 
       return {
-        city: tour.city,
-        attractions: locations,
-        days: tour.days,
+        city: tour.city.trim(),
+        attractions: tour.attractions,
+        days: parseInt(tour.days, 10),
         prices: {
-          adult: tour.prices.adult,
-          child: tour.prices.child,
+          adult: parseFloat(tour.prices.adult),
+          child: parseFloat(tour.prices.child),
         },
-        guides: guideTour,
+        guide: tour.guide,
         images: imageAttractions,
-        createdAt: tour.createAt || nowDate(),
+        createdAt: nowDate(),
       };
     });
+
     let createTour = await Tour.insertMany(tours);
     if (!createTour) {
       return responseStatus(res, 402, "failed", "Enter complete information");
@@ -61,7 +52,7 @@ class TourService {
             adult: infoTour.prices.adult,
             child: infoTour.prices.child,
           },
-          guides: infoTour.guides,
+          guide: infoTour.guide,
           images: infoTour.images,
           updateAt: nowDate(),
         },

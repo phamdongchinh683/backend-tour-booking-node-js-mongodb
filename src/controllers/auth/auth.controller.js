@@ -10,14 +10,14 @@ class AuthController {
     try {
       await UserService.saveUser(req.user, password, res);
     } catch (e) {
-      // if (e.code === 11000) {
-      //   return responseStatus(
-      //     res,
-      //     422,
-      //     "failed",
-      //     `${Object.keys(e.keyValue)} exited`
-      //   );
-      // }
+      if (e.code === 11000) {
+        return responseStatus(
+          res,
+          422,
+          "failed",
+          `${Object.keys(e.keyValue)} exited`
+        );
+      }
       return responseStatus(res, 400, "failed", e);
     }
   }

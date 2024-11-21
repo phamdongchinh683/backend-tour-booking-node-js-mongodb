@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "sass": "sass -w src/public/scss/style.scss src/public/css/style.css"
   },
   "keywords": [],
@@ -28,7 +29,7 @@
     "jsonwebtoken": "^9.0.2",
     "jsonwebtoken-promisified": "^1.0.3",
     "mongodb": "^6.9.0",
-    "mongoose": "^5.13.22",
+    "mongoose": "^8.8.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.5",

@@ -18,6 +18,8 @@ router.post("/manage-role/create-role", adminController.createRole);
 router.get("/manage-role/role-list", adminController.roleList);
 router.patch("/manage-role/edit-role/:id", adminController.updateRole);
 router.delete("/manage-role/delete-role/:id", adminController.deleteRole);
+router.delete("/manage-role/delete-roles", adminController.deleteRoles);
+
 // manage tour
 router.post("/manage-tour/create-tour", adminController.addTour);
 router.get("/manage-tour/tour-detail/:id", adminController.tourDetail);

@@ -69,9 +69,9 @@ class AdminController {
     }
   }
   async createRole(req, res) {
-    const { name } = req.body;
+    const { roles } = req.body;
     try {
-      await roleService.saveRole(name, res);
+      await roleService.saveRole(roles, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -91,6 +91,15 @@ class AdminController {
       await roleService.deleteRole(roleId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+
+  async deleteRoles(req, res) {
+    const { ids } = req.body;
+    try {
+      await roleService.deleteRoles(ids, res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e);
     }
   }
   // manage tour
