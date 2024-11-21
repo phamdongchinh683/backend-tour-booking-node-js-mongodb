@@ -20,7 +20,7 @@ const tourSchema = new mongoose.Schema(
       },
     },
     guide: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
     images: [

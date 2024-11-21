@@ -3,7 +3,7 @@ const { responseStatus } = require("../../utils/handler");
 const { nowDate } = require("../../controllers/auth/auth.method");
 class TourService {
   async tourList(res) {
-    let tours = await Tour.find().populate("guide").lean();
+    let tours = await Tour.find().populate("guide", "fullName").lean();
     if (!tours || tours.length === 0) {
       return responseStatus(res, 400, "failed", "No tour found");
     }
@@ -34,9 +34,9 @@ class TourService {
     return responseStatus(res, 200, "success", "Tour created successfully");
   }
   async detailTour(id, res) {
-    let tour = await Tour.findById(id).populate("guides", "fullName").lean();
+    let tour = await Tour.findById(id).populate("guide", "fullName").lean();
     if (!tour) {
-      return responseStatus(res, 400, "failed", "No tours were updated");
+      return responseStatus(res, 400, "failed", "Not found this tour");
     }
     return responseStatus(res, 200, "success", tour);
   }
