@@ -3,7 +3,7 @@ const { responseStatus } = require("../../utils/handler");
 const { nowDate } = require("../../controllers/auth/auth.method");
 class TourService {
   async tourList(res) {
-    let tours = await Tour.find().populate("guides", "fullName").lean();
+    let tours = await Tour.find().populate("guide").lean();
     if (!tours || tours.length === 0) {
       return responseStatus(res, 400, "failed", "No tour found");
     }

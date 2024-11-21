@@ -36,5 +36,4 @@ const tourSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
-tourSchema.index({ guides: 1 });
 module.exports = mongoose.model("Tour", tourSchema);
