@@ -29,14 +29,15 @@ class AuthMiddleware {
       );
     }
   }
+
   async roleUser(req, res, next) {
     try {
       let role = await userService.userRole(req.user.username, res);
       if (role.role_id.name === "Traveler" || "Guide") {
         req.user = role;
-        next();
+        return next();
       } else {
-        responseStatus(
+        return responseStatus(
           res,
           403,
           "failed",
@@ -53,7 +54,7 @@ class AuthMiddleware {
       let verify = await otpService.verifyOtp(otp, res);
       if (verify) {
         req.user = verify;
-        next();
+        return next();
       }
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
@@ -82,3 +83,4 @@ class AuthMiddleware {
 }
 
 module.exports = new AuthMiddleware();
+

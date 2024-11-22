@@ -3,7 +3,9 @@ const router = express.Router();
 const adminController = require("../../controllers/admin/admin.controller");
 const adminMiddleware = require("../../middlewares/admin/admin.middleware");
 const authMiddleware = require("../../middlewares/auth/auth.middleware");
+const authController = require("../../controllers/auth/auth.controller");
 
+router.post("/login", adminMiddleware.isAdmin, authController.login);
 // protected router
 router.use(authMiddleware.authorization, adminMiddleware.adminRole);
 // manage-user
@@ -19,7 +21,6 @@ router.get("/manage-role/role-list", adminController.roleList);
 router.patch("/manage-role/edit-role/:id", adminController.updateRole);
 router.delete("/manage-role/delete-role/:id", adminController.deleteRole);
 router.delete("/manage-role/delete-roles", adminController.deleteRoles);
-
 // manage tour
 router.post("/manage-tour/create-tour", adminController.addTour);
 router.get("/manage-tour/tour-detail/:id", adminController.tourDetail);

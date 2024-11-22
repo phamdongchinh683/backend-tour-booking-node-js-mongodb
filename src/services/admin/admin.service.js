@@ -5,6 +5,17 @@ const { hashPassword } = require("../../utils/hashHelper");
 const User = require("../../models/user.model");
 const Role = require("../../models/role.model");
 class AdminService {
+  async isAdmin(username, res) {
+    let getRole = await User.find({ username: username })
+      .select("role_id")
+      .populate("role_id", "name")
+      .lean();
+    if (!getRole) {
+      return responseStatus(res, 400, "failed", "Not found role");
+    }
+    return getRole[0];
+  }
+
   async getRoleIdByName(roleName) {
     const role = await Role.findOne({ name: roleName }).lean();
     if (!role) {
