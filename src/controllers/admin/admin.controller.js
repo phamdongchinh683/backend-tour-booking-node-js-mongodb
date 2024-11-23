@@ -51,7 +51,6 @@ class AdminController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async deleteUsers(req, res) {
     const { users } = req.body;
     try {
