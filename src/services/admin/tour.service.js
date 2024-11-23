@@ -26,6 +26,7 @@ class TourService {
         createdAt: nowDate(),
       };
     });
+
     
     
     let createTour = await Tour.insertMany(tours);
