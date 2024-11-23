@@ -1,18 +1,21 @@
-// const path = require("path");
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "API Documentation",
+    version: "1.0.0",
+    description: "API documentation for the booking application",
+  },
+  servers: [
+    {
+      url: "http://localhost:8080",
+      description: "Development Server",
+    },
+  ],
+};
 
-// module.exports = {
-//   definition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "Api tour booking",
-//       version: "1.0.0",
-//       description:
-//         "Create, Read, Update, and Delete operations using a Node.js API",
-//     },
-//     servers: [{ url: "http://localhost:8080" }],
-//   },
+const options = {
+  swaggerDefinition,
+  apis: ["./src/routers/**/*.js"],
+};
 
-//   apis: [path.join(__dirname, "../routers/**/*.js")],
-// };
-
-
+module.exports = options;

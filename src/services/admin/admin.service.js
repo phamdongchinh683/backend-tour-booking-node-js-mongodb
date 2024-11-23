@@ -112,7 +112,7 @@ class AdminService {
     if (deleteUsers.deletedCount > 0) {
       return responseStatus(res, 200, "success", "Deleted");
     }
-    return responseStatus(res, 400, "failed", "No users were updated");
+    return responseStatus(res, 400, "failed", "No users were deleted");
   }
   // manage guide
   async getAllGuides(res) {

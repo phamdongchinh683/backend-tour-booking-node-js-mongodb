@@ -1,4 +1,6 @@
 const express = require("express");
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
 const mongodb = require("./src/config");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -7,6 +9,13 @@ const app = express();
 const corsOptions = require("./src/config/corsOptions");
 const PORT = process.env.PORT || 3000;
 const router = require("./src/routers/router");
+const swagger = require("./src/config/swagger");
+const swaggerSpec = swaggerJsdoc(swagger);
+
+app.get("/", function (req, res) {
+  res.redirect("/api-docs");
+});
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 const START_SERVER = () => {
   app.use(cors(corsOptions));
