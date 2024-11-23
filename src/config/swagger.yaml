@@ -4,12 +4,12 @@ info:
   description: API documentation for managing admin resources
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/api/v1/admin
+  - url: https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/admin
     description: Admin use router this management
     variables:
       environment:
         default: production
-  - url: http://localhost:8080/api/v1/auth
+  - url: https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/auth
     description: Traveler and Guilde use this
     variables:
       environment:
