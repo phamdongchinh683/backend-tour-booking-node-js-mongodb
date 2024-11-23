@@ -22,7 +22,7 @@ router.patch("/manage-role/edit-role/:id", adminController.updateRole);
 router.delete("/manage-role/delete-role/:id", adminController.deleteRole);
 router.delete("/manage-role/delete-roles", adminController.deleteRoles);
 // manage tour
-router.post("/manage-tour/create-tour", adminController.addTour);
+router.post("/manage-tour/create-tours", adminController.addTour);
 router.get("/manage-tour/tour-detail/:id", adminController.tourDetail);
 router.put("/manage-tour/update-tour", adminController.updateTour);
 router.delete("/manage-tour/remove-tour", adminController.deleteTours);

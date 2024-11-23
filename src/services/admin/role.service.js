@@ -29,6 +29,7 @@ class RoleService {
     }
     return responseStatus(res, 200, "success", "Updated role");
   }
+  
   async deleteRole(id, res) {
     let removeRole = await Role.findByIdAndDelete(id);
     if (!removeRole) {
@@ -36,7 +37,6 @@ class RoleService {
     }
     return responseStatus(res, 200, "success", "Deleted role");
   }
-
   async deleteRoles(list, res) {
     let remove = await Role.deleteMany({ _id: { $in: list } });
     if (!remove) {

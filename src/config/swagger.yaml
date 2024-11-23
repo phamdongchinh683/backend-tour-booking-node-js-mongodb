@@ -10,7 +10,7 @@ servers:
       environment:
         default: production
   - url: https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/auth
-    description: Traveler and Guilde use this
+    description: Traveler and Guide use this
     variables:
       environment:
         default: production
@@ -31,11 +31,11 @@ paths:
                 username:
                   type: string
                   description: The username of the admin
-                  example: admin_user
+                  example: chinh6823
                 password:
                   type: string
                   description: The password of the admin
-                  example: your_secure_password
+                  example: saomabietduoc
       responses:
         200:
           description: Login successful
@@ -178,6 +178,12 @@ paths:
                       username:
                         type: string
                         example: alice_smith
+                      phone:
+                        type: string
+                        example: 0991312312321
+                      age:
+                        type: integer
+                        example: 312312312
                       email:
                         type: string
                         example: alice@example.com
@@ -215,14 +221,29 @@ paths:
                   type: object
                   properties:
                     id:
-                      type: string
-                      example: 12345
+                      type: string,
+                      example: 312312312312
                     firstName:
                       type: string
                       example: Alice
                     lastName:
                       type: string
                       example: Smith
+                    username:
+                      type: string
+                      example: alice_smith
+                    phone:
+                      type: string
+                      example: 0991312312321
+                    age:
+                      type: integer
+                      example: 312312312
+                    email:
+                      type: string
+                      example: alice@example.com
+                    role_id:
+                      type: string
+                      example: 672b888f4c2051465239b718
       responses:
         200:
           description: User updated successfully
@@ -253,8 +274,12 @@ paths:
                 users:
                   type: array
                   items:
-                    type: string
-                    example: 6731ac666836ca5c885f7e3d
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                    example:
+                      _id: "6731ac666836ca5c885f7e3d"
       responses:
         200:
           description: Users deleted successfully
@@ -262,13 +287,20 @@ paths:
           description: Bad request
         401:
           description: Unauthorized
-    paths:
+
   /manage-role/create-role:
     post:
-      summary: Create a new role
+      summary: Create new roles
       description: Allows an admin to create a new role.
       tags:
         - Role Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       requestBody:
         required: true
         content:
@@ -276,14 +308,15 @@ paths:
             schema:
               type: object
               properties:
-                roleName:
-                  type: string
-                  example: "Admin"
-                permissions:
+                roles:
                   type: array
                   items:
-                    type: string
-                    example: ["create", "edit", "delete"]
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    example:
+                      name: "Student"
       responses:
         200:
           description: Role created successfully.
@@ -298,6 +331,13 @@ paths:
       description: Retrieves a list of all roles.
       tags:
         - Role Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       responses:
         200:
           description: List of roles.
@@ -324,12 +364,18 @@ paths:
       tags:
         - Role Management
       parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
         - in: path
           name: id
           required: true
-          description: ID of the role to update.
+          description: ID of the role to delete.
           schema:
-            type: integer
+            type: string
             example: 1
       requestBody:
         required: true
@@ -341,11 +387,6 @@ paths:
                 roleName:
                   type: string
                   example: "Super Admin"
-                permissions:
-                  type: array
-                  items:
-                    type: string
-                    example: ["create", "edit", "delete", "approve"]
       responses:
         200:
           description: Role updated successfully.
@@ -361,12 +402,18 @@ paths:
       tags:
         - Role Management
       parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
         - in: path
           name: id
           required: true
           description: ID of the role to delete.
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         200:
@@ -382,6 +429,13 @@ paths:
       description: Deletes multiple roles.
       tags:
         - Role Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       requestBody:
         required: true
         content:
@@ -389,11 +443,15 @@ paths:
             schema:
               type: object
               properties:
-                roleIds:
+                ids:
                   type: array
                   items:
-                    type: integer
-                    example: [1, 2, 3]
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                    example:
+                      _id: 673e065b8d49ec0c90020712
       responses:
         200:
           description: Roles deleted successfully.
@@ -401,13 +459,18 @@ paths:
           description: Invalid input data.
         401:
           description: Unauthorized.
-
-  /manage-tour/create-tour:
+  /manage-tour/create-tours:
     post:
-      summary: Create a new tour
-      description: Allows an admin to create a new tour.
+      summary: Create multiple tours
       tags:
         - Tour Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       requestBody:
         required: true
         content:
@@ -415,22 +478,75 @@ paths:
             schema:
               type: object
               properties:
-                tourName:
-                  type: string
-                  example: "Paris Adventure"
-                description:
-                  type: string
-                  example: "A guided tour of Paris for 5 days."
-                price:
-                  type: number
-                  example: 500
+                tours:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - city
+                      - attractions
+                      - days
+                      - prices
+                      - guide
+                      - images
+                      - createdAt
+                    properties:
+                      city:
+                        type: string
+                        description: Name of the city for the tour
+                        example: "Paris"
+                      attractions:
+                        type: string
+                        description: Comma-separated list of attractions
+                        example: "Eiffel Tower, Louvre Museum, Notre-Dame Cathedral"
+                      days:
+                        type: integer
+                        description: Duration of the tour in days
+                        example: 3
+                      prices:
+                        type: object
+                        required:
+                          - adult
+                          - child
+                        properties:
+                          adult:
+                            type: number
+                            format: float
+                            description: Price for adults
+                            example: 200
+                          child:
+                            type: number
+                            format: float
+                            description: Price for children
+                            example: 100
+                      guide:
+                        type: string
+                        description: Guide's unique ID
+                        example: "672b9fd4041d7643abab83fe"
+                      images:
+                        type: array
+                        items:
+                          type: string
+                        description: List of image filenames for the tour
+                        example:
+                          - "paris1.jpg"
+                          - "paris2.jpg"
+                          - "paris3.jpg"
       responses:
         200:
-          description: Tour created successfully.
+          description: Tours created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Tours created successfully"
         400:
-          description: Invalid data.
+          description: Bad request, invalid input
         401:
-          description: Unauthorized.
+          description: Unauthorized, invalid or missing token
 
   /manage-tour/tour-detail/{id}:
     get:
@@ -439,12 +555,18 @@ paths:
       tags:
         - Tour Management
       parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
         - in: path
           name: id
           required: true
           description: ID of the tour to retrieve.
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         200:
@@ -460,22 +582,75 @@ paths:
       description: Allows an admin to update an existing tour.
       tags:
         - Tour Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       requestBody:
         required: true
         content:
           application/json:
+            tour:
+
             schema:
               type: object
               properties:
-                tourName:
+                tour:
+                  type: object
+                properties:
+                id:
                   type: string
-                  example: "Updated Paris Adventure"
-                description:
+                  description: Name of the city for the tour
+                  example: "21321321"
+                city:
                   type: string
-                  example: "Updated description of the tour."
-                price:
-                  type: number
-                  example: 600
+                  description: Name of the city for the tour
+                  example: "Paris"
+                attractions:
+                  type: string
+                  description: Comma-separated list of attractions
+                  example: "Eiffel Tower, Louvre Museum, Notre-Dame Cathedral"
+                days:
+                  type: integer
+                  description: Duration of the tour in days
+                  example: 3
+                prices:
+                  type: object
+                  required:
+                    - adult
+                    - child
+                  properties:
+                    adult:
+                      type: number
+                      format: float
+                      description: Price for adults
+                      example: 200
+                    child:
+                      type: number
+                      format: float
+                      description: Price for children
+                      example: 100
+                guide:
+                  type: string
+                  description: Guide's unique ID
+                  example: "672b9fd4041d7643abab83fe"
+                images:
+                  type: array
+                  items:
+                    type: string
+                  description: List of image filenames for the tour
+                  example:
+                    - "paris1.jpg"
+                    - "paris2.jpg"
+                    - "paris3.jpg"
+                createdAt:
+                  type: string
+                  format: date-time
+                  description: Timestamp when the tour was created
+                  example: "2023-11-06T14:33:26.000Z"
       responses:
         200:
           description: Tour updated successfully.
@@ -490,6 +665,13 @@ paths:
       description: Removes a specific tour.
       tags:
         - Tour Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       requestBody:
         required: true
         content:
@@ -497,11 +679,15 @@ paths:
             schema:
               type: object
               properties:
-                tourIds:
+                ids:
                   type: array
                   items:
-                    type: integer
-                    example: [1, 2]
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                    example:
+                      _id: 673e065b8d49ec0c90020712
       responses:
         200:
           description: Tour removed successfully.
@@ -516,6 +702,14 @@ paths:
       description: Retrieves a list of all tours.
       tags:
         - Tour Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
+      requestBody:
       responses:
         200:
           description: List of tours.
@@ -535,33 +729,85 @@ paths:
         401:
           description: Unauthorized.
 
-  /manage-booking-tour/booking-list:
-    get:
+  /manage-booking-tour/create-booking-tour:
+    post:
       summary: Get list of bookings
       description: Retrieves a list of all bookings.
       tags:
         - Booking Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - tour_id
+                - guide_id
+                - number_visitors
+                - start_tour
+                - time
+              properties:
+                user_id:
+                  type: string
+                  description: The ID of the user booking the tour
+                  example: "605c72ef1532071f3f6c1d3b"
+                tour_id:
+                  type: string
+                  description: The ID of the tour being booked
+                  example: "tour_12345"
+                guide_id:
+                  type: string
+                  description: The ID of the tour guide assigned to the booking
+                  example: "guide_98765"
+                number_visitors:
+                  type: integer
+                  description: The number of visitors for the booking
+                  example: 4
+                start_tour:
+                  type: string
+                  format: date-time
+                  description: The date and time when the tour starts
+                  example: "2024-12-01T09:00:00Z"
+                time:
+                  type: object
+                  required:
+                    - start_time
+                    - end_time
+                  properties:
+                    start_time:
+                      type: string
+                      format: date-time
+                      description: The start time of the tour
+                      example: "2024-12-01T09:00:00Z"
+                    end_time:
+                      type: string
+                      format: date-time
+                      description: The end time of the tour
+                      example: "2024-12-01T17:00:00Z"
       responses:
         200:
-          description: List of bookings.
+          description: Tour booking successful
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    user:
-                      type: string
-                      example: "John Doe"
-                    tour:
-                      type: string
-                      example: "Paris Adventure"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Tour booked successfully"
+        400:
+          description: Bad request, invalid input
         401:
-          description: Unauthorized.
+          description: Unauthorized, invalid or missing token
 
   /manage-booking/booking-detail/{id}:
     get:
@@ -570,12 +816,18 @@ paths:
       tags:
         - Booking Management
       parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
         - in: path
           name: id
           required: true
           description: ID of the booking to retrieve.
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         200:
@@ -585,31 +837,23 @@ paths:
         401:
           description: Unauthorized.
 
-  /manage-booking-tour/create-booking-tour:
-    post:
+  /manage-booking-tour/tour-list:
+    get:
       summary: Create a new booking for a tour
       description: Allows an admin to create a new booking for a specific tour.
       tags:
         - Booking Management
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Authorization token
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  example: 1
-                tourId:
-                  type: integer
-                  example: 1
-                date:
-                  type: string
-                  example: "2024-12-01"
-                numberOfPeople:
-                  type: integer
-                  example: 2
       responses:
         200:
           description: Booking created successfully.

@@ -12,4 +12,5 @@ const _dbConnect = async () => {
     console.error(`Failed to connect database: ${error}`.red.bold);
   }
 };
+
 module.exports = _dbConnect;

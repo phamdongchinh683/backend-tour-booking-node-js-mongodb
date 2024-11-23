@@ -64,6 +64,7 @@ class AdminService {
       })
     );
 
+    
     let userCreated = await User.insertMany(users);
     if (!userCreated) {
       return responseStatus(res, 402, "failed", "Users already exists");
@@ -78,6 +79,7 @@ class AdminService {
       return responseStatus(res, 200, "success", user);
     }
   }
+
   async updateUser(info, res) {
     const [hashedPassword] = await hashPassword(info.password);
     const result = await User.updateOne(
@@ -114,6 +116,7 @@ class AdminService {
     }
     return responseStatus(res, 400, "failed", "No users were deleted");
   }
+
   // manage guide
   async getAllGuides(res) {
     let roleGuide = await Role.findOne({ name: "Guide" }).lean();

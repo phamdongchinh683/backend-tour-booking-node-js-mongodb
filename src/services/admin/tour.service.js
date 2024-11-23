@@ -26,7 +26,8 @@ class TourService {
         createdAt: nowDate(),
       };
     });
-
+    
+    
     let createTour = await Tour.insertMany(tours);
     if (!createTour) {
       return responseStatus(res, 402, "failed", "Enter complete information");
@@ -40,6 +41,7 @@ class TourService {
     }
     return responseStatus(res, 200, "success", tour);
   }
+
   async updateTour(infoTour, res) {
     const result = await Tour.updateOne(
       { _id: infoTour.id || infoTour._id },
