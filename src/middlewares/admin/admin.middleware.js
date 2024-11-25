@@ -16,8 +16,8 @@ class AdminMiddleware {
           "Only administrators can log in!"
         );
       }
-    } catch (error) {
-      return responseStatus(res, 400, "failed", error.message);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
     }
   }
 

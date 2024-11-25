@@ -3,6 +3,7 @@ const { hashPassword } = require("../../utils/hashHelper");
 const UserService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
 const commentService = require("../../services/admin/comment.service");
+const tourService = require("../../services/admin/tour.service");
 class AuthController {
   // auth
   async signUp(req, res) {
@@ -146,6 +147,13 @@ class AuthController {
         { evaluateContent, rating },
         res
       );
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async getAllTour(req, res) {
+    try {
+      await tourService.tourList(res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

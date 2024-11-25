@@ -10,8 +10,8 @@ class AdminService {
       .select("role_id")
       .populate("role_id", "name")
       .lean();
-    if (!getRole) {
-      return responseStatus(res, 400, "failed", "Not found role");
+    if (getRole.length === 0) {
+      responseStatus(res, 400, "failed", "This account does not exist");
     }
     return getRole[0];
   }
@@ -64,7 +64,6 @@ class AdminService {
       })
     );
 
-    
     let userCreated = await User.insertMany(users);
     if (!userCreated) {
       return responseStatus(res, 402, "failed", "Users already exists");

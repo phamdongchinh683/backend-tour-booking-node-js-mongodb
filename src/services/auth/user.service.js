@@ -12,7 +12,6 @@ const { generateToken } = require("../../utils/tokenGenerator");
 const { responseStatus } = require("../../utils/handler");
 
 class UserService {
-
   async getRoleIdByName(roleName) {
     const role = await Role.findOne({ name: roleName }).lean();
     if (!role) {

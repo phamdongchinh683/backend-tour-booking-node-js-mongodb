@@ -708,7 +708,7 @@ paths:
           required: true
           schema:
             type: string
-          description: Authorization token
+          description: token
       requestBody:
       responses:
         200:
