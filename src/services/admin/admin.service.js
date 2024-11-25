@@ -1,9 +1,9 @@
 const { nowDate } = require("../../controllers/auth/auth.method");
 const { responseStatus } = require("../../utils/handler");
 const { hashPassword } = require("../../utils/hashHelper");
-
 const User = require("../../models/user.model");
 const Role = require("../../models/role.model");
+
 class AdminService {
   async isAdmin(username, res) {
     let getRole = await User.find({ username: username })
@@ -11,7 +11,7 @@ class AdminService {
       .populate("role_id", "name")
       .lean();
     if (getRole.length === 0) {
-      responseStatus(res, 400, "failed", "This account does not exist");
+      throw new Error("This account does not exist");
     }
     return getRole[0];
   }
