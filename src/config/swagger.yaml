@@ -31,11 +31,11 @@ paths:
                 username:
                   type: string
                   description: The username of the admin
-                  example: chinh6823
+                  example: Chinh6823
                 password:
                   type: string
                   description: The password of the admin
-                  example: saomabietduoc
+                  example: Chinh.789123
       responses:
         200:
           description: Login successful
