@@ -4,7 +4,6 @@ const authController = require("../../controllers/auth/auth.controller");
 const authMiddleware = require("../../middlewares/auth/auth.middleware");
 const { infoUser } = require("../../validations/board.validation");
 // public routers
-router.get("/get-tours", authController.getAllTour);
 router.post("/sign-up", infoUser, authController.signUp);
 router.post("/login", authController.login);
 router.post("/send-otp", authController.forgotPassword);
@@ -19,6 +18,7 @@ router.get("/profile", authController.getProfile);
 router.post("/post-blog", authController.postBlog);
 router.get("/my-blogs", authController.getAllBlog);
 router.get("/blog/:id", authController.detailBlog);
+router.get("/get-tours", authController.getAllTour);
 router.put("/edit-blog/:id", authController.editBlog);
 router.delete("/remove-blog/:id", authController.removeBlog);
 router.post("/comment-blog/:id", authController.commentBlog);
