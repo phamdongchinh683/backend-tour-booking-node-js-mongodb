@@ -35,7 +35,7 @@ paths:
                 password:
                   type: string
                   description: The password of the admin
-                  example: Chinh.789123
+                  example: Chinh.7891230
       responses:
         200:
           description: Login successful
