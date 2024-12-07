@@ -15,7 +15,6 @@ class AdminMiddleware {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async adminRole(req, res, next) {
     try {
       const role = await adminService.adminRole(req.user.username, res);

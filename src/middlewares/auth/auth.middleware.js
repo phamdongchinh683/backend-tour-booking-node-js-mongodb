@@ -29,7 +29,6 @@ class AuthMiddleware {
       );
     }
   }
-
   async roleUser(req, res, next) {
     try {
       let role = await userService.userRole(req.user.username, res);

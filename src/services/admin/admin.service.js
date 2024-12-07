@@ -15,7 +15,6 @@ class AdminService {
     }
     return getRole[0];
   }
-
   async getRoleIdByName(roleName) {
     const role = await Role.findOne({ name: roleName }).lean();
     if (!role) {
@@ -23,7 +22,6 @@ class AdminService {
     }
     return role._id;
   }
-  // role
   async adminRole(username, res) {
     let getRole = await User.findOne({ username: username })
       .select("role_id")
@@ -34,7 +32,6 @@ class AdminService {
     }
     return getRole;
   }
-  //manage user
   async getAllUsers(res) {
     let users = await User.find().lean().exec();
     if (!users || users.length === 0) {
@@ -78,7 +75,6 @@ class AdminService {
       return responseStatus(res, 200, "success", user);
     }
   }
-
   async updateUser(info, res) {
     const [hashedPassword] = await hashPassword(info.password);
     const result = await User.updateOne(
@@ -115,8 +111,6 @@ class AdminService {
     }
     return responseStatus(res, 400, "failed", "No users were deleted");
   }
-
-  // manage guide
   async getAllGuides(res) {
     let roleGuide = await Role.findOne({ name: "Guide" }).lean();
     if (!roleGuide) {
