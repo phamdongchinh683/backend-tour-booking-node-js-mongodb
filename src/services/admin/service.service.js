@@ -18,6 +18,7 @@ class ServiceBookService {
     let save = await Service.create({
       name: info.name,
       describe: info.describe,
+      createdAt: nowDate(),
     });
     if (save) {
       return responseStatus(res, 200, "success", "Created ServiceBook");
@@ -39,6 +40,7 @@ class ServiceBookService {
     let update = await Service.findByIdAndUpdate(id, {
       name: info.name,
       describe: info.describe,
+      updatedAt: nowDate(),
     });
     if (!update) {
       return responseStatus(res, 402, "failed", "No changes were made");

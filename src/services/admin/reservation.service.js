@@ -23,6 +23,7 @@ class ReservationService {
       service_id: info.service_id,
       numberPeople: info.numberPeople,
       date: info.date,
+      createdAt: nowDate(),
     });
     if (save) {
       return responseStatus(res, 200, "success", "Created Reservation");
@@ -45,9 +46,11 @@ class ReservationService {
   }
   async updateReservation(id, info, res) {
     let update = await Reservation.findByIdAndUpdate(id, {
+      user_id: info.user_id,
       service_id: info.service_id,
       numberPeople: info.numberPeople,
       date: info.date,
+      updatedAt: nowDate(),
     });
     if (!update) {
       return responseStatus(res, 402, "failed", "No changes were made");
