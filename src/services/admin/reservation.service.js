@@ -26,7 +26,7 @@ class ReservationService {
       createdAt: nowDate(),
     });
     if (save) {
-      return responseStatus(res, 200, "success", "Created Reservation");
+      return responseStatus(res, 200, "success", "Created reservation");
     }
   }
   async detailReservation(id, res) {
@@ -42,7 +42,7 @@ class ReservationService {
         "There are currently no listings"
       );
     }
-    return responseStatus(res, 200, "success", Reservation);
+    return responseStatus(res, 200, "success", reservation);
   }
   async updateReservation(id, info, res) {
     let update = await Reservation.findByIdAndUpdate(id, {
@@ -55,7 +55,7 @@ class ReservationService {
     if (!update) {
       return responseStatus(res, 402, "failed", "No changes were made");
     }
-    return responseStatus(res, 200, "success", "Updated this Reservation");
+    return responseStatus(res, 200, "success", "Updated this reservation");
   }
   async deleteReservations(list, res) {
     let remove = await Reservation.deleteMany({ _id: { $in: list } });

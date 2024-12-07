@@ -1,4 +1,4 @@
-// const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../controllers/auth/auth.method");
 const Service = require("../../models/service.model");
 const { responseStatus } = require("../../utils/handler");
 class ServiceBookService {
@@ -21,7 +21,7 @@ class ServiceBookService {
       createdAt: nowDate(),
     });
     if (save) {
-      return responseStatus(res, 200, "success", "Created ServiceBook");
+      return responseStatus(res, 200, "success", "Created service book");
     }
   }
   async detailServiceBook(id, res) {
@@ -45,7 +45,7 @@ class ServiceBookService {
     if (!update) {
       return responseStatus(res, 402, "failed", "No changes were made");
     }
-    return responseStatus(res, 200, "success", "Updated this serviceBook");
+    return responseStatus(res, 200, "success", "Updated this service book");
   }
   async deleteServiceBooks(list, res) {
     let remove = await Service.deleteMany({ _id: { $in: list } });
