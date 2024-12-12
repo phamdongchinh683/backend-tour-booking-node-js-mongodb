@@ -162,7 +162,7 @@ class AuthController {
   async detailTour(req, res) {
     const tourId = req.params.id;
     try {
-      await tourService.tourList(res);
+      await tourService.detailTour(tourId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

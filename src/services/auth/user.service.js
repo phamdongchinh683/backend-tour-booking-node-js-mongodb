@@ -301,13 +301,6 @@ class UserService {
       ? responseStatus(res, 200, "success", "Thank you for your review")
       : responseStatus(res, 400, "failed", "Please try again");
   }
-  async detailTour(id, res) {
-    let tour = await Tour.findById(id).populate("guide", "fullName").lean();
-    if (!tour) {
-      return responseStatus(res, 400, "failed", "Not found this tour");
-    }
-    return responseStatus(res, 200, "success", tour);
-  }
 }
 
 module.exports = new UserService();
