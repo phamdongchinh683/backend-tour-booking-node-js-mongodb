@@ -158,6 +158,15 @@ class AuthController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
+
+  async detailTour(req, res) {
+    const tourId = req.params.id;
+    try {
+      await tourService.tourList(res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
 }
 
 module.exports = new AuthController();

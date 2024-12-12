@@ -3,11 +3,11 @@ const { nowDate } = require("../../controllers/auth/auth.method");
 const { responseStatus } = require("../../utils/handler");
 class PaymentService {
   async getAllPayment(res) {
-    let PaymentList = await Payment.find()
+    let paymentList = await Payment.find()
       .populate("user_id", "fullName -_id")
       .lean()
       .exec();
-    if (PaymentList.length === 0) {
+    if (paymentList.length === 0) {
       return responseStatus(
         res,
         402,
@@ -15,7 +15,7 @@ class PaymentService {
         "There are currently no listings"
       );
     }
-    return responseStatus(res, 200, "success", PaymentList);
+    return responseStatus(res, 200, "success", paymentList);
   }
   async createPayment(info, res) {
     let save = await Payment.create({

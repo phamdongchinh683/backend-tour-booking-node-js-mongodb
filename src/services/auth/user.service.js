@@ -5,6 +5,7 @@ const Comment = require("../../models/comment.model");
 const Payment = require("../../models/payment.model");
 const Booking = require("../../models/booking.model");
 const Review = require("../../models/review.model");
+const Tour = require("../../models/tour.model");
 const { _tokenLife, _tokenSecret } = require("../../utils/secretKey");
 const { comparePassword } = require("../../utils/hashHelper");
 const { nowDate } = require("../../controllers/auth/auth.method");
@@ -299,6 +300,13 @@ class UserService {
     pushReviews
       ? responseStatus(res, 200, "success", "Thank you for your review")
       : responseStatus(res, 400, "failed", "Please try again");
+  }
+  async detailTour(id, res) {
+    let tour = await Tour.findById(id).populate("guide", "fullName").lean();
+    if (!tour) {
+      return responseStatus(res, 400, "failed", "Not found this tour");
+    }
+    return responseStatus(res, 200, "success", tour);
   }
 }
 
