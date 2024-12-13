@@ -33,6 +33,9 @@ const tourSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    updateAt: {
+      type: Date,
+    },
   },
   { versionKey: false }
 );

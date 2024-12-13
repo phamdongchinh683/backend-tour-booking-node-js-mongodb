@@ -61,7 +61,7 @@ class AdminService {
       })
     );
 
-    let userCreated = await User.insertMany(users);
+    let userCreated = await User.insertMany(users, { ordered: false });
     if (!userCreated) {
       return responseStatus(res, 402, "failed", "Users already exists");
     }

@@ -9,6 +9,7 @@ const blogService = require("../../services/admin/blog.service");
 const serviceBookService = require("../../services/admin/service.service");
 const paymentService = require("../../services/admin/payment.service");
 const reservationService = require("../../services/admin/reservation.service");
+const userModel = require("../../models/user.model");
 class AdminController {
   // manage user
   async userList(req, res) {
@@ -18,6 +19,7 @@ class AdminController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
+  
   async guideList(req, res) {
     try {
       await adminService.getAllGuides(res);

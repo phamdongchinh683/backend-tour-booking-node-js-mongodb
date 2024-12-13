@@ -152,9 +152,10 @@ class AuthController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
-  async getAllTour(req, res) {
+  async getTours(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await tourService.tourList(res);
+      await tourService.tourList(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

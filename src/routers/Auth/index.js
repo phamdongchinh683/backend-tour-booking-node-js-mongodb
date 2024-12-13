@@ -18,7 +18,7 @@ router.get("/profile", authController.getProfile);
 router.post("/post-blog", authController.postBlog);
 router.get("/my-blogs", authController.getAllBlog);
 router.get("/blog/:id", authController.detailBlog);
-router.get("/get-tours", authController.getAllTour);
+router.get("/tour-list", authController.getTours);
 router.get("/tour-detail/:id", authController.detailTour);
 router.put("/edit-blog/:id", authController.editBlog);
 router.delete("/remove-blog/:id", authController.removeBlog);

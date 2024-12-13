@@ -37,7 +37,7 @@ class AuthMiddleware {
         req.user = role;
         return next();
       } else {
-        throw new Error("Only Traveler or Guide can log in!");
+        throw new Error("Access Denied. Traveler or Guide only route!");
       }
     } catch (error) {
       responseStatus(res, 400, "failed", error.message);
