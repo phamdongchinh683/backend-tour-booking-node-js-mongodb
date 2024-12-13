@@ -78,6 +78,82 @@ module.exports = infoUser = async (req, res, next) => {
   }
 };
 
+module.exports = inputBookTour = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    guideId: Joi.string().min(8).max(30).trim().strict().required().messages({
+      "any.required": "Guide is required",
+      "string.empty": "Guide cannot be an empty field",
+      "string.trim": "Guide must not have leading or trailing whitespace",
+    }),
+    numberVisitor: Joi.string()
+      .min(10)
+      .max(60)
+      .trim()
+      .strict()
+      .required()
+      .messages({
+        "any.required": "number visitor is required",
+        "string.empty": "number visitor cannot be an empty field",
+        "string.min":
+          "number visitor length must be at least 10 characters long",
+        "string.max": "The maximum length of a number visitor is 60",
+      }),
+    startTour: Joi.date().min(2).max(60).trim().strict().required().messages({
+      "any.required": "startTour is required",
+      "string.empty": "First name cannot be an empty field",
+      "string.min": "First name must be at least 2 characters long",
+      "string.max": "First name cannot exceed 60 characters",
+    }),
+    endTime: Joi.date().min(2).max(60).trim().strict().required().messages({
+      "any.required": "Last name is required",
+      "string.empty": "Last name cannot be an empty field",
+      "string.min": "Last name must be at least 2 characters long",
+      "string.max": "Last name cannot exceed 60 characters",
+    }),
+    status: Joi.number().min(10).required().messages({
+      "any.required": "Age is required",
+      "number.base": "Age must be a number",
+      "number.min": "Age must be at least 10",
+    }),
+    cardNumber: Joi.string()
+      .min(2)
+      .max(30)
+      .trim()
+      .strict()
+      .required()
+      .messages({
+        "any.required": "City is required",
+        "string.empty": "City cannot be an empty field",
+        "string.min": "City must be at least 2 characters long",
+        "string.max": "City cannot exceed 30 characters",
+      }),
+    totalAmount: Joi.string()
+      .email()
+      .pattern(/^[\w.-]+@[a-zA-Z\d-]+\.(com|edu|net|org|gov)$/)
+      .required()
+      .messages({
+        "any.required": "Email is required",
+        "string.email": "Email must be a valid email address",
+        "string.pattern.base":
+          "Email must be a valid address ending in .com, .edu, .net, .org, or .gov",
+      }),
+  });
+
+  try {
+    const value = await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+    });
+
+    req.user = value;
+
+    next();
+  } catch (error) {
+    const errorDetail = error.details.map((err) => err.message).join(", ");
+
+    return responseStatus(res, 422, "failed", errorDetail);
+  }
+};
+
 module.exports = {
   infoUser,
 };

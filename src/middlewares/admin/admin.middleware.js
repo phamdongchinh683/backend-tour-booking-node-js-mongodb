@@ -7,6 +7,7 @@ class AdminMiddleware {
     try {
       const role = await adminService.isAdmin(username, res);
       if (role.role_id.name === "Admin") {
+        req.user = username;
         next();
       } else {
         throw new Error("Only administrators can log in!");

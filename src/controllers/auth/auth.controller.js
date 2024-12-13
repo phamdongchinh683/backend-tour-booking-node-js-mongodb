@@ -23,7 +23,8 @@ class AuthController {
     }
   }
   async login(req, res) {
-    const { username, password } = req.body;
+    const { password } = req.body;
+    const username = req.user;
     try {
       await UserService.findUser(username, password, res);
     } catch (e) {
@@ -158,7 +159,6 @@ class AuthController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
-
   async detailTour(req, res) {
     const tourId = req.params.id;
     try {

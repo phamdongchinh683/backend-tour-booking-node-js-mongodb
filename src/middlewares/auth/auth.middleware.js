@@ -16,7 +16,8 @@ class AuthMiddleware {
         return responseStatus(res, 403, "failed", "You do not have access!");
       }
       const payload = {
-        username: verified.payload,
+        username: verified.payload.username,
+        id: verified.payload.id,
       };
       req.user = payload;
       next();
@@ -32,16 +33,11 @@ class AuthMiddleware {
   async roleUser(req, res, next) {
     try {
       let role = await userService.userRole(req.user.username, res);
-      if (role.role_id.name === "Traveler" || "Guide") {
+      if (role.role_id.name === "Traveler" || role.role_id.name === "Guide") {
         req.user = role;
         return next();
       } else {
-        return responseStatus(
-          res,
-          403,
-          "failed",
-          "Access Denied. Traveler only route!"
-        );
+        throw new Error("Only Traveler or Guide can log in!");
       }
     } catch (error) {
       responseStatus(res, 400, "failed", error.message);
@@ -77,6 +73,23 @@ class AuthMiddleware {
       next();
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async isAuth(req, res, next) {
+    const { username } = req.body;
+    if (!username) {
+      return responseStatus(res, 400, "failed", "Username is required");
+    }
+    try {
+      let role = await userService.userRole(username, res);
+      if (role.role_id.name === "Traveler" || role.role_id.name === "Guide") {
+        req.user = username;
+        return next();
+      } else {
+        throw new Error("Only Traveler or Guide can log in!");
+      }
+    } catch (error) {
+      responseStatus(res, 400, "failed", error.message);
     }
   }
 }

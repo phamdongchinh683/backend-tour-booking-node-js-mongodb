@@ -13,6 +13,16 @@ const { generateToken } = require("../../utils/tokenGenerator");
 const { responseStatus } = require("../../utils/handler");
 
 class UserService {
+  async isUser(username, res) {
+    let getRole = await User.find({ username: username })
+      .select("role_id")
+      .populate("role_id", "name")
+      .lean();
+    if (getRole.length === 0) {
+      throw new Error("This account does not exist");
+    }
+    return getRole[0];
+  }
   async getRoleIdByName(roleName) {
     const role = await Role.findOne({ name: roleName }).lean();
     if (!role) {
@@ -26,7 +36,7 @@ class UserService {
       .populate("role_id", "name")
       .lean();
     if (!getRole) {
-      return responseStatus(res, 400, "failed", "You have not role");
+      throw new Error("This account does not exist");
     }
     return getRole;
   }
@@ -55,7 +65,7 @@ class UserService {
   }
   async findUser(username, password, res) {
     let user = await User.findOne({ username: username })
-      .select("username password")
+      .select("username password _id")
       .lean();
     if (!user) {
       return responseStatus(
@@ -76,7 +86,7 @@ class UserService {
         "The password that you've entered is incorrect."
       );
     }
-    const data = user.username;
+    const data = { username: user.username, id: user._id };
     let accessToken = await generateToken(data, _tokenSecret, _tokenLife);
     return responseStatus(res, 200, "success", accessToken);
   }

@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../../controllers/auth/auth.controller");
 const authMiddleware = require("../../middlewares/auth/auth.middleware");
-const { infoUser } = require("../../validations/board.validation");
+const { infoUser } = require("../../validations/auth.validation");
 // public routers
 router.post("/sign-up", infoUser, authController.signUp);
-router.post("/login", authController.login);
+router.post("/login", authMiddleware.isAuth, authController.login);
 router.post("/send-otp", authController.forgotPassword);
 router.post(
   "/new-password",
