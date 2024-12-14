@@ -15,6 +15,7 @@ router.post(
   authMiddleware.authorization,
   authController.refreshToken
 );
+// router.post("/log-out", authMiddleware.authorization, authController.logout);
 router.post("/send-otp", authController.forgotPassword);
 router.post(
   "/new-password",
@@ -28,7 +29,7 @@ router.get("/my-blogs", authController.getAllBlog);
 router.get("/blog/:id", authController.detailBlog);
 router.get("/tour-list", authController.getTours);
 router.get("/tour-detail/:id", authController.detailTour);
-router.put("/edit-blog/:id", authController.editBlog);
+router.put("/edit-blog/:id", inputBlog, authController.editBlog);
 router.delete("/remove-blog/:id", authController.removeBlog);
 router.post("/comment-blog/:id", authController.commentBlog);
 router.patch("/edit-comment/:id", authController.updateComment);

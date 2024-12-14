@@ -151,7 +151,7 @@ class UserService {
   async editBlog(id, newInfo, res) {
     let updateBlog = await Blog.findByIdAndUpdate(id, {
       title: newInfo.title,
-      content: newInfo.newContent,
+      content: newInfo.content,
       images: newInfo.images,
       updateAt: nowDate(),
     });

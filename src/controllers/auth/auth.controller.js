@@ -40,6 +40,14 @@ class AuthController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
+  async logout(req, res) {
+    const token = req.token;
+    if (token) {
+      res.status(200).json({ message: "Logged out successfully" });
+    } else {
+      res.status(400).json({ message: "No token provided" });
+    }
+  }
   async getProfile(req, res) {
     try {
       await UserService.profile(req.user._id, res);
@@ -74,9 +82,9 @@ class AuthController {
   }
   async editBlog(req, res) {
     let blogId = req.params.id;
-    const { title, newContent, images } = req.body;
+
     try {
-      await UserService.editBlog(blogId, { title, newContent, images }, res);
+      await UserService.editBlog(blogId, req.value, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
