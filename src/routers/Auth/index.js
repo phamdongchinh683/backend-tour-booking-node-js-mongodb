@@ -12,7 +12,6 @@ router.post(
   authMiddleware.verifyOtp,
   authController.newPassword
 ); // protected router
-
 router.use(authMiddleware.authorization, authMiddleware.roleUser);
 router.get("/profile", authController.getProfile);
 router.post("/post-blog", authController.postBlog);

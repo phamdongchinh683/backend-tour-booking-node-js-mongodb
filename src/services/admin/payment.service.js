@@ -1,21 +1,43 @@
 const Payment = require("../../models/payment.model");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 class PaymentService {
-  async getAllPayment(res) {
-    let paymentList = await Payment.find()
+  async getAllPayment(cursor, direction, res) {
+    let limit = 6;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
+    }
+
+    let paymentList = await Payment.find(query)
       .populate("user_id", "fullName -_id")
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
       .lean()
       .exec();
-    if (paymentList.length === 0) {
+
+    if (!paymentList || paymentList.length === 0) {
       return responseStatus(
         res,
-        402,
+        400,
         "failed",
-        "There are currently no listings"
+        "There are currently no payments available"
       );
     }
-    return responseStatus(res, 200, "success", paymentList);
+    const nextCursor =
+      paymentList.length > 0 ? paymentList[paymentList.length - 1]._id : null;
+    const prevCursor = paymentList.length > 0 ? paymentList[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: paymentList.length,
+      paymentList,
+    };
+    return responseStatus(res, 200, "success", results);
   }
   async createPayment(info, res) {
     let save = await Payment.create({

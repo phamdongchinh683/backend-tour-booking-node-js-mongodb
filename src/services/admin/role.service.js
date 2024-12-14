@@ -1,5 +1,5 @@
 const Role = require("../../models/role.model");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 
 class RoleService {
@@ -29,7 +29,7 @@ class RoleService {
     }
     return responseStatus(res, 200, "success", "Updated role");
   }
-  
+
   async deleteRole(id, res) {
     let removeRole = await Role.findByIdAndDelete(id);
     if (!removeRole) {

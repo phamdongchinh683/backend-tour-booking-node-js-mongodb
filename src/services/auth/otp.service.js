@@ -1,4 +1,4 @@
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 const { generateOtp } = require("../../utils/generateOtp");
 const { mailSender } = require("../../utils/mailSender");

@@ -1,18 +1,42 @@
 const Blog = require("../../models/blog.model");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 class BlogService {
-  async getAllBlog(res) {
-    let blogs = await Blog.find().select("-comments").lean().exec();
-    if (blogs.length === 0) {
+  async getAllBlog(cursor, direction = "next", res) {
+    let limit = 6;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
+    }
+    let blogs = await Blog.find(query)
+      .select("-comments")
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
+      .lean()
+      .exec();
+
+    if (!blogs || blogs.length === 0) {
       return responseStatus(
         res,
-        402,
+        400,
         "failed",
-        "There are currently no listings"
+        "There are currently no blogs available"
       );
     }
-    return responseStatus(res, 200, "success", blogs);
+    const nextCursor = blogs.length > 0 ? blogs[blogs.length - 1]._id : null;
+    const prevCursor = blogs.length > 0 ? blogs[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: blogs.length,
+      blogs,
+    };
+
+    return responseStatus(res, 200, "success", results);
   }
   async createBlog(id, info, res) {
     let save = await Blog.create({

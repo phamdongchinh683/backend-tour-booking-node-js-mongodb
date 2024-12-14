@@ -57,7 +57,7 @@ module.exports = infoUser = async (req, res, next) => {
         "string.pattern.base":
           "Phone number must contain only digits and be 10-15 characters long",
       }),
-    role: Joi.string().valid("Traveler", "Guide", "Admin").required().messages({
+    role: Joi.string().valid("Traveler", "Guide").required().messages({
       "any.required": "Role is required",
       "any.only": "Role must be one of traveler, guide, or moderator",
     }),

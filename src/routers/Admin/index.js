@@ -66,44 +66,6 @@ router.post("/manage-blog/create-blog", adminController.createBlog);
 router.get("/manage-blog/blog-detail/:id", adminController.blogDetail);
 router.put("/manage-blog/edit-blog/:id", adminController.updateBlog);
 router.delete("/manage-blog/delete-blog", adminController.deleteBlogs);
-//manage reservation
-router.get(
-  "/manage-reservation/reservation-list",
-  adminController.reservationList
-);
-router.post(
-  "/manage-reservation/create-reservation",
-  adminController.createReservation
-);
-router.get(
-  "/manage-reservation/blog-reservation/:id",
-  adminController.reservationDetail
-);
-router.put(
-  "/manage-reservation/edit-reservation/:id",
-  adminController.updateReservation
-);
-router.delete(
-  "/manage-reservation/delete-reservation",
-  adminController.deleteReservations
-);
-//manage service
-router.get("/manage-service/service-list", adminController.serviceBookList);
-router.post(
-  "/manage-service/create-service",
-  adminController.createServiceBook
-);
-router.get(
-  "/manage-service/service-detail/:id",
-  adminController.serviceBookDetail
-);
-router.put(
-  "/manage-service/edit-service/:id",
-  adminController.updateServiceBook
-);
-router.delete(
-  "/manage-service/delete-service",
-  adminController.deleteServiceBooks
-);
+
 
 module.exports = router;

@@ -6,20 +6,17 @@ const bookingService = require("../../services/admin/booking.service");
 const reviewService = require("../../services/admin/review.service");
 const commentService = require("../../services/admin/comment.service");
 const blogService = require("../../services/admin/blog.service");
-const serviceBookService = require("../../services/admin/service.service");
 const paymentService = require("../../services/admin/payment.service");
-const reservationService = require("../../services/admin/reservation.service");
-const userModel = require("../../models/user.model");
 class AdminController {
   // manage user
   async userList(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await adminService.getAllUsers(res);
+      await adminService.getAllUsers(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
-  
   async guideList(req, res) {
     try {
       await adminService.getAllGuides(res);
@@ -114,8 +111,9 @@ class AdminController {
     }
   }
   async getTours(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await tourService.tourList(res);
+      await tourService.tourList(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -147,8 +145,9 @@ class AdminController {
   }
   // manage booking
   async bookingList(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await bookingService.getAllBooking(res);
+      await bookingService.getAllBooking(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -228,8 +227,10 @@ class AdminController {
   }
   // manage blog
   async blogList(req, res) {
+    const { cursor, direction } = req.query;
+
     try {
-      await blogService.getAllBlog(res);
+      await blogService.getAllBlog(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -273,8 +274,9 @@ class AdminController {
   }
   // manage comment
   async commentList(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await commentService.getAllComment(res);
+      await commentService.getAllComment(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -319,8 +321,9 @@ class AdminController {
   }
   // manage review
   async reviewList(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await reviewService.getAllReview(res);
+      await reviewService.getAllReview(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -367,8 +370,9 @@ class AdminController {
   }
   // manage payment
   async paymentList(req, res) {
+    const { cursor, direction } = req.query;
     try {
-      await paymentService.getAllPayment(res);
+      await paymentService.getAllPayment(cursor, direction, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -415,103 +419,6 @@ class AdminController {
     const { ids } = req.body;
     try {
       await paymentService.deletePayments(ids, res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-
-  // manage service
-
-  async serviceBookList(req, res) {
-    try {
-      await serviceBookService.getAllServiceBook(res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async serviceBookDetail(req, res) {
-    const serviceBookId = req.params.id;
-    try {
-      await serviceBookService.detailServiceBook(serviceBookId, res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async createServiceBook(req, res) {
-    const { name, describe } = req.body;
-    try {
-      await serviceBookService.createServiceBook({ name, describe }, res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async updateServiceBook(req, res) {
-    let serviceBookId = req.params.id;
-    const { name, describe } = req.body;
-    try {
-      await serviceBookService.updateServiceBook(
-        serviceBookId,
-        { name, describe },
-        res
-      );
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async deleteServiceBooks(req, res) {
-    const { ids } = req.body;
-    try {
-      await serviceBookService.deleteServiceBooks(ids, res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-
-  // manage reservation
-
-  async reservationList(req, res) {
-    try {
-      await reservationService.getAllReservation(res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async reservationDetail(req, res) {
-    const reservationId = req.params.id;
-    try {
-      await reservationService.detailReservation(reservationId, res);
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async createReservation(req, res) {
-    const { user_id, service_id, numberPeople, date } = req.body;
-    try {
-      await reservationService.createReservation(
-        { user_id, service_id, numberPeople, date },
-        res
-      );
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async updateReservation(req, res) {
-    let reservationId = req.params.id;
-    const { user_id, service_id, numberPeople, date } = req.body;
-    try {
-      await reservationService.updateReservation(
-        reservationId,
-        { user_id, service_id, numberPeople, date },
-        res
-      );
-    } catch (e) {
-      return responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async deleteReservations(req, res) {
-    const { ids } = req.body;
-    try {
-      await reservationService.deleteReservations(ids, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

@@ -1,21 +1,43 @@
 const Review = require("../../models/review.model");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 class ReviewService {
-  async getAllReview(res) {
-    let reviewList = await Review.find()
+  async getAllReview(cursor, direction = "next", res) {
+    let limit = 6;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
+    }
+
+    let reviews = await Review.find(query)
       .populate("user_id", "fullName -_id")
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
       .lean()
       .exec();
-    if (reviewList.length === 0) {
+
+    if (!reviews || reviews.length === 0) {
       return responseStatus(
         res,
-        402,
+        400,
         "failed",
-        "There are currently no listings"
+        "There are currently no reviews available"
       );
     }
-    return responseStatus(res, 200, "success", reviewList);
+    const nextCursor =
+      reviews.length > 0 ? reviews[reviews.length - 1]._id : null;
+    const prevCursor = reviews.length > 0 ? reviews[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: reviews.length,
+      reviews,
+    };
+    return responseStatus(res, 200, "success", results);
   }
   async createReview(info, res) {
     let save = await Review.create({

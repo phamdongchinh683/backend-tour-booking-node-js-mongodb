@@ -8,7 +8,7 @@ const Review = require("../../models/review.model");
 const Tour = require("../../models/tour.model");
 const { _tokenLife, _tokenSecret } = require("../../utils/secretKey");
 const { comparePassword } = require("../../utils/hashHelper");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { generateToken } = require("../../utils/tokenGenerator");
 const { responseStatus } = require("../../utils/handler");
 

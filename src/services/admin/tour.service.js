@@ -1,9 +1,9 @@
 const Tour = require("../../models/tour.model");
 const { responseStatus } = require("../../utils/handler");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 class TourService {
   async tourList(cursor, direction = "next", res) {
-    let limit = 5;
+    let limit = 6;
     let query = {};
 
     if (direction === "next" && cursor) {
@@ -12,15 +12,20 @@ class TourService {
       query._id = { $lt: cursor };
     }
 
-    let tours = await Tour.find()
-      .find(query)
+    let tours = await Tour.find(query)
       .populate("guide", "fullName")
-      .sort({ createAt: direction === "next" ? -1 : 1 })
+      .sort({ createAt: -1 })
       .limit(Number(limit))
       .lean()
       .exec();
+
     if (!tours || tours.length === 0) {
-      return responseStatus(res, 400, "failed", "No tour found");
+      return responseStatus(
+        res,
+        400,
+        "failed",
+        "There are currently no tours available"
+      );
     }
     const nextCursor = tours.length > 0 ? tours[tours.length - 1]._id : null;
     const prevCursor = tours.length > 0 ? tours[0]._id : null;

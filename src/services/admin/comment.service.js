@@ -1,24 +1,47 @@
 const Comment = require("../../models/comment.model");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 class CommentService {
-  async getAllComment(res) {
-    let commentList = await Comment.find()
+  async getAllComment(cursor, direction = "next", res) {
+    let limit = 6;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
+    }
+
+    let commentList = await Comment.find(query)
       .populate([
         { path: "blog_id", select: "title -_id" },
         { path: "user_id", select: "fullName -_id" },
       ])
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
       .lean()
       .exec();
-    if (commentList.length === 0) {
+
+    if (!commentList || commentList.length === 0) {
       return responseStatus(
         res,
-        402,
+        400,
         "failed",
-        "There are currently no listings"
+        "There are currently no commentList available"
       );
     }
-    return responseStatus(res, 200, "success", commentList);
+    const nextCursor =
+      commentList.length > 0 ? commentList[commentList.length - 1]._id : null;
+    const prevCursor = commentList.length > 0 ? commentList[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: commentList.length,
+      commentList,
+    };
+
+    return responseStatus(res, 200, "success", results);
   }
   async createComment(info, res) {
     let save = await Comment.create({

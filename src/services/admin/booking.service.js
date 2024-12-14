@@ -1,25 +1,47 @@
 const Booking = require("../../models/booking.model");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../utils/handler");
 class BookingService {
-  async getAllBooking(res) {
-    let bookingList = await Booking.find()
+  async getAllBooking(cursor, direction = "next", res) {
+    let limit = 1;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
+    }
+    let bookingList = await Booking.find(query)
       .populate([
         { path: "user_id", select: "fullName -_id" },
         { path: "guide_id", select: "fullName -_id" },
         { path: "tour_id", select: "city -_id" },
       ])
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
       .lean()
       .exec();
-    if (bookingList.length === 0) {
+
+    if (!bookingList || bookingList.length === 0) {
       return responseStatus(
         res,
-        402,
+        400,
         "failed",
-        "There are currently no listings"
+        "There are currently no bookingList available"
       );
     }
-    return responseStatus(res, 200, "success", bookingList);
+    const nextCursor =
+      bookingList.length > 0 ? bookingList[bookingList.length - 1]._id : null;
+    const prevCursor = bookingList.length > 0 ? bookingList[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: bookingList.length,
+      bookingList,
+    };
+
+    return responseStatus(res, 200, "success", results);
   }
   async createBooking(info, res) {
     let save = await Booking.create({
