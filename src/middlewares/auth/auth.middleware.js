@@ -20,6 +20,7 @@ class AuthMiddleware {
         id: verified.payload.id,
       };
       req.user = payload;
+      req.token = authorizationToken;
       next();
     } catch (error) {
       return responseStatus(
@@ -51,26 +52,6 @@ class AuthMiddleware {
         req.user = verify;
         return next();
       }
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
-    }
-  }
-  async createTour(req, res, next) {
-    let tourId = req.params.tourId;
-    let userId = req.user._id;
-    let { guideId, numberVisitor, startTour, startTime, endTime } = req.body;
-    try {
-      let infoBook = {
-        userId,
-        tourId,
-        guideId,
-        numberVisitor,
-        startTour,
-        startTime,
-        endTime,
-      };
-      req.infoBook = infoBook;
-      next();
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
     }

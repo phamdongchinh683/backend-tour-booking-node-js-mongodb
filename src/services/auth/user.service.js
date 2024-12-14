@@ -5,14 +5,35 @@ const Comment = require("../../models/comment.model");
 const Payment = require("../../models/payment.model");
 const Booking = require("../../models/booking.model");
 const Review = require("../../models/review.model");
-const Tour = require("../../models/tour.model");
 const { _tokenLife, _tokenSecret } = require("../../utils/secretKey");
 const { comparePassword } = require("../../utils/hashHelper");
 const { nowDate } = require("../../utils/formatDate");
 const { generateToken } = require("../../utils/tokenGenerator");
 const { responseStatus } = require("../../utils/handler");
-
+const { decodeToken } = require("../../utils/decodeToken");
 class UserService {
+  async decodeByUsername(username, token, res) {
+    let decoded = await decodeToken(token, _tokenSecret);
+    if (!decoded) {
+      return responseStatus(res, 400, "failed", "token is not invalid");
+    }
+
+    let user = await User.findOne({ username: username })
+      .select("username")
+      .lean();
+    if (!user) {
+      return responseStatus(res, 400, "failed", "Not found user");
+    }
+    let data = {
+      username: user.username,
+    };
+
+    let newToken = await generateToken(data, _tokenSecret, _tokenLife);
+    if (!newToken) {
+      return responseStatus(res, 400, "failed", "generateToken failed");
+    }
+    return responseStatus(res, 200, "success", newToken);
+  }
   async isUser(username, res) {
     let getRole = await User.find({ username: username })
       .select("role_id")

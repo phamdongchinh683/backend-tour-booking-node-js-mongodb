@@ -31,6 +31,15 @@ class AuthController {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
+  async refreshToken(req, res) {
+    const username = req.user.username;
+    const token = req.token;
+    try {
+      await UserService.decodeByUsername(username, token, res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
   async getProfile(req, res) {
     try {
       await UserService.profile(req.user._id, res);

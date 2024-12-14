@@ -10,6 +10,11 @@ const {
 // public routers
 router.post("/sign-up", infoUser, authController.signUp);
 router.post("/login", authMiddleware.isAuth, authController.login);
+router.post(
+  "/refresh-token",
+  authMiddleware.authorization,
+  authController.refreshToken
+);
 router.post("/send-otp", authController.forgotPassword);
 router.post(
   "/new-password",
