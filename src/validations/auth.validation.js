@@ -80,11 +80,11 @@ module.exports = infoUser = async (req, res, next) => {
 
 module.exports = inputBookTour = async (req, res, next) => {
   const correctCondition = Joi.object({
-    guideId: Joi.string().min(8).max(40).trim().required().messages({
+    guideId: Joi.string().min(8).max(30).trim().required().messages({
       "any.required": "Guide is required",
       "string.empty": "Guide cannot be an empty field",
       "string.min": "Guide ID must be at least 8 characters long",
-      "string.max": "Guide ID cannot exceed 40 characters",
+      "string.max": "Guide ID cannot exceed 30 characters",
     }),
     numberVisitor: Joi.number().integer().min(1).max(60).required().messages({
       "any.required": "Number of visitors is required",
@@ -92,21 +92,18 @@ module.exports = inputBookTour = async (req, res, next) => {
       "number.min": "Number of visitors must be at least 1",
       "number.max": "Number of visitors cannot exceed 60",
     }),
-    startTour: Joi.date().iso().required().messages({
+    startTour: Joi.string().required().messages({
       "any.required": "Start date is required",
       "date.base": "Start date must be a valid date",
-      "date.iso": "Start date must be in ISO 8601 format",
     }),
-    endTime: Joi.date()
-      .iso()
-      .greater(Joi.ref("startTour"))
-      .required()
-      .messages({
-        "any.required": "End date is required",
-        "date.base": "End date must be a valid date",
-        "date.iso": "End date must be in ISO 8601 format",
-        "date.greater": "End date must be after the start date",
-      }),
+    startTime: Joi.string().required().messages({
+      "any.required": "Start time is required",
+      "date.base": "End time must be a valid date",
+    }),
+    endTime: Joi.string().required().messages({
+      "any.required": "End time is required",
+      "date.base": "End time must be a valid date",
+    }),
     status: Joi.number().integer().valid(0, 1).required().messages({
       "any.required": "Status is required",
       "number.base": "Status must be a number",
@@ -130,7 +127,9 @@ module.exports = inputBookTour = async (req, res, next) => {
       abortEarly: false,
     });
 
-    req.user = value;
+    payload = req.user;
+    req.user = payload;
+    req.infoBook = value;
 
     next();
   } catch (error) {
@@ -164,9 +163,9 @@ module.exports = inputBlog = async (req, res, next) => {
     const value = await correctCondition.validateAsync(req.body, {
       abortEarly: false,
     });
-
-    req.user = value;
-
+    payload = req.user;
+    req.user = payload;
+    req.value = value;
     next();
   } catch (error) {
     const errorDetail = error.details.map((err) => err.message).join(", ");

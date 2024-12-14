@@ -108,8 +108,9 @@ class AuthController {
     }
   }
   async getAllBlog(req, res) {
+    let userId = req.user._id;
     try {
-      await UserService.getAllBlog(req.user._id, res);
+      await UserService.getAllBlog(userId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -124,27 +125,33 @@ class AuthController {
   }
   // tour payment
   async tourPayment(req, res) {
+    let userId = req.user._id;
+    let tourId = req.params.tourId;
+    let infoBook = req.infoBook;
     try {
-      await UserService.tourPayment(req.infoBook, req, res);
+      await UserService.tourPayment(infoBook, tourId, userId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
   // getBooked
   async getBookedList(req, res) {
+    let userId = req.user._id;
     try {
-      await UserService.bookedList(req.user._id, res);
+      await UserService.bookedList(userId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
   async evaluateGuide(req, res) {
+    let userId = req.user._id;
     const guideId = req.params.guideId;
+
     const { evaluateContent, rating } = req.body;
     try {
       await UserService.evaluateGuide(
         guideId,
-        req.user._id,
+        userId,
         { evaluateContent, rating },
         res
       );

@@ -13,8 +13,8 @@ const paymentSchema = new Schema(
       required: true,
     },
     status: {
-      type: String,
-      enum: ["pending", "complete"],
+      type: Number,
+      enum: [0, 1],
     },
     card_number: {
       type: String,

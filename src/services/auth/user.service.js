@@ -242,12 +242,10 @@ class UserService {
       ? responseStatus(res, 200, "success", "Successfully booked the tour")
       : null;
   }
-  async tourPayment(infoBook, req, res) {
-    const { status, cardNumber, totalAmount } = req.body;
-
+  async tourPayment(infoBook, tourId, userId, res) {
     let createBook = new Booking({
-      tour_id: infoBook.tourId,
-      user_id: infoBook.userId,
+      tour_id: tourId,
+      user_id: userId,
       guide_id: infoBook.guideId,
       number_visitors: infoBook.numberVisitor,
       start_tour: infoBook.startTour,
@@ -261,10 +259,10 @@ class UserService {
 
     let createPayment = await Payment.create({
       booking_id: createBook._id,
-      user_id: infoBook.userId,
-      status: status,
-      card_number: cardNumber,
-      total_amount: totalAmount,
+      user_id: userId,
+      status: infoBook.status,
+      card_number: infoBook.cardNumber,
+      total_amount: infoBook.totalAmount,
       createdAt: nowDate(),
     });
     return responseStatus(res, 200, "success", createPayment);
