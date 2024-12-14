@@ -66,9 +66,8 @@ class AuthController {
   }
   // blog
   async postBlog(req, res) {
-    const { title, content, images } = req.body;
     try {
-      await UserService.addBlog(req.user._id, { title, content, images }, res);
+      await UserService.addBlog(req.user._id, req.value, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

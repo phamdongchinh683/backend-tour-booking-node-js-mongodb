@@ -23,7 +23,7 @@ router.post(
 ); // protected router
 router.use(authMiddleware.authorization, authMiddleware.roleUser);
 router.get("/profile", authController.getProfile);
-router.post("/post-blog", authController.postBlog);
+router.post("/post-blog", inputBlog, authController.postBlog);
 router.get("/my-blogs", authController.getAllBlog);
 router.get("/blog/:id", authController.detailBlog);
 router.get("/tour-list", authController.getTours);
