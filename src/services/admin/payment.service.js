@@ -1,6 +1,6 @@
 const Payment = require("../../models/payment.model");
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 class PaymentService {
   async getAllPayment(cursor, direction, res) {
     let limit = 6;

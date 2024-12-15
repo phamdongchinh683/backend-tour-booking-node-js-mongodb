@@ -1,6 +1,6 @@
 const userService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { verifyToken } = require("../../utils/verifyToken");
 const { _tokenSecret } = require("../../utils/secretKey");
 

@@ -1,6 +1,6 @@
 const Guide = require("../../models/guide.model");
 const User = require("../../models/user.model");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 
 class GuildService {
   async guideRole(username, res) {

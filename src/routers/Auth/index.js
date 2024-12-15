@@ -6,6 +6,8 @@ const {
   infoUser,
   inputBookTour,
   inputBlog,
+  inputEmailOtp,
+  inputComment,
 } = require("../../validations/auth.validation");
 // public routers
 router.post("/sign-up", infoUser, authController.signUp);
@@ -16,7 +18,7 @@ router.post(
   authController.refreshToken
 );
 // router.post("/log-out", authMiddleware.authorization, authController.logout);
-router.post("/send-otp", authController.forgotPassword);
+router.post("/send-otp", inputEmailOtp, authController.forgotPassword);
 router.post(
   "/new-password",
   authMiddleware.verifyOtp,
@@ -31,7 +33,7 @@ router.get("/tour-list", authController.getTours);
 router.get("/tour-detail/:id", authController.detailTour);
 router.put("/edit-blog/:id", inputBlog, authController.editBlog);
 router.delete("/remove-blog/:id", authController.removeBlog);
-router.post("/comment-blog/:id", authController.commentBlog);
+router.post("/comment-blog/:id", inputComment, authController.commentBlog);
 router.patch("/edit-comment/:id", authController.updateComment);
 router.delete("/remove-comment/:id", authController.removeComment);
 router.post("/book-tour/:tourId", inputBookTour, authController.tourPayment);

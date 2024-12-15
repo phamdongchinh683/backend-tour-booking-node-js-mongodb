@@ -1,5 +1,5 @@
 const userService = require("../../services/auth/user.service");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 class GuideMiddleware {
   async roleGuide(req, res, next) {
     try {

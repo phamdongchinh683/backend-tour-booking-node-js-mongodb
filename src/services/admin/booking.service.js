@@ -1,6 +1,6 @@
 const Booking = require("../../models/booking.model");
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 class BookingService {
   async getAllBooking(cursor, direction = "next", res) {
     let limit = 1;

@@ -1,4 +1,4 @@
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const adminService = require("../../services/admin/admin.service");
 const roleService = require("../../services/admin/role.service");
 const tourService = require("../../services/admin/tour.service");

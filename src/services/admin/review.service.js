@@ -1,6 +1,6 @@
 const Review = require("../../models/review.model");
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 class ReviewService {
   async getAllReview(cursor, direction = "next", res) {
     let limit = 6;

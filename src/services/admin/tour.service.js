@@ -1,5 +1,5 @@
 const Tour = require("../../models/tour.model");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { nowDate } = require("../../utils/formatDate");
 class TourService {
   async tourList(cursor, direction = "next", res) {

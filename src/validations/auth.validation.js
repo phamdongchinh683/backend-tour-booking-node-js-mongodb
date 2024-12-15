@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { responseStatus } = require("../utils/handler");
+const { responseStatus } = require("../globals/handler");
 
 module.exports = infoUser = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -133,9 +133,8 @@ module.exports = inputBookTour = async (req, res, next) => {
 
     next();
   } catch (error) {
-    const errorDetail = error.details.map((err) => err.message).join(", ");
-
-    return res.status(422).json({ status: "failed", message: errorDetail });
+    // const errorDetail = error.details.map((err) => err.message).join(",");
+    return responseStatus(res, 422, "failed", "ga");
   }
 };
 
@@ -174,8 +173,84 @@ module.exports = inputBlog = async (req, res, next) => {
   }
 };
 
+module.exports = inputEmailOtp = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    email: Joi.string()
+      .email()
+      .pattern(/^[\w.-]+@[a-zA-Z\d-]+\.(com|edu|net|org|gov)$/)
+      .required()
+      .messages({
+        "any.required": "Email is required",
+        "string.email": "Email must be a valid email address",
+        "string.pattern.base":
+          "Email must be a valid address ending in .com, .edu, .net, .org, or .gov",
+      }),
+  });
+  try {
+    const value = await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+    });
+
+    payload = req.user;
+    req.user = payload;
+    req.value = value;
+
+    next();
+  } catch (error) {
+    const errorDetail = error.details.map((err) => err.message).join(", ");
+    return responseStatus(res, 422, "failed", errorDetail);
+  }
+};
+
+module.exports = inputComment = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    comment: Joi.string().max(40).trim().required().messages({
+      "any.required": "title is required",
+      "string.empty": "title cannot be an empty field",
+      "string.max": "title cannot exceed 99 characters",
+    }),
+  });
+  try {
+    const value = await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+    });
+
+    payload = req.user;
+    req.user = payload;
+    req.value = value;
+
+    next();
+  } catch (error) {
+    const errorDetail = error.details.map((err) => err.message).join(", ");
+    return responseStatus(res, 422, "failed", errorDetail);
+  }
+};
+
+module.exports = inputComment = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    comment: Joi.string().max(40).trim().required().messages({
+      "any.required": "title is required",
+      "string.empty": "title cannot be an empty field",
+      "string.max": "title cannot exceed 99 characters",
+    }),
+  });
+  try {
+    const value = await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+    });
+
+    req.value = value;
+    next();
+  } catch (error) {
+    const errorDetail = error.details.map((err) => err.message).join(", ");
+    return responseStatus(res, 422, "failed", errorDetail);
+  }
+};
+
 module.exports = {
   infoUser,
   inputBookTour,
   inputBlog,
+  inputEmailOtp,
+  inputComment,
 };

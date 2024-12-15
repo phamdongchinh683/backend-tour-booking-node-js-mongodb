@@ -1,6 +1,6 @@
 const Comment = require("../../models/comment.model");
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 class CommentService {
   async getAllComment(cursor, direction = "next", res) {
     let limit = 6;

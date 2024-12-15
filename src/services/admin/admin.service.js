@@ -1,5 +1,5 @@
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { hashPassword } = require("../../utils/hashHelper");
 const User = require("../../models/user.model");
 const Role = require("../../models/role.model");

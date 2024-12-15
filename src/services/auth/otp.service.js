@@ -1,5 +1,5 @@
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { generateOtp } = require("../../utils/generateOtp");
 const { mailSender } = require("../../utils/mailSender");
 const Otp = require("../../models/otp.model");
@@ -26,7 +26,7 @@ class OtpService {
   async verifyOtp(otp, res) {
     let checkOtp = await Otp.find({ otp: otp }, { email: 1, _id: 0 }).lean();
     if (checkOtp.length === 0) {
-      return responseStatus(res, 402, "failed", "Invalid otp");
+      throw new Error("Invalid otp!");
     }
     return checkOtp[0].email;
   }

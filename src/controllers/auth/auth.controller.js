@@ -1,4 +1,4 @@
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { hashPassword } = require("../../utils/hashHelper");
 const UserService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
@@ -56,7 +56,7 @@ class AuthController {
     }
   }
   async forgotPassword(req, res) {
-    const { email } = req.body;
+    let email = req.value.email;
     try {
       await otpService.sendOtp(email, res);
     } catch (e) {
@@ -98,7 +98,7 @@ class AuthController {
     }
   }
   async commentBlog(req, res) {
-    let { commentContent } = req.body;
+    let commentContent = req.value.comment;
     let blogId = req.params.id;
     try {
       await UserService.commentBlog(blogId, req.user._id, commentContent, res);

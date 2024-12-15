@@ -1,6 +1,6 @@
 const Role = require("../../models/role.model");
 const { nowDate } = require("../../utils/formatDate");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 
 class RoleService {
   async saveRole(roles, res) {

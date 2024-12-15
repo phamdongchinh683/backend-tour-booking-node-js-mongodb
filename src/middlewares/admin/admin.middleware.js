@@ -1,5 +1,5 @@
 const adminService = require("../../services/admin/admin.service");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 
 class AdminMiddleware {
   async isAdmin(req, res, next) {
