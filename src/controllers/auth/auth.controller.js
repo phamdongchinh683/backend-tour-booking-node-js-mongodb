@@ -1,8 +1,9 @@
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { hashPassword } = require("../../utils/hashHelper");
 const UserService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
 const commentService = require("../../services/admin/comment.service");
+const tourService = require("../../services/admin/tour.service");
 class AuthController {
   // auth
   async signUp(req, res) {
@@ -22,11 +23,29 @@ class AuthController {
     }
   }
   async login(req, res) {
-    const { username, password } = req.body;
+    const { password } = req.body;
+    const username = req.user;
     try {
       await UserService.findUser(username, password, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async refreshToken(req, res) {
+    const username = req.user.username;
+    const token = req.token;
+    try {
+      await UserService.decodeByUsername(username, token, res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async logout(req, res) {
+    const token = req.token;
+    if (token) {
+      res.status(200).json({ message: "Logged out successfully" });
+    } else {
+      res.status(400).json({ message: "No token provided" });
     }
   }
   async getProfile(req, res) {
@@ -37,7 +56,7 @@ class AuthController {
     }
   }
   async forgotPassword(req, res) {
-    const { email } = req.body;
+    let email = req.value.email;
     try {
       await otpService.sendOtp(email, res);
     } catch (e) {
@@ -55,18 +74,17 @@ class AuthController {
   }
   // blog
   async postBlog(req, res) {
-    const { title, content, images } = req.body;
     try {
-      await UserService.addBlog(req.user._id, { title, content, images }, res);
+      await UserService.addBlog(req.user._id, req.value, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
   async editBlog(req, res) {
     let blogId = req.params.id;
-    const { title, newContent, images } = req.body;
+
     try {
-      await UserService.editBlog(blogId, { title, newContent, images }, res);
+      await UserService.editBlog(blogId, req.value, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -80,7 +98,7 @@ class AuthController {
     }
   }
   async commentBlog(req, res) {
-    let { commentContent } = req.body;
+    let commentContent = req.value.comment;
     let blogId = req.params.id;
     try {
       await UserService.commentBlog(blogId, req.user._id, commentContent, res);
@@ -106,8 +124,9 @@ class AuthController {
     }
   }
   async getAllBlog(req, res) {
+    let userId = req.user._id;
     try {
-      await UserService.getAllBlog(req.user._id, res);
+      await UserService.getAllBlog(userId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
@@ -122,30 +141,52 @@ class AuthController {
   }
   // tour payment
   async tourPayment(req, res) {
+    let userId = req.user._id;
+    let tourId = req.params.tourId;
+    let infoBook = req.infoBook;
     try {
-      await UserService.tourPayment(req.infoBook, req, res);
+      await UserService.tourPayment(infoBook, tourId, userId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
   // getBooked
   async getBookedList(req, res) {
+    let userId = req.user._id;
     try {
-      await UserService.bookedList(req.user._id, res);
+      await UserService.bookedList(userId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
   }
   async evaluateGuide(req, res) {
+    let userId = req.user._id;
     const guideId = req.params.guideId;
+
     const { evaluateContent, rating } = req.body;
     try {
       await UserService.evaluateGuide(
         guideId,
-        req.user._id,
+        userId,
         { evaluateContent, rating },
         res
       );
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async getTours(req, res) {
+    const { cursor, direction } = req.query;
+    try {
+      await tourService.tourList(cursor, direction, res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async detailTour(req, res) {
+    const tourId = req.params.id;
+    try {
+      await tourService.detailTour(tourId, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

@@ -6,3 +6,4 @@ module.exports = {
   optionsSuccessStatus: 200,
   credentials: true,
 };
+

@@ -7,11 +7,43 @@ const Booking = require("../../models/booking.model");
 const Review = require("../../models/review.model");
 const { _tokenLife, _tokenSecret } = require("../../utils/secretKey");
 const { comparePassword } = require("../../utils/hashHelper");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { nowDate } = require("../../utils/formatDate");
 const { generateToken } = require("../../utils/tokenGenerator");
-const { responseStatus } = require("../../utils/handler");
-
+const { responseStatus } = require("../../globals/handler");
+const { decodeToken } = require("../../utils/decodeToken");
 class UserService {
+  async decodeByUsername(username, token, res) {
+    let decoded = await decodeToken(token, _tokenSecret);
+    if (!decoded) {
+      return responseStatus(res, 400, "failed", "token is not invalid");
+    }
+
+    let user = await User.findOne({ username: username })
+      .select("username")
+      .lean();
+    if (!user) {
+      return responseStatus(res, 400, "failed", "Not found user");
+    }
+    let data = {
+      username: user.username,
+    };
+
+    let newToken = await generateToken(data, _tokenSecret, _tokenLife);
+    if (!newToken) {
+      return responseStatus(res, 400, "failed", "generateToken failed");
+    }
+    return responseStatus(res, 200, "success", newToken);
+  }
+  async isUser(username, res) {
+    let getRole = await User.find({ username: username })
+      .select("role_id")
+      .populate("role_id", "name")
+      .lean();
+    if (getRole.length === 0) {
+      throw new Error("This account does not exist");
+    }
+    return getRole[0];
+  }
   async getRoleIdByName(roleName) {
     const role = await Role.findOne({ name: roleName }).lean();
     if (!role) {
@@ -25,7 +57,7 @@ class UserService {
       .populate("role_id", "name")
       .lean();
     if (!getRole) {
-      return responseStatus(res, 400, "failed", "You have not role");
+      throw new Error("This account does not exist");
     }
     return getRole;
   }
@@ -54,7 +86,7 @@ class UserService {
   }
   async findUser(username, password, res) {
     let user = await User.findOne({ username: username })
-      .select("username password")
+      .select("username password _id")
       .lean();
     if (!user) {
       return responseStatus(
@@ -75,7 +107,7 @@ class UserService {
         "The password that you've entered is incorrect."
       );
     }
-    const data = user.username;
+    const data = { username: user.username, id: user._id };
     let accessToken = await generateToken(data, _tokenSecret, _tokenLife);
     return responseStatus(res, 200, "success", accessToken);
   }
@@ -93,7 +125,6 @@ class UserService {
       { "contact.email": email },
       { $set: { password: newPassword } }
     );
-    console.log(updatePassword);
     if (updatePassword.matchedCount === 0) {
       return responseStatus(res, 402, "failed", "Update failed");
     }
@@ -120,7 +151,7 @@ class UserService {
   async editBlog(id, newInfo, res) {
     let updateBlog = await Blog.findByIdAndUpdate(id, {
       title: newInfo.title,
-      content: newInfo.newContent,
+      content: newInfo.content,
       images: newInfo.images,
       updateAt: nowDate(),
     });
@@ -232,12 +263,10 @@ class UserService {
       ? responseStatus(res, 200, "success", "Successfully booked the tour")
       : null;
   }
-  async tourPayment(infoBook, req, res) {
-    const { status, cardNumber, totalAmount } = req.body;
-
+  async tourPayment(infoBook, tourId, userId, res) {
     let createBook = new Booking({
-      tour_id: infoBook.tourId,
-      user_id: infoBook.userId,
+      tour_id: tourId,
+      user_id: userId,
       guide_id: infoBook.guideId,
       number_visitors: infoBook.numberVisitor,
       start_tour: infoBook.startTour,
@@ -251,10 +280,10 @@ class UserService {
 
     let createPayment = await Payment.create({
       booking_id: createBook._id,
-      user_id: infoBook.userId,
-      status: status,
-      card_number: cardNumber,
-      total_amount: totalAmount,
+      user_id: userId,
+      status: infoBook.status,
+      card_number: infoBook.cardNumber,
+      total_amount: infoBook.totalAmount,
       createdAt: nowDate(),
     });
     return responseStatus(res, 200, "success", createPayment);

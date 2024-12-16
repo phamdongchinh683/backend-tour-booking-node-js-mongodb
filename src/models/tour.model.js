@@ -4,12 +4,10 @@ const tourSchema = new mongoose.Schema(
     city: {
       type: String,
     },
-    attractions: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    attractions: {
+      type: String,
+      required: true,
+    },
     days: {
       type: String,
     },
@@ -21,12 +19,10 @@ const tourSchema = new mongoose.Schema(
         type: String,
       },
     },
-    guides: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-      },
-    ],
+    guide: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     images: [
       {
         type: String,
@@ -37,8 +33,10 @@ const tourSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
+    updateAt: {
+      type: Date,
+    },
   },
   { versionKey: false }
 );
-tourSchema.index({ guides: 1 });
 module.exports = mongoose.model("Tour", tourSchema);

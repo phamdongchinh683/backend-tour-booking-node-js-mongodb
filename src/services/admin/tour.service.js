@@ -1,41 +1,62 @@
 const Tour = require("../../models/tour.model");
-const { responseStatus } = require("../../utils/handler");
-const { nowDate } = require("../../controllers/auth/auth.method");
+const { responseStatus } = require("../../globals/handler");
+const { nowDate } = require("../../utils/formatDate");
 class TourService {
-  async tourList(res) {
-    let tours = await Tour.find().populate("guides", "fullName").lean();
-    if (!tours || tours.length === 0) {
-      return responseStatus(res, 400, "failed", "No tour found");
+  async tourList(cursor, direction = "next", res) {
+    let limit = 6;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
     }
-    return responseStatus(res, 200, "success", tours);
+
+    let tours = await Tour.find(query)
+      .populate("guide", "fullName")
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
+      .lean()
+      .exec();
+
+    if (!tours || tours.length === 0) {
+      return responseStatus(
+        res,
+        400,
+        "failed",
+        "There are currently no tours available"
+      );
+    }
+    const nextCursor = tours.length > 0 ? tours[tours.length - 1]._id : null;
+    const prevCursor = tours.length > 0 ? tours[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: tours.length,
+      tours,
+    };
+
+    return responseStatus(res, 200, "success", results);
   }
   async createTours(infoTours, res) {
-    let tours = infoTours.map((tour) => {
-      let locations = tour.attractions.map((attraction) => {
-        return attraction;
-      });
-
-      let imageAttractions = tour.images.map((image) => {
-        return image;
-      });
-
-      let guideTour = tour.guides.map((guide) => {
-        return guide;
-      });
+    const tours = infoTours.map((tour) => {
+      const imageAttractions = tour.images.map((image) => image);
 
       return {
-        city: tour.city,
-        attractions: locations,
-        days: tour.days,
+        city: tour.city.trim(),
+        attractions: tour.attractions,
+        days: parseInt(tour.days, 10),
         prices: {
-          adult: tour.prices.adult,
-          child: tour.prices.child,
+          adult: parseFloat(tour.prices.adult),
+          child: parseFloat(tour.prices.child),
         },
-        guides: guideTour,
+        guide: tour.guide,
         images: imageAttractions,
-        createdAt: tour.createAt || nowDate(),
+        createdAt: nowDate(),
       };
     });
+
     let createTour = await Tour.insertMany(tours);
     if (!createTour) {
       return responseStatus(res, 402, "failed", "Enter complete information");
@@ -43,12 +64,13 @@ class TourService {
     return responseStatus(res, 200, "success", "Tour created successfully");
   }
   async detailTour(id, res) {
-    let tour = await Tour.findById(id).populate("guides", "fullName").lean();
+    let tour = await Tour.findById(id).populate("guide", "fullName").lean();
     if (!tour) {
-      return responseStatus(res, 400, "failed", "No tours were updated");
+      return responseStatus(res, 400, "failed", "Not found this tour");
     }
     return responseStatus(res, 200, "success", tour);
   }
+
   async updateTour(infoTour, res) {
     const result = await Tour.updateOne(
       { _id: infoTour.id || infoTour._id },
@@ -61,7 +83,7 @@ class TourService {
             adult: infoTour.prices.adult,
             child: infoTour.prices.child,
           },
-          guides: infoTour.guides,
+          guide: infoTour.guide,
           images: infoTour.images,
           updateAt: nowDate(),
         },

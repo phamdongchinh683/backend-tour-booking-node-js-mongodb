@@ -52,7 +52,15 @@ const userSchema = new mongoose.Schema(
         ref: "Review",
       },
     ],
+    createAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    updateAt: {
+      type: Date,
+    },
   },
+
   { versionKey: false }
 );
 module.exports = mongoose.model("User", userSchema);

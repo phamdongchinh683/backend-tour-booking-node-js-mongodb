@@ -1,18 +1,36 @@
 const adminService = require("../../services/admin/admin.service");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 
 class AdminMiddleware {
-  async adminRole(req, res, next) {
+  async isAdmin(req, res, next) {
+    const { username } = req.body;
     try {
-      let role = await adminService.adminRole(req.user.username, res);
+      const role = await adminService.isAdmin(username, res);
       if (role.role_id.name === "Admin") {
-        req.user = role;
+        req.user = username;
         next();
       } else {
-        responseStatus(res, 403, "failed", "Access Denied. Admin only route!");
+        throw new Error("Only administrators can log in!");
       }
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+  async adminRole(req, res, next) {
+    try {
+      const role = await adminService.adminRole(req.user.username, res);
+      if (role.role_id.name === "Admin") {
+        req.user = role;
+        return next();
+      }
+      return responseStatus(
+        res,
+        403,
+        "failed",
+        "Access Denied. Admin only route!"
+      );
     } catch (error) {
-      responseStatus(res, 400, "failed", error.message);
+      return responseStatus(res, 400, "failed", error.message);
     }
   }
 }

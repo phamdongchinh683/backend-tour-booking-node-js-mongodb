@@ -1,6 +1,6 @@
 const userService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
-const { responseStatus } = require("../../utils/handler");
+const { responseStatus } = require("../../globals/handler");
 const { verifyToken } = require("../../utils/verifyToken");
 const { _tokenSecret } = require("../../utils/secretKey");
 
@@ -16,9 +16,11 @@ class AuthMiddleware {
         return responseStatus(res, 403, "failed", "You do not have access!");
       }
       const payload = {
-        username: verified.payload,
+        username: verified.payload.username,
+        id: verified.payload.id,
       };
       req.user = payload;
+      req.token = authorizationToken;
       next();
     } catch (error) {
       return responseStatus(
@@ -32,16 +34,11 @@ class AuthMiddleware {
   async roleUser(req, res, next) {
     try {
       let role = await userService.userRole(req.user.username, res);
-      if (role.role_id.name === "Traveler" || "Guide") {
+      if (role.role_id.name === "Traveler" || role.role_id.name === "Guide") {
         req.user = role;
-        next();
+        return next();
       } else {
-        responseStatus(
-          res,
-          403,
-          "failed",
-          "Access Denied. Traveler only route!"
-        );
+        throw new Error("Access Denied. Traveler or Guide only route!");
       }
     } catch (error) {
       responseStatus(res, 400, "failed", error.message);
@@ -53,30 +50,27 @@ class AuthMiddleware {
       let verify = await otpService.verifyOtp(otp, res);
       if (verify) {
         req.user = verify;
-        next();
+        return next();
       }
     } catch (e) {
       responseStatus(res, 400, "failed", e.message);
     }
   }
-  async createTour(req, res, next) {
-    let tourId = req.params.tourId;
-    let userId = req.user._id;
-    let { guideId, numberVisitor, startTour, startTime, endTime } = req.body;
+  async isAuth(req, res, next) {
+    const { username } = req.body;
+    if (!username) {
+      return responseStatus(res, 400, "failed", "Username is required");
+    }
     try {
-      let infoBook = {
-        userId,
-        tourId,
-        guideId,
-        numberVisitor,
-        startTour,
-        startTime,
-        endTime,
-      };
-      req.infoBook = infoBook;
-      next();
-    } catch (e) {
-      responseStatus(res, 400, "failed", e.message);
+      let role = await userService.userRole(username, res);
+      if (role.role_id.name === "Traveler" || role.role_id.name === "Guide") {
+        req.user = username;
+        return next();
+      } else {
+        throw new Error("Only Traveler or Guide can log in!");
+      }
+    } catch (error) {
+      responseStatus(res, 400, "failed", error.message);
     }
   }
 }

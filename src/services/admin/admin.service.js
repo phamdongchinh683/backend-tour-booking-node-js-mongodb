@@ -1,10 +1,19 @@
-const { nowDate } = require("../../controllers/auth/auth.method");
-const { responseStatus } = require("../../utils/handler");
+const { nowDate } = require("../../utils/formatDate");
+const { responseStatus } = require("../../globals/handler");
 const { hashPassword } = require("../../utils/hashHelper");
-
 const User = require("../../models/user.model");
 const Role = require("../../models/role.model");
 class AdminService {
+  async isAdmin(username, res) {
+    let getRole = await User.find({ username: username })
+      .select("role_id")
+      .populate("role_id", "name")
+      .lean();
+    if (getRole.length === 0) {
+      throw new Error("This account does not exist");
+    }
+    return getRole[0];
+  }
   async getRoleIdByName(roleName) {
     const role = await Role.findOne({ name: roleName }).lean();
     if (!role) {
@@ -12,7 +21,6 @@ class AdminService {
     }
     return role._id;
   }
-  // role
   async adminRole(username, res) {
     let getRole = await User.findOne({ username: username })
       .select("role_id")
@@ -23,13 +31,40 @@ class AdminService {
     }
     return getRole;
   }
-  //manage user
-  async getAllUsers(res) {
-    let users = await User.find().lean().exec();
-    if (!users || users.length === 0) {
-      return responseStatus(res, 400, "failed", "No users found");
+  async getAllUsers(cursor, direction = "next", res) {
+    let limit = 3;
+    let query = {};
+
+    if (direction === "next" && cursor) {
+      query._id = { $gt: cursor };
+    } else if (direction === "prev" && cursor) {
+      query._id = { $lt: cursor };
     }
-    return responseStatus(res, 200, "success", users);
+
+    let users = await User.find(query)
+      .sort({ createAt: -1 })
+      .limit(Number(limit))
+      .lean()
+      .exec();
+
+    if (!users || users.length === 0) {
+      return responseStatus(
+        res,
+        400,
+        "failed",
+        "There are currently no users available"
+      );
+    }
+    const nextCursor = users.length > 0 ? users[users.length - 1]._id : null;
+    const prevCursor = users.length > 0 ? users[0]._id : null;
+
+    const results = {
+      nextCursor,
+      prevCursor,
+      totalResults: users.length,
+      users,
+    };
+    return responseStatus(res, 200, "success", results);
   }
   async saveUsers(info, res) {
     let users = await Promise.all(
@@ -53,7 +88,7 @@ class AdminService {
       })
     );
 
-    let userCreated = await User.insertMany(users);
+    let userCreated = await User.insertMany(users, { ordered: false });
     if (!userCreated) {
       return responseStatus(res, 402, "failed", "Users already exists");
     }
@@ -101,9 +136,8 @@ class AdminService {
     if (deleteUsers.deletedCount > 0) {
       return responseStatus(res, 200, "success", "Deleted");
     }
-    return responseStatus(res, 400, "failed", "No users were updated");
+    return responseStatus(res, 400, "failed", "No users were deleted");
   }
-  // manage guide
   async getAllGuides(res) {
     let roleGuide = await Role.findOne({ name: "Guide" }).lean();
     if (!roleGuide) {

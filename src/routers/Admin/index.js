@@ -3,7 +3,9 @@ const router = express.Router();
 const adminController = require("../../controllers/admin/admin.controller");
 const adminMiddleware = require("../../middlewares/admin/admin.middleware");
 const authMiddleware = require("../../middlewares/auth/auth.middleware");
+const authController = require("../../controllers/auth/auth.controller");
 
+router.post("/login", adminMiddleware.isAdmin, authController.login);
 // protected router
 router.use(authMiddleware.authorization, adminMiddleware.adminRole);
 // manage-user
@@ -18,8 +20,9 @@ router.post("/manage-role/create-role", adminController.createRole);
 router.get("/manage-role/role-list", adminController.roleList);
 router.patch("/manage-role/edit-role/:id", adminController.updateRole);
 router.delete("/manage-role/delete-role/:id", adminController.deleteRole);
+router.delete("/manage-role/delete-roles", adminController.deleteRoles);
 // manage tour
-router.post("/manage-tour/create-tour", adminController.addTour);
+router.post("/manage-tour/create-tours", adminController.addTour);
 router.get("/manage-tour/tour-detail/:id", adminController.tourDetail);
 router.put("/manage-tour/update-tour", adminController.updateTour);
 router.delete("/manage-tour/remove-tour", adminController.deleteTours);
@@ -56,12 +59,13 @@ router.get("/manage-payment/payment-list", adminController.paymentList);
 router.get("/manage-payment/payment-detail/:id", adminController.paymentDetail);
 router.post("/manage-payment/create-payment", adminController.createPayment);
 router.put("/manage-payment/edit-payment/:id", adminController.updatePayment);
-router.delete("/manage-payment/delete-payment", adminController.deletePayment);
+router.delete("/manage-payment/delete-payment", adminController.deletePayments);
 //manage blog
 router.get("/manage-blog/blog-list", adminController.blogList);
 router.post("/manage-blog/create-blog", adminController.createBlog);
 router.get("/manage-blog/blog-detail/:id", adminController.blogDetail);
 router.put("/manage-blog/edit-blog/:id", adminController.updateBlog);
 router.delete("/manage-blog/delete-blog", adminController.deleteBlogs);
+
 
 module.exports = router;
