@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 require("colors");
-const { _dbName, _url } = require("../utils/secretKey");
+const { _dbName, _url } = require("../globals/secretKey");
 const _dbConnect = async () => {
   try {
     await mongoose.connect(`${_url}/${_dbName}`, {

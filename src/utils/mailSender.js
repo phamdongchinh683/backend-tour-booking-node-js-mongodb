@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { _mailPass, _mailHost, _mailUser } = require("../utils/secretKey");
+const { _mailPass, _mailHost, _mailUser } = require("../globals/secretKey");
 const { responseStatus } = require("../globals/handler");
 
 const mailSender = async (options, res) => {

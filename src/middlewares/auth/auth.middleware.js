@@ -2,7 +2,7 @@ const userService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
 const { responseStatus } = require("../../globals/handler");
 const { verifyToken } = require("../../utils/verifyToken");
-const { _tokenSecret } = require("../../utils/secretKey");
+const { _tokenSecret } = require("../../globals/secretKey");
 
 class AuthMiddleware {
   async authorization(req, res, next) {
