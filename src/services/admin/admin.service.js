@@ -32,7 +32,7 @@ class AdminService {
     return getRole;
   }
   async getAllUsers(cursor, direction = "next", res) {
-    let limit = 3;
+    let limit = 5;
     let query = {};
 
     if (direction === "next" && cursor) {
@@ -103,12 +103,12 @@ class AdminService {
     }
   }
   async updateUser(info, res) {
+    console.log(info);
     const [hashedPassword] = await hashPassword(info.password);
     const result = await User.updateOne(
       { _id: info.id },
       {
         $set: {
-          username: info.username,
           password: hashedPassword,
           fullName: {
             firstName: info.firstName,
@@ -125,6 +125,7 @@ class AdminService {
         },
       }
     );
+    console.log(result);
     if (result.matchedCount === 0) {
       return responseStatus(res, 400, "failed", "No users were updated");
     } else {

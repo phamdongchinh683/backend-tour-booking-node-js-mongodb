@@ -13,7 +13,6 @@ class TourService {
     }
 
     let tours = await Tour.find(query)
-      .populate("guide", "fullName")
       .sort({ createAt: -1 })
       .limit(Number(limit))
       .lean()
