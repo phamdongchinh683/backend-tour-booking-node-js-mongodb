@@ -17,7 +17,6 @@ router.post(
   authMiddleware.authorization,
   authController.refreshToken
 );
-// router.post("/log-out", authMiddleware.authorization, authController.logout);
 router.post("/send-otp", inputEmailOtp, authController.forgotPassword);
 router.post(
   "/new-password",

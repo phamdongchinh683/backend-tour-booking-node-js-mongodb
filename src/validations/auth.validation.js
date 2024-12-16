@@ -205,9 +205,9 @@ module.exports = inputEmailOtp = async (req, res, next) => {
 module.exports = inputComment = async (req, res, next) => {
   const correctCondition = Joi.object({
     comment: Joi.string().max(40).trim().required().messages({
-      "any.required": "title is required",
-      "string.empty": "title cannot be an empty field",
-      "string.max": "title cannot exceed 99 characters",
+      "any.required": "comment is required",
+      "string.empty": "comment cannot be an empty field",
+      "string.max": "comment cannot exceed 99 characters",
     }),
   });
   try {
@@ -219,27 +219,6 @@ module.exports = inputComment = async (req, res, next) => {
     req.user = payload;
     req.value = value;
 
-    next();
-  } catch (error) {
-    const errorDetail = error.details.map((err) => err.message).join(", ");
-    return responseStatus(res, 422, "failed", errorDetail);
-  }
-};
-
-module.exports = inputComment = async (req, res, next) => {
-  const correctCondition = Joi.object({
-    comment: Joi.string().max(40).trim().required().messages({
-      "any.required": "title is required",
-      "string.empty": "title cannot be an empty field",
-      "string.max": "title cannot exceed 99 characters",
-    }),
-  });
-  try {
-    const value = await correctCondition.validateAsync(req.body, {
-      abortEarly: false,
-    });
-
-    req.value = value;
     next();
   } catch (error) {
     const errorDetail = error.details.map((err) => err.message).join(", ");

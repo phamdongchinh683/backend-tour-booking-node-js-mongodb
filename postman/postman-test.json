@@ -196,13 +196,19 @@
 					"name": "create-role",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiQ2hpbmg2ODIzIiwiaWF0IjoxNzMyMzQxNDQwLCJleHAiOjE3MzI0Mjc4NDB9.SIsWhxCU0CdQQqrvAzTwVSIh2HMJ8ydVl7n807ebWt0",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
 									"key": "nameRole",
-									"value": "Admin",
+									"value": "normal",
 									"type": "text"
 								}
 							]
@@ -302,7 +308,7 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMyMTE3NTcxLCJleHAiOjE3MzIyMDM5NzF9.cDPBwas5f4zr-t9-oUZR023Mv_297JQgSVJyALQfGoc",
 								"type": "text"
 							}
 						],
@@ -322,7 +328,41 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "6731afbe5dc1f6674b0780b9"
+									"value": "673e03ef53d28472adaba01d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-roles",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMyMTE3NTcxLCJleHAiOjE3MzIyMDM5NzF9.cDPBwas5f4zr-t9-oUZR023Mv_297JQgSVJyALQfGoc",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-role/delete-role/:id",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-role",
+								"delete-role",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "673e03ef53d28472adaba01d"
 								}
 							]
 						}
@@ -750,13 +790,13 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMxMzA3OTk0LCJleHAiOjE3MzEzOTQzOTR9.GQ_K8ERF3t7285VJQeQ2ZMpg-eXgwiqQTAp9EDmhxT0",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIzIiwiaWF0IjoxNzMyMDAyNzQxLCJleHAiOjE3MzIwODkxNDF9.UUElHil_74O274celIi8IjABptbDxGKPzY_bwudjbfk",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"tours\": [\n        {\n            \"city\": \"Paris\",\n            \"attractions\": [\n                \"Eiffel Tower\",\n                \"Louvre Museum\",\n                \"Notre-Dame Cathedral\"\n            ],\n            \"days\": \"3\",\n            \"prices\": {\n                \"adult\": \"200\",\n                \"child\": \"100\"\n            },\n            \"guides\": [\n                \"672b9fd4041d7643abab83fe\",\n                \"672b8baa2e0fd88240d92092\"\n            ],\n            \"images\": [\n                \"paris1.jpg\",\n                \"paris2.jpg\",\n                \"paris3.jpg\"\n            ],\n            \"createAt\": \"2023-11-06T14:33:26.000Z\"\n        },\n        {\n            \"city\": \"New York\",\n            \"attractions\": [\n                \"Statue of Liberty\",\n                \"Central Park\",\n                \"Times Square\"\n            ],\n            \"days\": \"5\",\n            \"prices\": {\n                \"adult\": \"300\",\n                \"child\": \"150\"\n            },\n            \"guides\": [\n                \"672b9fd4041d7643abab83fe\",\n                \"672b8baa2e0fd88240d92092\"\n            ],\n            \"images\": [\n                \"nyc1.jpg\",\n                \"nyc2.jpg\",\n                \"nyc3.jpg\"\n            ]\n        },\n        {\n            \"city\": \"Tokyo\",\n            \"attractions\": [\n                \"Tokyo Tower\",\n                \"Meiji Shrine\",\n                \"Shibuya Crossing\"\n            ],\n            \"days\": \"4\",\n            \"prices\": {\n                \"adult\": \"250\",\n                \"child\": \"120\"\n            },\n            \"guides\": [\n                \"672b9fd4041d7643abab83fe\",\n                \"672b8baa2e0fd88240d92092\"\n            ],\n            \"images\": [\n                \"tokyo1.jpg\",\n                \"tokyo2.jpg\",\n                \"tokyo3.jpg\"\n            ]\n        }\n    ]\n}",
+							"raw": "{\n    \"tours\": [\n        {\n            \"city\": \"Paris\",\n            \"attractions\":\" Eiffel Tower, Louvre Museum,Notre-Dame Cathedral \",\n            \"days\": \"3\",\n            \"prices\": {\n                \"adult\": \"200\",\n                \"child\": \"100\"\n            },\n            \"guide\": \"672b9fd4041d7643abab83fe\",\n            \"images\": [\n                \"paris1.jpg\",\n                \"paris2.jpg\",\n                \"paris3.jpg\"\n            ],\n            \"createAt\": \"2023-11-06T14:33:26.000Z\"\n        },\n        {\n            \"city\": \"New York\",\n            \"attractions\": [\n                \"Statue of Liberty\",\n                \"Central Park\",\n                \"Times Square\"\n            ],\n            \"days\": \"5\",\n            \"prices\": {\n                \"adult\": \"300\",\n                \"child\": \"150\"\n            },\n            \"guides\": \"672b9fd4041d7643abab83fe\",\n            \"images\": [\n                \"nyc1.jpg\",\n                \"nyc2.jpg\",\n                \"nyc3.jpg\"\n            ]\n        },\n        {\n            \"city\": \"Tokyo\",\n                        \"attractions\":\" Eiffel Tower, Louvre Museum,Notre-Dame Cathedral \",\n\n            \"days\": \"4\",\n            \"prices\": {\n                \"adult\": \"250\",\n                \"child\": \"120\"\n            },\n            \"guide\": \"672b8baa2e0fd88240d92092\",\n            \"images\": [\n                \"tokyo1.jpg\",\n                \"tokyo2.jpg\",\n                \"tokyo3.jpg\"\n            ]\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2039,18 +2079,15 @@
 				},
 				{
 					"name": "send otp",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "phamdongchinh789@gmail.com",
+									"value": "312321",
 									"type": "text"
 								}
 							]
@@ -2095,6 +2132,120 @@
 								"v1",
 								"auth",
 								"new-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail-tour",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmhjaGluaDEyMyIsImlhdCI6MTczMzk4MTgzOSwiZXhwIjoxNzM0MDY4MjM5fQ.aZFQ3aR4hqgeQ5AxwT0sOS8pc9SxuFQ5HHaWMidx1PQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/auth/tour-detail/:id",
+							"protocol": "https",
+							"host": [
+								"backend-tour-booking-node-js-mongodb",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"tour-detail",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "673fdc1c85fe4c87c938467c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{NodeJS-TS}}/api/v1/admin/notes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiQ2hpbmg2ODIzIiwiaWQiOiI2NzQ0OWEwMzNlNzM5MDYzMTFiNWY2YmQifSwiaWF0IjoxNzM0MTAzMzYxLCJleHAiOjE3MzQxODk3NjF9.iTNY-h4RC7SFEauim8tVGFi4GYI-im55WSiQdFYBFLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/notes",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/refresh-token",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiY2hpbmhjaGluaDEyMyIsImlkIjoiNjc0NGFjY2U3ZmQ2OWNkMTg4MzBkNWZlIn0sImlhdCI6MTczNDE5MTQyMSwiZXhwIjoxNzM0Mjc3ODIxfQ.vAEEZrehPwPEkt60higUCk6oCoZCK-xqtX-_eq_C7Cg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/log-out",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"log-out"
 							]
 						}
 					},
