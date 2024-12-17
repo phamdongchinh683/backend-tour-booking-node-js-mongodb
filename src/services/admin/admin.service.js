@@ -42,6 +42,7 @@ class AdminService {
     }
 
     let users = await User.find(query)
+      .select("-reviews")
       .sort({ createAt: -1 })
       .limit(Number(limit))
       .lean()
@@ -95,7 +96,7 @@ class AdminService {
     return responseStatus(res, 200, "success", "Created");
   }
   async userDetailById(id, res) {
-    let user = await User.findById(id).lean();
+    let user = await User.findById(id).populate("reviews").lean().exec();
     if (!user) {
       return responseStatus(res, 400, "failed", "Not Found");
     } else {
@@ -103,7 +104,6 @@ class AdminService {
     }
   }
   async updateUser(info, res) {
-    console.log(info);
     const [hashedPassword] = await hashPassword(info.password);
     const result = await User.updateOne(
       { _id: info.id },
@@ -125,7 +125,6 @@ class AdminService {
         },
       }
     );
-    console.log(result);
     if (result.matchedCount === 0) {
       return responseStatus(res, 400, "failed", "No users were updated");
     } else {
@@ -151,6 +150,14 @@ class AdminService {
       return responseStatus(res, 400, "failed", "No guides found");
     }
     return responseStatus(res, 200, "success", getAllGuides);
+  }
+
+  async userList(res) {
+    let users = await User.find().lean().exec();
+    if (!users || users.length === 0) {
+      return responseStatus(res, 400, "failed", "No users in the list");
+    }
+    return responseStatus(res, 200, "success", users);
   }
 }
 

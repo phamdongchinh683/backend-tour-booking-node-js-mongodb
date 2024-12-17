@@ -1,9 +1,10 @@
 const Booking = require("../../models/booking.model");
 const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../globals/handler");
+const userModel = require("../../models/user.model");
 class BookingService {
   async getAllBooking(cursor, direction = "next", res) {
-    let limit = 1;
+    let limit = 5;
     let query = {};
 
     if (direction === "next" && cursor) {
@@ -27,7 +28,7 @@ class BookingService {
         res,
         400,
         "failed",
-        "There are currently no bookingList available"
+        "There are currently no booking available"
       );
     }
     const nextCursor =
@@ -43,21 +44,11 @@ class BookingService {
 
     return responseStatus(res, 200, "success", results);
   }
-  async createBooking(info, res) {
-    let save = await Booking.create({
-      user_id: info.userId,
-      tour_id: info.tourId,
-      guide_id: info.guideId,
-      number_visitors: info.numberVisitor,
-      start_tour: info.startTour,
-      time: {
-        start_time: info.startTime,
-        end_time: info.endTime,
-      },
-      createAt: nowDate(),
-    });
-    if (save) {
-      return responseStatus(res, 200, "success", "Created booking tour");
+  async createBooking(bookTours, res) {
+    let createBookTour = await Booking.insertMany(bookTours);
+
+    if (createBookTour) {
+      return responseStatus(res, 200, "success", "Created book tour");
     }
   }
   async detailBooking(id, res) {
@@ -89,7 +80,7 @@ class BookingService {
     if (remove.deletedCount > 0) {
       return responseStatus(res, 200, "success", "Deleted This booking tour");
     }
-    return responseStatus(res, 402, "failed", "This blog does not exist");
+    return responseStatus(res, 402, "failed", "This booking does not exist");
   }
 }
 

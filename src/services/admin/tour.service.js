@@ -101,6 +101,19 @@ class TourService {
     }
     return responseStatus(res, 200, "success", "Deleted");
   }
+
+  async getAllTours(res) {
+    let tours = await Tour.find().select("city attractions").lean().exec();
+    if (tours.length === 0) {
+      return responseStatus(
+        res,
+        400,
+        "failed",
+        "There are currently no tours available"
+      );
+    }
+    return responseStatus(res, 200, "success", tours);
+  }
 }
 
 module.exports = new TourService();
