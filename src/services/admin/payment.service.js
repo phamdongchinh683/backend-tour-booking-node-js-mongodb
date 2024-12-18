@@ -39,18 +39,12 @@ class PaymentService {
     };
     return responseStatus(res, 200, "success", results);
   }
-  async createPayment(info, res) {
-    let save = await Payment.create({
-      booking_id: info.bookingId,
-      user_id: info.userId,
-      status: info.status,
-      card_number: info.cardNumber,
-      total_amount: info.totalAmount,
-      createAt: nowDate(),
-    });
-    if (save) {
+  async createPayment(payments, res) {
+    let save = await Payment.insertMany(payments);
+    if (save.length > 0) {
       return responseStatus(res, 200, "success", "Created Payment");
     }
+    return responseStatus(res, 402, "failed", "No change");
   }
   async detailPayment(id, res) {
     let payment = await Payment.findById(id)

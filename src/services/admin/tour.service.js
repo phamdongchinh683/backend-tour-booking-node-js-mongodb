@@ -56,7 +56,7 @@ class TourService {
       };
     });
 
-    let createTour = await Tour.insertMany(tours);
+    let createTour = await Tour.insertMany(tours, { ordered: false });
     if (!createTour) {
       return responseStatus(res, 402, "failed", "Enter complete information");
     }

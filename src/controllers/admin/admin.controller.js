@@ -185,29 +185,9 @@ class AdminController {
   }
   async updateBooking(req, res) {
     let bookingId = req.params.id;
-    const {
-      userId,
-      tourId,
-      guideId,
-      numberVisitor,
-      startTour,
-      startTime,
-      endTime,
-    } = req.body;
+    const { bookTour } = req.body;
     try {
-      await bookingService.updateBooking(
-        bookingId,
-        {
-          userId,
-          tourId,
-          guideId,
-          numberVisitor,
-          startTour,
-          startTime,
-          endTime,
-        },
-        res
-      );
+      await bookingService.updateBooking(bookingId, bookTour, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

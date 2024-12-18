@@ -1,7 +1,7 @@
 const Booking = require("../../models/booking.model");
 const { nowDate } = require("../../utils/formatDate");
 const { responseStatus } = require("../../globals/handler");
-const userModel = require("../../models/user.model");
+const Payment = require("../../models/payment.model");
 class BookingService {
   async getAllBooking(cursor, direction = "next", res) {
     let limit = 5;
@@ -45,14 +45,51 @@ class BookingService {
     return responseStatus(res, 200, "success", results);
   }
   async createBooking(bookTours, res) {
-    let createBookTour = await Booking.insertMany(bookTours);
+    const bookings = bookTours.map((param) => ({
+      tour_id: param.tour_id,
+      user_id: param.user_id,
+      guide_id: param.guide_id,
+      number_visitors: param.number_visitors,
+      start_tour: param.start_tour,
+      time: {
+        start_time: param.start_time,
+        end_time: param.end_time,
+      },
+    }));
+    const createBookTours = await Booking.insertMany(bookings);
 
-    if (createBookTour) {
-      return responseStatus(res, 200, "success", "Created book tour");
+    if (createBookTours.length <= 0) {
+      return responseStatus(res, 400, "failed", "there are no changes");
     }
+    const paymentInfo = createBookTours.map((bookInfo, index) => ({
+      booking_id: bookInfo._id,
+      card_number: bookTours[index].card_number,
+      total_amount: bookTours[index].total_amount,
+      status: bookTours[index].status,
+      user_id: bookTours[index].user_id,
+      createdAt: nowDate(),
+    }));
+    const createPayments = Payment.insertMany(paymentInfo);
+    if (createPayments <= 0) {
+      return responseStatus(res, 400, "failed", "there are no changes");
+    }
+    responseStatus(res, 200, "success", "Created BookTours");
   }
   async detailBooking(id, res) {
-    let booking = await Booking.findById(id);
+    let booking = await Booking.findById(id)
+      .populate([
+        ({
+          path: "tour_id",
+        },
+        {
+          path: "user_id",
+        },
+        {
+          path: "guide_id",
+        }),
+      ])
+      .lean()
+      .exec();
     if (booking) {
       return responseStatus(res, 200, "success", booking);
     }
