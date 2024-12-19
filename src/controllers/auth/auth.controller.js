@@ -16,7 +16,7 @@ class AuthController {
           res,
           422,
           "failed",
-          `${Object.keys(e.keyValue)} exited`
+          `${Object.keys(e.keyValue)} existed`
         );
       }
       return responseStatus(res, 400, "failed", e);
