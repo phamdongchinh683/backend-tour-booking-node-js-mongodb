@@ -80,23 +80,23 @@ module.exports = infoUser = async (req, res, next) => {
 
 module.exports = inputBookTour = async (req, res, next) => {
   const correctCondition = Joi.object({
-    guide_Id: Joi.string().min(8).max(30).trim().required().messages({
+    guideId: Joi.string().min(8).max(30).trim().required().messages({
       "any.required": "Guide is required",
       "string.empty": "Guide cannot be an empty field",
       "string.min": "Guide ID must be at least 8 characters long",
       "string.max": "Guide ID cannot exceed 30 characters",
     }),
-    number_visitor: Joi.number().integer().min(1).max(60).required().messages({
+    numberVisitor: Joi.number().integer().min(1).max(60).required().messages({
       "any.required": "Number of visitors is required",
       "number.base": "Number of visitors must be a number",
       "number.min": "Number of visitors must be at least 1",
       "number.max": "Number of visitors cannot exceed 60",
     }),
-    start_tour: Joi.string().required().messages({
+    startTour: Joi.string().required().messages({
       "any.required": "Start date is required",
       "date.base": "Start date must be a valid date",
     }),
-    start_time: Joi.string().required().messages({
+    startTime: Joi.string().required().messages({
       "any.required": "Start time is required",
       "date.base": "End time must be a valid date",
     }),
@@ -133,8 +133,8 @@ module.exports = inputBookTour = async (req, res, next) => {
 
     next();
   } catch (error) {
-    // const errorDetail = error.details.map((err) => err.message).join(",");
-    return responseStatus(res, 422, "failed", "ga");
+    const errorDetail = error.details.map((err) => err.message).join(",");
+    return responseStatus(res, 422, "failed", errorDetail);
   }
 };
 
