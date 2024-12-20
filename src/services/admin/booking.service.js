@@ -121,6 +121,30 @@ class BookingService {
     }
     return responseStatus(res, 402, "failed", "This booking does not exist");
   }
+
+  async getBookings(res) {
+    let results = await Booking.find()
+      .populate({
+        path: "tour_id",
+        select: "city",
+      })
+      .populate({
+        path: "user_id",
+        select: "username",
+      })
+      .select("_guide_id")
+      .lean()
+      .exec();
+    if (results.length > 0) {
+      return responseStatus(res, 200, "success", results);
+    }
+    return responseStatus(
+      res,
+      402,
+      "failed",
+      "There are currently no booking available"
+    );
+  }
 }
 
 module.exports = new BookingService();

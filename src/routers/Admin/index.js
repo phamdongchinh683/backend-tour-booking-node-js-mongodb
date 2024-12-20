@@ -10,7 +10,7 @@ router.post("/login", adminMiddleware.isAdmin, authController.login);
 router.use(authMiddleware.authorization, adminMiddleware.adminRole);
 // manage-user
 router.get("/manage-user/user-list", adminController.userList);
-router.get("/manage-user/get-users", adminController.getUsers)
+router.get("/manage-user/get-users", adminController.getUsers);
 router.get("/manage-user/guide-list", adminController.guideList);
 router.get("/manage-user/user-detail/:id", adminController.userDetail);
 router.post("/manage-user/create-user", adminController.addUsers);
@@ -30,6 +30,10 @@ router.delete("/manage-tour/remove-tour", adminController.deleteTours);
 router.get("/manage-tour/tour-list", adminController.getTours);
 router.get("/manage-tour/get-tours", adminController.getAllTours);
 //manage booking
+router.get(
+  "/manage-booking-tour/get-booking-tours",
+  adminController.getAllBookings
+);
 router.get("/manage-booking-tour/booking-list", adminController.bookingList);
 router.get("/manage-booking/booking-detail/:id", adminController.bookingDetail);
 router.post(

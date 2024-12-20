@@ -175,6 +175,14 @@ class AdminController {
     }
   }
 
+  async getAllBookings(req, res) {
+    try {
+      await bookingService.getBookings(res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+
   async createBooking(req, res) {
     const { bookTours } = req.body;
     try {
@@ -370,13 +378,9 @@ class AdminController {
   }
   async updatePayment(req, res) {
     let paymentId = req.params.id;
-    const { bookingId, userId, status, cardNumber, totalAmount } = req.body;
+    const { Payment } = req.body;
     try {
-      await paymentService.updatePayment(
-        paymentId,
-        { bookingId, userId, status, cardNumber, totalAmount },
-        res
-      );
+      await paymentService.updatePayment(paymentId, Payment, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
