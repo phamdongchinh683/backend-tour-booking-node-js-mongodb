@@ -361,18 +361,9 @@ class AdminController {
     }
   }
   async createPayment(req, res) {
-    const { bookingId, userId, status, cardNumber, totalAmount } = req.body;
+    const { payments } = req.body;
     try {
-      await paymentService.createPayment(
-        {
-          bookingId,
-          userId,
-          status,
-          cardNumber,
-          totalAmount,
-        },
-        res
-      );
+      await paymentService.createPayment(payments, res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

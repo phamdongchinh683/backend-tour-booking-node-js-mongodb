@@ -48,7 +48,10 @@ class PaymentService {
   }
   async detailPayment(id, res) {
     let payment = await Payment.findById(id)
-      .populate("user_id", "fullName -_id")
+      .populate([
+        { path: "booking_id", select: " -_id" },
+        { path: "user_id", select: "fullName , _id" },
+      ])
       .lean()
       .exec();
     if (payment) {

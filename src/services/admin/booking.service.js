@@ -56,7 +56,9 @@ class BookingService {
         end_time: param.end_time,
       },
     }));
-    const createBookTours = await Booking.insertMany(bookings);
+    const createBookTours = await Booking.insertMany(bookings, {
+      ordered: false,
+    });
 
     if (createBookTours.length <= 0) {
       return responseStatus(res, 400, "failed", "there are no changes");
@@ -69,7 +71,7 @@ class BookingService {
       user_id: bookTours[index].user_id,
       createdAt: nowDate(),
     }));
-    const createPayments = Payment.insertMany(paymentInfo);
+    const createPayments = Payment.insertMany(paymentInfo, { ordered: false });
     if (createPayments <= 0) {
       return responseStatus(res, 400, "failed", "there are no changes");
     }
