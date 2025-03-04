@@ -1,4 +1,3 @@
-const Guide = require("../../models/guide.model");
 const User = require("../../models/user.model");
 const { responseStatus } = require("../../globals/handler");
 
@@ -14,7 +13,7 @@ class GuildService {
     return getRole.role_id.name;
   }
   async profile(username, res) {
-    let userInfo = await Guide.findOne({ username: username }).lean();
+    let userInfo = await User.findOne({ username: username }).lean();
     if (!userInfo) {
       return responseStatus(res, 402, "failed", "Not found your profile");
     }
