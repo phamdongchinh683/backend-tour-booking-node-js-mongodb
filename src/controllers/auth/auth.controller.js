@@ -195,7 +195,7 @@ class AuthController {
 
   async getAllGuide(res) {
     try {
-      await guideService.getGuides();
+      await guideService.getGuides(res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
