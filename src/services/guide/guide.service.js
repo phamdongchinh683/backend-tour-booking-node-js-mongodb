@@ -19,7 +19,7 @@ class GuildService {
     }
     return responseStatus(res, 200, "success", userInfo);
   }
-  async getGuides() {
+  async getGuides(res) {
     let getAllGuides = await User.find({ role_id: roleGuide._id })
       .populate("role_id", "name")
       .lean();
