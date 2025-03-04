@@ -144,6 +144,7 @@ class AdminService {
       return responseStatus(res, 400, "failed", "Role guide not found");
     }
     let getAllGuides = await User.find({ role_id: roleGuide._id })
+      .select("-password -__v -age -city -username")
       .populate("role_id", "name")
       .lean();
     if (!getAllGuides || getAllGuides.length === 0) {

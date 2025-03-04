@@ -5,6 +5,7 @@ const otpService = require("../../services/auth/otp.service");
 const commentService = require("../../services/admin/comment.service");
 const tourService = require("../../services/admin/tour.service");
 const guideService = require("../../services/guide/guide.service");
+const adminService = require("../../services/admin/admin.service");
 class AuthController {
   // auth
   async signUp(req, res) {
@@ -193,9 +194,9 @@ class AuthController {
     }
   }
 
-  async getAllGuide(res) {
+  async getAllGuide(req, res) {
     try {
-      await guideService.getGuides(res);
+      await adminService.getAllGuides(res);
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }
