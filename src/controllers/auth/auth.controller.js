@@ -4,6 +4,7 @@ const UserService = require("../../services/auth/user.service");
 const otpService = require("../../services/auth/otp.service");
 const commentService = require("../../services/admin/comment.service");
 const tourService = require("../../services/admin/tour.service");
+const guideService = require("../../services/guide/guide.service");
 class AuthController {
   // auth
   async signUp(req, res) {
@@ -187,6 +188,14 @@ class AuthController {
     const tourId = req.params.id;
     try {
       await tourService.detailTour(tourId, res);
+    } catch (e) {
+      return responseStatus(res, 400, "failed", e.message);
+    }
+  }
+
+  async getAllGuide() {
+    try {
+      await guideService.getGuides();
     } catch (e) {
       return responseStatus(res, 400, "failed", e.message);
     }

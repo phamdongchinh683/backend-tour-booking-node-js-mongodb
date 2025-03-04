@@ -38,5 +38,5 @@ router.delete("/remove-comment/:id", authController.removeComment);
 router.post("/book-tour/:tourId", inputBookTour, authController.tourPayment);
 router.get("/my-book-tour", authController.getBookedList);
 router.post("/evaluate-guide/:guideId", authController.evaluateGuide);
-
+router.get("/get-guides", authController.getAllGuide);
 module.exports = router;
