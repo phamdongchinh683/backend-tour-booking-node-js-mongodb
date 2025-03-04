@@ -20,6 +20,10 @@ class GuildService {
     return responseStatus(res, 200, "success", userInfo);
   }
   async getGuides(res) {
+    let roleGuide = await Role.findOne({ name: "Guide" }).lean();
+    if (!roleGuide) {
+      return responseStatus(res, 400, "failed", "Role guide not found");
+    }
     let getAllGuides = await User.find({ role_id: roleGuide._id })
       .populate("role_id", "name")
       .lean();
