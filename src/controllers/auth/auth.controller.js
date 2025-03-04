@@ -193,7 +193,7 @@ class AuthController {
     }
   }
 
-  async getAllGuide() {
+  async getAllGuide(res) {
     try {
       await guideService.getGuides();
     } catch (e) {
