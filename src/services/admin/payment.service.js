@@ -13,6 +13,9 @@ class PaymentService {
     }
 
     let paymentList = await Payment.find(query)
+      .populate([
+        { path: "user_id", select: "fullName -_id" },
+      ])
       .sort({ createAt: -1 })
       .limit(Number(limit))
       .lean()
