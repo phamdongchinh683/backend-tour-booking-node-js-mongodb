@@ -1,18 +1,12 @@
-# Use official Node image
-FROM node:20-alpine
+FROM node:22.14.0-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install --production
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
-# Copy the rest of the app
+RUN npm install
+
 COPY . .
 
-# Expose the port your app listens on
-EXPOSE 3000
-
-# Start the app
-CMD ["node", "index.js"]
+CMD [ "node", "index.js" ]
