@@ -50,12 +50,12 @@ module.exports = infoUser = async (req, res, next) => {
           "Email must be a valid address ending in .com, .edu, .net, .org, or .gov",
       }),
     phone: Joi.string()
-      .pattern(/^[0-9]{10,15}$/)
+      .pattern(/^[0-9]{11,20}$/)
       .required()
       .messages({
         "any.required": "Phone number is required",
         "string.pattern.base":
-          "Phone number must contain only digits and be 10-15 characters long",
+          "Phone number must contain only digits and be 11-20 characters long",
       }),
     role: Joi.string().valid("Traveler", "Guide").required().messages({
       "any.required": "Role is required",
