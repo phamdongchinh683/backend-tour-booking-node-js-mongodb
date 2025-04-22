@@ -59,7 +59,7 @@ module.exports = infoUser = async (req, res, next) => {
       }),
     role: Joi.string().valid("Traveler", "Guide").required().messages({
       "any.required": "Role is required",
-      "any.only": "Role must be one of traveler, guide, or moderator",
+      "any.only": "Role must be one of Traveler, Guide, or moderator",
     }),
   });
 

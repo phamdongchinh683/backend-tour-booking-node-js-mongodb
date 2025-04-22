@@ -5,24 +5,23 @@ info:
   version: 1.0.0
 servers:
   - url: https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/admin
-    description: Admin use router this management
+    description: Admin use this router
     variables:
       environment:
         default: production
   - url: https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/auth
-    description: Traveler and Guide use this
+    description: Traveler use this router
     variables:
       environment:
         default: production
 paths:
   /login:
     post:
-      summary: Admin login
-      description: Allows an admin to log in with a username and password.
+      summary: Admin login and Traveler login note change url on
+      description: username and password.
       tags:
-        - Admin
+        - Admin - Traveler
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -71,19 +70,30 @@ paths:
                   error:
                     type: string
                     example: Invalid username or password
-
   /manage-user/user-list:
     get:
       summary: List all users
       tags:
         - Admin
       parameters:
+        - $ref: "#/components/headers/AuthorizationHeader"
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Cursor for pagination
+        - in: query
+          name: direction
+          schema:
+            type: string
+            enum: [next, prev]
+          description: Direction for pagination (next or prev)
       responses:
         200:
           description: List of users
@@ -113,13 +123,13 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
         - in: path
           name: id
-          required: true
+
           schema:
             type: string
           description: User ID
@@ -153,12 +163,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -206,12 +215,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -260,12 +268,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -297,12 +304,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -334,7 +340,7 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
@@ -366,19 +372,18 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
         - in: path
           name: id
-          required: true
+
           description: ID of the role to delete.
           schema:
             type: string
             example: 1
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -404,13 +409,13 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
         - in: path
           name: id
-          required: true
+
           description: ID of the role to delete.
           schema:
             type: string
@@ -432,12 +437,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -467,12 +471,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -557,13 +560,13 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
         - in: path
           name: id
-          required: true
+
           description: ID of the tour to retrieve.
           schema:
             type: string
@@ -585,12 +588,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             tour:
@@ -668,12 +670,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -705,10 +706,21 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: token
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Cursor for pagination
+        - in: query
+          name: direction
+          schema:
+            type: string
+            enum: [next, prev]
+          description: Direction for pagination (next or prev)
       requestBody:
       responses:
         200:
@@ -738,12 +750,11 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -818,13 +829,13 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
         - in: path
           name: id
-          required: true
+
           description: ID of the booking to retrieve.
           schema:
             type: string
@@ -837,7 +848,7 @@ paths:
         401:
           description: Unauthorized.
 
-  /manage-booking-tour/tour-list:
+  /manage-booking-tour/booking-list:
     get:
       summary: Create a new booking for a tour
       description: Allows an admin to create a new booking for a specific tour.
@@ -846,12 +857,22 @@ paths:
       parameters:
         - in: header
           name: token
-          required: true
+
           schema:
             type: string
           description: Authorization token
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Cursor for pagination
+        - in: query
+          name: direction
+          schema:
+            type: string
+            enum: [next, prev]
+          description: Direction for pagination (next or prev)
       requestBody:
-        required: true
         content:
           application/json:
       responses:
@@ -869,15 +890,16 @@ paths:
       tags:
         - Booking Management
       parameters:
+        - in: header
+          name: token
         - in: path
           name: id
-          required: true
+
           description: ID of the booking to update.
           schema:
             type: integer
             example: 1
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -903,8 +925,10 @@ paths:
       description: Allows an admin to delete a specific booking.
       tags:
         - Booking Management
+      parameters:
+        - in: header
+          name: token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -922,270 +946,6 @@ paths:
           description: Booking not found.
         401:
           description: Unauthorized.
-        /manage-comment/comment-list:
-    get:
-      summary: Get list of comments
-      description: Retrieves a list of all comments.
-      tags:
-        - Comment Management
-      responses:
-        200:
-          description: List of comments.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    user:
-                      type: string
-                      example: "Jane Doe"
-                    comment:
-                      type: string
-                      example: "Great tour, had an amazing time!"
-        401:
-          description: Unauthorized.
-
-  /manage-comment/comment-detail/{id}:
-    get:
-      summary: Get comment details
-      description: Retrieves details of a specific comment by ID.
-      tags:
-        - Comment Management
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the comment to retrieve.
-          schema:
-            type: integer
-            example: 1
-      responses:
-        200:
-          description: Comment details retrieved successfully.
-        404:
-          description: Comment not found.
-        401:
-          description: Unauthorized.
-
-  /manage-comment/create-comment:
-    post:
-      summary: Create a new comment
-      description: Allows an admin to create a new comment.
-      tags:
-        - Comment Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  example: 1
-                tourId:
-                  type: integer
-                  example: 1
-                comment:
-                  type: string
-                  example: "Amazing tour experience!"
-      responses:
-        200:
-          description: Comment created successfully.
-        400:
-          description: Invalid input data.
-        401:
-          description: Unauthorized.
-
-  /manage-comment/edit-comment/{id}:
-    put:
-      summary: Edit a comment
-      description: Allows an admin to update a comment.
-      tags:
-        - Comment Management
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the comment to edit.
-          schema:
-            type: integer
-            example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                comment:
-                  type: string
-                  example: "Updated review, really enjoyed it!"
-      responses:
-        200:
-          description: Comment updated successfully.
-        400:
-          description: Invalid data.
-        401:
-          description: Unauthorized.
-
-  /manage-comment/delete-comment:
-    delete:
-      summary: Delete a comment
-      description: Deletes a specific comment.
-      tags:
-        - Comment Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                commentIds:
-                  type: array
-                  items:
-                    type: integer
-                    example: [1, 2]
-      responses:
-        200:
-          description: Comment deleted successfully.
-        404:
-          description: Comment not found.
-        401:
-          description: Unauthorized.
-
-  /manage-review/review-list:
-    get:
-      summary: Get list of reviews
-      description: Retrieves a list of all reviews.
-      tags:
-        - Review Management
-      responses:
-        200:
-          description: List of reviews.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    review:
-                      type: string
-                      example: "Wonderful experience, will recommend!"
-        401:
-          description: Unauthorized.
-
-  /manage-review/create-review:
-    post:
-      summary: Create a new review
-      description: Allows an admin to create a new review.
-      tags:
-        - Review Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  example: 1
-                tourId:
-                  type: integer
-                  example: 1
-                review:
-                  type: string
-                  example: "Incredible experience, highly recommended!"
-      responses:
-        200:
-          description: Review created successfully.
-        400:
-          description: Invalid input data.
-        401:
-          description: Unauthorized.
-
-  /manage-review/review-detail/{id}:
-    get:
-      summary: Get review details
-      description: Retrieves details of a specific review by ID.
-      tags:
-        - Review Management
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the review to retrieve.
-          schema:
-            type: integer
-            example: 1
-      responses:
-        200:
-          description: Review details retrieved successfully.
-        404:
-          description: Review not found.
-        401:
-          description: Unauthorized.
-
-  /manage-review/edit-review:
-    put:
-      summary: Edit a review
-      description: Allows an admin to edit a review.
-      tags:
-        - Review Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                review:
-                  type: string
-                  example: "Updated review, had an even better time!"
-      responses:
-        200:
-          description: Review updated successfully.
-        400:
-          description: Invalid input data.
-        401:
-          description: Unauthorized.
-
-  /manage-review/delete-review:
-    delete:
-      summary: Delete a review
-      description: Deletes a specific review.
-      tags:
-        - Review Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                reviewIds:
-                  type: array
-                  items:
-                    type: integer
-                    example: [1, 2]
-      responses:
-        200:
-          description: Review deleted successfully.
-        404:
-          description: Review not found.
-        401:
-          description: Unauthorized.
 
   /manage-payment/payment-list:
     get:
@@ -1193,6 +953,9 @@ paths:
       description: Retrieves a list of all payments.
       tags:
         - Payment Management
+      parameters:
+        - in: header
+          name: token
       responses:
         200:
           description: List of payments.
@@ -1222,9 +985,11 @@ paths:
       tags:
         - Payment Management
       parameters:
+        - in: header
+          name: token
         - in: path
           name: id
-          required: true
+
           description: ID of the payment to retrieve.
           schema:
             type: integer
@@ -1244,7 +1009,6 @@ paths:
       tags:
         - Payment Management
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1274,15 +1038,16 @@ paths:
       tags:
         - Payment Management
       parameters:
+        - in: header
+          name: token
         - in: path
           name: id
-          required: true
+
           description: ID of the payment to edit.
           schema:
             type: integer
             example: 1
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1308,8 +1073,10 @@ paths:
       description: Deletes a specific payment.
       tags:
         - Payment Management
+      parameters:
+        - in: header
+          name: token
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -1328,140 +1095,6 @@ paths:
         401:
           description: Unauthorized.
 
-  /manage-blog/blog-list:
-    get:
-      summary: Get list of blogs
-      description: Retrieves a list of all blogs.
-      tags:
-        - Blog Management
-      responses:
-        200:
-          description: List of blogs.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    title:
-                      type: string
-                      example: "5 Amazing Destinations"
-        401:
-          description: Unauthorized.
-
-  /manage-blog/create-blog:
-    post:
-      summary: Create a new blog
-      description: Allows an admin to create a new blog.
-      tags:
-        - Blog Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "Exploring the Hidden Gems of the World"
-                content:
-                  type: string
-                  example: "Discover the lesser-known destinations..."
-      responses:
-        200:
-          description: Blog created successfully.
-        400:
-          description: Invalid input data.
-        401:
-          description: Unauthorized.
-
-  /manage-blog/blog-detail/{id}:
-    get:
-      summary: Get blog details
-      description: Retrieves details of a specific blog by ID.
-      tags:
-        - Blog Management
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the blog to retrieve.
-          schema:
-            type: integer
-            example: 1
-      responses:
-        200:
-          description: Blog details retrieved successfully.
-        404:
-          description: Blog not found.
-        401:
-          description: Unauthorized.
-
-  /manage-blog/edit-blog/{id}:
-    put:
-      summary: Edit a blog
-      description: Allows an admin to update a blog.
-      tags:
-        - Blog Management
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: ID of the blog to update.
-          schema:
-            type: integer
-            example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "Updated blog title"
-                content:
-                  type: string
-                  example: "Updated blog content..."
-      responses:
-        200:
-          description: Blog updated successfully.
-        400:
-          description: Invalid input data.
-        401:
-          description: Unauthorized.
-
-  /manage-blog/delete-blog:
-    delete:
-      summary: Delete a blog
-      description: Deletes a specific blog.
-      tags:
-        - Blog Management
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                blogIds:
-                  type: array
-                  items:
-                    type: integer
-                    example: [1, 2]
-      responses:
-        200:
-          description: Blog deleted successfully.
-        404:
-          description: Blog not found.
-        401:
-          description: Unauthorized.
   /sign-up:
     post:
       summary: User Sign-Up
@@ -1470,7 +1103,7 @@ paths:
         - Authentication
       requestBody:
         description: User registration details
-        required: true
+
         content:
           application/json:
             schema:
@@ -1498,7 +1131,7 @@ paths:
         - Authentication
       requestBody:
         description: User login credentials
-        required: true
+
         content:
           application/json:
             schema:
@@ -1515,229 +1148,20 @@ paths:
         "401":
           description: Unauthorized
 
-  /send-otp:
-    post:
-      summary: Send OTP for password recovery
-      operationId: sendOtp
-      tags:
-        - Authentication
-      responses:
-        "200":
-          description: OTP sent to the user's email
-        "400":
-          description: Bad request
-
-  /new-password:
-    post:
-      summary: Set a new password
-      operationId: newPassword
-      tags:
-        - Authentication
-      requestBody:
-        description: New password and OTP
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                otp:
-                  type: string
-                newPassword:
-                  type: string
-      responses:
-        "200":
-          description: Password updated successfully
-        "400":
-          description: Invalid OTP or password
-
   /profile:
     get:
       summary: Get user profile
       operationId: getProfile
       tags:
         - Authentication
+      parameters:
+        - in: header
+          name: token
       responses:
         "200":
           description: User profile details
         "401":
           description: Unauthorized
-
-  /post-blog:
-    post:
-      summary: Create a new blog post
-      operationId: postBlog
-      tags:
-        - Authentication
-      requestBody:
-        description: Blog post details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                content:
-                  type: string
-      responses:
-        "201":
-          description: Blog post created
-        "400":
-          description: Bad request
-
-  /my-blogs:
-    get:
-      summary: Get all blog posts by the user
-      operationId: getAllBlog
-      tags:
-        - Authentication
-      responses:
-        "200":
-          description: List of user's blog posts
-        "401":
-          description: Unauthorized
-
-  /blog/{id}:
-    get:
-      summary: Get blog details by ID
-      operationId: detailBlog
-      tags:
-        - Authentication
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Blog post details
-        "404":
-          description: Blog not found
-
-  /edit-blog/{id}:
-    put:
-      summary: Edit a blog post by ID
-      operationId: editBlog
-      tags:
-        - Authentication
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Updated blog post details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                content:
-                  type: string
-      responses:
-        "200":
-          description: Blog post updated
-        "404":
-          description: Blog not found
-
-  /remove-blog/{id}:
-    delete:
-      summary: Remove a blog post by ID
-      operationId: removeBlog
-      tags:
-        - Authentication
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Blog post deleted
-        "404":
-          description: Blog not found
-
-  /comment-blog/{id}:
-    post:
-      summary: Comment on a blog post
-      operationId: commentBlog
-      tags:
-        - Authentication
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Comment details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                comment:
-                  type: string
-      responses:
-        "201":
-          description: Comment added
-        "404":
-          description: Blog not found
-
-  /edit-comment/{id}:
-    patch:
-      summary: Edit a comment
-      operationId: updateComment
-      tags:
-        - Authentication
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Updated comment details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                comment:
-                  type: string
-      responses:
-        "200":
-          description: Comment updated
-        "404":
-          description: Comment or blog not found
-
-  /remove-comment/{id}:
-    delete:
-      summary: Remove a comment
-      operationId: removeComment
-      tags:
-        - Authentication
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Comment removed
-        "404":
-          description: Comment or blog not found
 
   /book-tour/{tourId}:
     post:
@@ -1746,9 +1170,11 @@ paths:
       tags:
         - Authentication
       parameters:
+        - in: header
+          name: token
         - in: path
           name: tourId
-          required: true
+
           schema:
             type: string
       responses:
@@ -1763,42 +1189,132 @@ paths:
       operationId: getBookedList
       tags:
         - Authentication
+      parameters:
+        - in: header
+          name: token
       responses:
         "200":
           description: List of booked tours
         "401":
           description: Unauthorized
 
-  /evaluate-guide/{guideId}:
-    post:
-      summary: Evaluate a tour guide
-      operationId: evaluateGuide
+  /tour-detail/{id}:
+    get:
+      summary: Get tour details by ID
       tags:
         - Authentication
       parameters:
+        - in: header
+          name: token
         - in: path
-          name: guideId
-          required: true
+          name: id
+
           schema:
             type: string
-      requestBody:
-        description: Guide evaluation details
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                rating:
-                  type: integer
-                  minimum: 1
-                  maximum: 5
-                comment:
-                  type: string
+          description: ID of the tour
+        - in: header
+          name: token
+
+          schema:
+            type: string
+          description: Authorization token
       responses:
-        "200":
-          description: Guide evaluated
-        "400":
+        200:
+          description: Tour detail data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: tour123
+                  name:
+                    type: string
+                    example: Ha Long Bay Adventure
+                  description:
+                    type: string
+                    example: A scenic tour through the famous Ha Long Bay...
+        400:
           description: Bad request
-        "404":
-          description: Guide not found
+        401:
+          description: Unauthorized
+        404:
+          description: Tour not found
+
+  /tour-list:
+    get:
+      summary: Get list of all tours
+      description: Retrieves a list of all tours.
+      tags:
+        - Authentication
+      parameters:
+        - in: header
+          name: token
+
+          schema:
+            type: string
+          description: token
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Cursor for pagination
+        - in: query
+          name: direction
+          schema:
+            type: string
+            enum: [next, prev]
+          description: Direction for pagination (next or prev)
+      requestBody:
+      responses:
+        200:
+          description: List of tours.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    tourName:
+                      type: string
+                      example: "Paris Adventure"
+        401:
+          description: Unauthorized.
+
+  /get-guides:
+    get:
+      summary: Get guides
+      description: Retrieves a list of all tours.
+      tags:
+        - Authentication
+      parameters:
+        - in: header
+          name: token
+
+          schema:
+            type: string
+          description: token
+      requestBody:
+      responses:
+        200:
+          description: List of tours.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    tourName:
+                      type: string
+                      example: "Paris Adventure"
+        401:
+          description: Unauthorized.
