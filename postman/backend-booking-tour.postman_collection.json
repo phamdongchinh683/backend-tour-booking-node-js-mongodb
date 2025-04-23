@@ -1924,23 +1924,94 @@
 					"item": [
 						{
 							"name": "my booked",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json();",
+											"",
+											"// Check response body status field",
+											"pm.test(\"Response status field is present\", function () {",
+											"    pm.expect(jsonData).to.have.property(\"status\");",
+											"});",
+											"",
+											"if (jsonData.status === \"success\") {",
+											"    pm.test(\"Status code is 200\", function () {",
+											"        pm.response.to.have.status(200);",
+											"    });",
+											"",
+											"    pm.test(\"Tours data structure is valid\", function () {",
+											"        pm.expect(jsonData.data).to.be.an(\"array\");",
+											"        jsonData.data.forEach(tour => {",
+											"            pm.expect(tour).to.have.property(\"_id\");",
+											"            pm.expect(tour).to.have.property(\"tour_id\");",
+											"            if (tour.tour_id) {",
+											"                pm.expect(tour.tour_id).to.have.property(\"city\");",
+											"            }",
+											"",
+											"            pm.expect(tour).to.have.property(\"user_id\");",
+											"            pm.expect(tour.user_id.fullName).to.have.property(\"firstName\");",
+											"            pm.expect(tour.user_id.fullName).to.have.property(\"lastName\");",
+											"",
+											"            pm.expect(tour).to.have.property(\"guide_id\");",
+											"            pm.expect(tour.guide_id.fullName).to.have.property(\"firstName\");",
+											"            pm.expect(tour.guide_id.fullName).to.have.property(\"lastName\");",
+											"",
+											"            pm.expect(tour).to.have.property(\"number_visitors\");",
+											"            pm.expect(tour).to.have.property(\"start_tour\");",
+											"            pm.expect(tour).to.have.property(\"time\");",
+											"            pm.expect(tour.time).to.have.property(\"start_time\");",
+											"            pm.expect(tour.time).to.have.property(\"end_time\");",
+											"        });",
+											"    });",
+											"",
+											"} else if (jsonData.status === \"failed\") {",
+											"    if (jsonData.message === \"Invalid authorization!\") {",
+											"        pm.test(\"Status code is 401 for invalid token\", function () {",
+											"            pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+											"        });",
+											"",
+											"        pm.test(\"Proper message for invalid authorization\", function () {",
+											"            pm.expect(jsonData.message).to.eql(\"Invalid authorization!\");",
+											"        });",
+											"",
+											"    } else if (jsonData.message === \"You haven't booked any tours yet, try booking one\") {",
+											"        pm.test(\"Status code is 404 or 200 for empty booking\", function () {",
+											"            pm.expect(pm.response.code).to.be.oneOf([200, 400]);",
+											"        });",
+											"",
+											"        pm.test(\"Proper message when no bookings found\", function () {",
+											"            pm.expect(jsonData.message).to.eql(\"You haven't booked any tours yet, try booking one\");",
+											"        });",
+											"    }",
+											"} else {",
+											"    pm.test(\"Status is either success or failed\", function () {",
+											"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+											"    });",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "GET",
 								"header": [
 									{
 										"key": "token",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTA3MDM0MywiZXhwIjoxNzMxMTU2NzQzfQ.-ZnUbDDowM2iUdOO0uCpQ0UvqhTAH5mx_ZJX19Kz2y4",
+										"value": "{{jwt_token}}",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "{{NodeJS-TS}}/api/v1/auth/my-book-tour",
+									"raw": "{{NodeJS-TS}}/auth/my-book-tour",
 									"host": [
 										"{{NodeJS-TS}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"auth",
 										"my-book-tour"
 									]
@@ -1950,12 +2021,131 @@
 						},
 						{
 							"name": "book-tour",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json();",
+											"const statusCode = pm.response.code;",
+											"",
+											"if (jsonData.status === \"success\") {",
+											"    pm.test(\"Status code is 200\", function () {",
+											"        pm.response.to.have.status(200);",
+											"    });",
+											"",
+											"    pm.test(\"Response is JSON\", function () {",
+											"        pm.response.to.be.withBody;",
+											"        pm.response.to.be.json;",
+											"    });",
+											"",
+											"    pm.test(\"Booking contains required fields\", function () {",
+											"        pm.expect(jsonData.data).to.have.property(\"booking_id\");",
+											"        pm.expect(jsonData.data).to.have.property(\"user_id\");",
+											"        pm.expect(jsonData.data).to.have.property(\"status\");",
+											"        pm.expect(jsonData.data).to.have.property(\"card_number\");",
+											"        pm.expect(jsonData.data).to.have.property(\"total_amount\");",
+											"    });",
+											"",
+											"    console.log(\"Booking success:\", jsonData.data);",
+											"} else if (jsonData.status === \"failed\") {",
+											"    const msg = jsonData.message;",
+											"",
+											"    if (statusCode === 422 || statusCode === 400) {",
+											"        pm.test(\"❌ Status code is 422 or 400 for validation or logic error\", function () {",
+											"            pm.expect([400, 422]).to.include(statusCode);",
+											"        });",
+											"",
+											"        const errorMessages = msg.split(\",\").map(m => m.trim());",
+											"        const knownMessages = [",
+											"            \"Guide is required\",",
+											"            \"Guide cannot be an empty field\",",
+											"            \"Guide ID must be at least 8 characters long\",",
+											"            \"Guide ID cannot exceed 30 characters\",",
+											"            \"Number of visitors is required\",",
+											"            \"Number of visitors must be a number\",",
+											"            \"Number of visitors must be at least 1\",",
+											"            \"Number of visitors cannot exceed 60\",",
+											"            \"Start date is required\",",
+											"            \"Start date must be a valid date\",",
+											"            \"Start time is required\",",
+											"            \"End time is required\",",
+											"            \"Status is required\",",
+											"            \"Status must be a number\",",
+											"            \"Status must be either 0 or 1\",",
+											"            \"Card number is required\",",
+											"            \"Card number cannot be an empty field\",",
+											"            \"Card number must be at least 8 characters long\",",
+											"            \"Card number cannot exceed 30 characters\",",
+											"            \"Total amount is required\",",
+											"            \"Total amount must be a number\",",
+											"            \"Total amount must be a positive number\",",
+											"",
+											"            // Logical errors",
+											"            \"This guide not exited\",",
+											"            \"This tour not exited\"",
+											"        ];",
+											"",
+											"        pm.test(\"❌ Error messages are known and expected\", function () {",
+											"            errorMessages.forEach(msg => {",
+											"                pm.expect(msg, `Unexpected error: ${msg}`).to.be.oneOf(knownMessages);",
+											"            });",
+											"        });",
+											"",
+											"        console.warn(\"❌ Booking failed with:\", errorMessages);",
+											"    }",
+											"",
+											"    else if (statusCode === 401 && msg === \"Invalid authorization!\") {",
+											"        pm.test(\"Status code is 401 for invalid JWT\", function () {",
+											"            pm.response.to.have.status(401);",
+											"        });",
+											"",
+											"        pm.test(\"Message is 'Invalid authorization!'\", function () {",
+											"            pm.expect(msg).to.eql(\"Invalid authorization!\");",
+											"        });",
+											"",
+											"        console.warn(\"Unauthorized access detected (invalid token)\");",
+											"    }",
+											"",
+											"    else if (statusCode === 400 && msg === \"Access Denied. Traveler or Guide only route!\") {",
+											"        pm.test(\"Status code is 400 for role restriction\", function () {",
+											"            pm.response.to.have.status(400);",
+											"        });",
+											"",
+											"        pm.test(\"Message is 'Access Denied. Traveler or Guide only route!'\", function () {",
+											"            pm.expect(msg).to.eql(\"Access Denied. Traveler or Guide only route!\");",
+											"        });",
+											"",
+											"        console.warn(\"Access denied due to role restriction\");",
+											"    }",
+											"",
+											"    else {",
+											"        pm.test(\"⚠️ Unexpected failure response\", function () {",
+											"            pm.expect([400, 401, 422]).to.include(statusCode);",
+											"        });",
+											"",
+											"        console.warn(\"⚠️ Unhandled error case:\", jsonData);",
+											"    }",
+											"} else {",
+											"    pm.test(\"⚠️ Unexpected response status type\", function () {",
+											"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+											"    });",
+											"",
+											"    console.warn(\"⚠️ Unknown status type or structure:\", jsonData);",
+											"}",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "token",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmg2ODIwMyIsImlhdCI6MTczMTExMzMwMywiZXhwIjoxNzMxMTk5NzAzfQ.SUjP-XAL6P9u8CvwerBTNGzuH1WBo4wN_QThK79SW4g",
+										"value": "{{jwt_token}}",
 										"type": "text"
 									}
 								],
@@ -1964,17 +2154,17 @@
 									"urlencoded": [
 										{
 											"key": "guideId",
-											"value": "672b8baa2e0fd88240d92092",
+											"value": "67e24c4be5290406018a305a",
 											"type": "text"
 										},
 										{
 											"key": "numberVisitor",
-											"value": "2",
+											"value": "3",
 											"type": "text"
 										},
 										{
 											"key": "startTour",
-											"value": "11-9-2024",
+											"value": "2020/12/8",
 											"type": "text"
 										},
 										{
@@ -1989,29 +2179,27 @@
 										},
 										{
 											"key": "status",
-											"value": "pending",
+											"value": "1",
 											"type": "text"
 										},
 										{
 											"key": "cardNumber",
-											"value": "0722132132",
+											"value": "65773123",
 											"type": "text"
 										},
 										{
 											"key": "totalAmount",
-											"value": "20.00",
+											"value": "12.00",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "{{NodeJS-TS}}/api/v1/auth/book-tour/:tourId",
+									"raw": "{{NodeJS-TS}}/auth/book-tour/:tourId",
 									"host": [
 										"{{NodeJS-TS}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"auth",
 										"book-tour",
 										":tourId"
@@ -2019,7 +2207,7 @@
 									"variable": [
 										{
 											"key": "tourId",
-											"value": "672ebef2dbadbc61a064f48d"
+											"value": "67fddc97d5dd0f909b8c600e"
 										}
 									]
 								}
@@ -2081,7 +2269,6 @@
 									"        \"Username length must be at least 8 characters long\",",
 									"        \"The maximum length of a username is 30\",",
 									"        \"Username must not have leading or trailing whitespace\",",
-									"        \"\\\"phone\\\" is not allowed to be empty\",",
 									"        \"Password is required\",",
 									"        \"Password cannot be an empty field\",",
 									"        \"Password length must be at least 10 characters long\",",
@@ -2091,7 +2278,6 @@
 									"        \"First name cannot be an empty field\",",
 									"        \"First name must be at least 2 characters long\",",
 									"        \"First name cannot exceed 60 characters\",",
-									"        \"\\\"email\\\" is not allowed to be empty\",",
 									"        \"Last name is required\",",
 									"        \"Last name cannot be an empty field\",",
 									"        \"Last name must be at least 2 characters long\",",
@@ -2121,7 +2307,9 @@
 									"        \"Role must be one of Traveler, Guide, or moderator\",",
 									"        \"username existed\",",
 									"        \"contact.phone existed\",",
-									"        \"contact.email existed\"",
+									"        \"contact.email existed\",",
+									"        , \"Guide\"",
+									"        , \"or moderator\"",
 									"    ];",
 									"",
 									"    pm.test(\"All error messages are valid\", function () {",
@@ -2272,7 +2460,6 @@
 									"    pm.test(\"Login failed with appropriate message\", function () {",
 									"        pm.expect(jsonData.message).to.be.a(\"string\");",
 									"",
-									"        // Check for known error messages",
 									"        pm.expect(jsonData.message).to.be.oneOf([",
 									"            \"This account does not exist\",",
 									"            \"The password that you've entered is incorrect.\",",
@@ -2303,6 +2490,7 @@
 								{
 									"key": "username",
 									"value": "chinhchinh123",
+									"description": "chinhchinh123",
 									"type": "text"
 								},
 								{
@@ -2313,12 +2501,12 @@
 							]
 						},
 						"url": {
-							"raw": "{{NodeJS-TS}}/auth/login",
+							"raw": "{{NodeJS-TS}}/admin/login",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"auth",
+								"admin",
 								"login"
 							]
 						}
@@ -2359,20 +2547,17 @@
 							"urlencoded": [
 								{
 									"key": "email",
-									"value": "312321",
+									"value": "phamdongchinh789@gmail.com",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/auth/send-otp",
+							"raw": "{{NodeJS-TS}}/send-otp",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"api",
-								"v1",
-								"auth",
 								"send-otp"
 							]
 						}
@@ -2381,29 +2566,95 @@
 				},
 				{
 					"name": "get guideList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"if (jsonData.status === \"success\") {",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    pm.test(\"Guides data structure is correct\", function () {",
+									"        const guides = jsonData.data;",
+									"",
+									"        pm.expect(guides).to.be.an(\"array\");",
+									"",
+									"        guides.forEach(guide => {",
+									"            pm.expect(guide).to.have.property(\"_id\");",
+									"            pm.expect(guide).to.have.property(\"fullName\");",
+									"            pm.expect(guide.fullName).to.have.property(\"firstName\");",
+									"            pm.expect(guide.fullName).to.have.property(\"lastName\");",
+									"",
+									"            pm.expect(guide).to.have.property(\"contact\");",
+									"            pm.expect(guide.contact).to.have.property(\"email\");",
+									"            pm.expect(guide.contact).to.have.property(\"phone\");",
+									"",
+									"            pm.expect(guide).to.have.property(\"role_id\");",
+									"            pm.expect(guide.role_id).to.have.property(\"_id\");",
+									"            pm.expect(guide.role_id).to.have.property(\"name\");",
+									"",
+									"            pm.expect(guide).to.have.property(\"reviews\");",
+									"            pm.expect(guide.reviews).to.be.an(\"array\");",
+									"        });",
+									"    });",
+									"",
+									"} else if (jsonData.status === \"failed\") {",
+									"    pm.test(\"Status code is appropriate for failed access\", function () {",
+									"        pm.expect(pm.response.code).to.be.oneOf([400, 401, 403]);",
+									"    });",
+									"",
+									"    pm.test(\"Failure message is correct\", function () {",
+									"        pm.expect(jsonData.message).to.be.a(\"string\");",
+									"        pm.expect(jsonData.message).to.be.oneOf([",
+									"            \"You do not have access!\",",
+									"            \"Access Denied. Traveler or Guide only route!\",",
+									"            \"Invalid authorization!\"",
+									"        ]);",
+									"    });",
+									"",
+									"} else {",
+									"    pm.test(\"Unknown status\", function () {",
+									"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "312321",
-									"type": "text"
-								}
-							]
-						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/auth/send-otp",
+							"raw": "https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/auth/get-guides",
+							"protocol": "https",
 							"host": [
-								"{{NodeJS-TS}}"
+								"backend-tour-booking-node-js-mongodb",
+								"onrender",
+								"com"
 							],
 							"path": [
 								"api",
 								"v1",
 								"auth",
-								"send-otp"
+								"get-guides"
 							]
 						}
 					},
@@ -2441,26 +2692,93 @@
 				},
 				{
 					"name": "detail-tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"if (jsonData.status === \"success\") {",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    pm.test(\"Tour details data structure is correct\", function () {",
+									"        const tour = jsonData.data;",
+									"",
+									"        pm.expect(tour).to.have.property(\"_id\");",
+									"        pm.expect(tour).to.have.property(\"city\");",
+									"        pm.expect(tour).to.have.property(\"attractions\");",
+									"        pm.expect(tour).to.have.property(\"days\");",
+									"        pm.expect(tour).to.have.property(\"prices\");",
+									"        pm.expect(tour.prices).to.have.property(\"adult\");",
+									"        pm.expect(tour.prices).to.have.property(\"child\");",
+									"",
+									"        pm.expect(tour).to.have.property(\"guide\");",
+									"        pm.expect(tour.guide).to.have.property(\"_id\");",
+									"        pm.expect(tour.guide).to.have.property(\"fullName\");",
+									"        pm.expect(tour.guide.fullName).to.have.property(\"firstName\");",
+									"        pm.expect(tour.guide.fullName).to.have.property(\"lastName\");",
+									"",
+									"        pm.expect(tour).to.have.property(\"images\");",
+									"        pm.expect(tour.images).to.be.an(\"array\");",
+									"",
+									"        pm.expect(tour).to.have.property(\"createAt\");",
+									"",
+									"        pm.expect(Number(tour.prices.adult)).to.be.above(0);",
+									"        pm.expect(Number(tour.prices.child)).to.be.above(0);",
+									"    });",
+									"",
+									"} else if (jsonData.status === \"failed\") {",
+									"    pm.test(\"Status code is appropriate for failed access\", function () {",
+									"        pm.expect(pm.response.code).to.be.oneOf([400, 401, 403]);",
+									"    });",
+									"",
+									"    pm.test(\"Failure message is correct\", function () {",
+									"        pm.expect(jsonData.message).to.be.a(\"string\");",
+									"        pm.expect(jsonData.message).to.be.oneOf([",
+									"            \"You do not have access!\",",
+									"            \"Access Denied. Traveler or Guide only route!\",",
+									"            \"Cast to ObjectId failed for value\",",
+									"            \"Invalid authorization!\",",
+									"            \"Not found this tour\",",
+									"            \"Cast to ObjectId failed for value \\\":id\\\" (type string) at path \\\"_id\\\" for model \\\"Tour\\\"\"",
+									"        ]);",
+									"    });",
+									"",
+									"} else {",
+									"    pm.test(\"Unknown status\", function () {",
+									"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiY2hpbmhjaGluaDEyMyIsImlhdCI6MTczMzk4MTgzOSwiZXhwIjoxNzM0MDY4MjM5fQ.aZFQ3aR4hqgeQ5AxwT0sOS8pc9SxuFQ5HHaWMidx1PQ",
+								"value": "{{jwt_token}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "https://backend-tour-booking-node-js-mongodb.onrender.com/api/v1/auth/tour-detail/:id",
-							"protocol": "https",
+							"raw": "{{NodeJS-TS}}/auth/tour-detail/:id",
 							"host": [
-								"backend-tour-booking-node-js-mongodb",
-								"onrender",
-								"com"
+								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"auth",
 								"tour-detail",
 								":id"
@@ -2468,7 +2786,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "673fdc1c85fe4c87c938467c"
+									"value": "67fdddddd5dd0f909b8c605e"
 								}
 							]
 						}
@@ -2477,30 +2795,90 @@
 				},
 				{
 					"name": "get tour",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"if (jsonData.status === \"success\") {",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    pm.test(\"Each tour should have necessary fields\", function () {",
+									"        const tours = jsonData.data.tours;",
+									"",
+									"        pm.expect(tours).to.be.an(\"array\");",
+									"        tours.forEach(tour => {",
+									"            pm.expect(tour).to.have.property(\"_id\");",
+									"            pm.expect(tour).to.have.property(\"city\");",
+									"            pm.expect(tour).to.have.property(\"attractions\");",
+									"            pm.expect(tour).to.have.property(\"days\");",
+									"            pm.expect(tour).to.have.property(\"prices\");",
+									"            pm.expect(tour.prices).to.have.property(\"adult\");",
+									"            pm.expect(tour.prices).to.have.property(\"child\");",
+									"            pm.expect(tour).to.have.property(\"guide\");",
+									"            pm.expect(tour).to.have.property(\"images\");",
+									"            pm.expect(tour.images).to.be.an(\"array\");",
+									"            pm.expect(tour).to.have.property(\"createAt\");",
+									"        });",
+									"    });",
+									"",
+									"} else if (jsonData.status === \"failed\") {",
+									"    pm.test(\"Status code is appropriate for failed access\", function () {",
+									"        pm.expect(pm.response.code).to.be.oneOf([400, 401, 403]);",
+									"    });",
+									"",
+									"    pm.test(\"Failure message is correct\", function () {",
+									"        pm.expect(jsonData.message).to.be.a(\"string\");",
+									"        pm.expect(jsonData.message).to.be.oneOf([",
+									"            \"You do not have access!\",",
+									"            \"Access Denied. Traveler or Guide only route!\",",
+									"            \"There are currently no tours available\"",
+									"        ]);",
+									"    });",
+									"",
+									"} else {",
+									"    pm.test(\"Unknown status\", function () {",
+									"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiY2hpbmhjaGluaDEyMyIsImlkIjoiNjc0NGFjY2U3ZmQ2OWNkMTg4MzBkNWZlIn0sImlhdCI6MTczNDEwODU1MSwiZXhwIjoxNzM0MTk0OTUxfQ.5wW-kdhjzyF3WQ-8VEj4kokGAO3cIxKFTMXTASUUppA",
+								"value": "{{jwt_token}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/auth/tour-list?cursor=&direction=next",
+							"raw": "{{NodeJS-TS}}/auth/tour-list?cursor=67fddf48d5dd0f909b8c6072&direction=next",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"auth",
 								"tour-list"
 							],
 							"query": [
 								{
 									"key": "cursor",
-									"value": ""
+									"value": "67fddf48d5dd0f909b8c6072"
 								},
 								{
 									"key": "direction",
@@ -2518,7 +2896,7 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiY2hpbmhjaGluaDEyMyIsImlkIjoiNjc0NGFjY2U3ZmQ2OWNkMTg4MzBkNWZlIn0sImlhdCI6MTczNDE5MTQyMSwiZXhwIjoxNzM0Mjc3ODIxfQ.vAEEZrehPwPEkt60higUCk6oCoZCK-xqtX-_eq_C7Cg",
 								"type": "text"
 							}
 						],

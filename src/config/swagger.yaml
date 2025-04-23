@@ -471,15 +471,18 @@ paths:
       parameters:
         - in: header
           name: token
-
+          required: true
           schema:
             type: string
           description: Authorization token
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - tours
               properties:
                 tours:
                   type: array
@@ -535,8 +538,13 @@ paths:
                           - "paris1.jpg"
                           - "paris2.jpg"
                           - "paris3.jpg"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: Date the tour was created
+                        example: "2023-11-06T14:33:26.000Z"
       responses:
-        200:
+        '200':
           description: Tours created successfully
           content:
             application/json:
@@ -546,10 +554,11 @@ paths:
                   message:
                     type: string
                     example: "Tours created successfully"
-        400:
+        '400':
           description: Bad request, invalid input
-        401:
+        '401':
           description: Unauthorized, invalid or missing token
+
 
   /manage-tour/tour-detail/{id}:
     get:
@@ -588,24 +597,29 @@ paths:
       parameters:
         - in: header
           name: token
-
+          required: true
           schema:
             type: string
           description: Authorization token
       requestBody:
+        required: true
         content:
           application/json:
-            tour:
-
             schema:
               type: object
+              required:
+                - id
+                - city
+                - attractions
+                - days
+                - prices
+                - guide
+                - images
+                - createdAt
               properties:
-                tour:
-                  type: object
-                properties:
                 id:
                   type: string
-                  description: Name of the city for the tour
+                  description: Unique ID of the tour to be updated
                   example: "21321321"
                 city:
                   type: string
@@ -641,9 +655,9 @@ paths:
                   example: "672b9fd4041d7643abab83fe"
                 images:
                   type: array
+                  description: List of image filenames for the tour
                   items:
                     type: string
-                  description: List of image filenames for the tour
                   example:
                     - "paris1.jpg"
                     - "paris2.jpg"
@@ -654,11 +668,11 @@ paths:
                   description: Timestamp when the tour was created
                   example: "2023-11-06T14:33:26.000Z"
       responses:
-        200:
+        "200":
           description: Tour updated successfully.
-        400:
+        "400":
           description: Invalid data.
-        401:
+        "401":
           description: Unauthorized.
 
   /manage-tour/remove-tour:
@@ -743,70 +757,83 @@ paths:
 
   /manage-booking-tour/create-booking-tour:
     post:
-      summary: Get list of bookings
-      description: Retrieves a list of all bookings.
+      summary: Create one or multiple tour bookings
+      description: Allows a user to create one or more tour bookings.
       tags:
         - Booking Management
       parameters:
         - in: header
           name: token
-
+          required: true
           schema:
             type: string
           description: Authorization token
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - user_id
-                - tour_id
-                - guide_id
-                - number_visitors
-                - start_tour
-                - time
-              properties:
-                user_id:
-                  type: string
-                  description: The ID of the user booking the tour
-                  example: "605c72ef1532071f3f6c1d3b"
-                tour_id:
-                  type: string
-                  description: The ID of the tour being booked
-                  example: "tour_12345"
-                guide_id:
-                  type: string
-                  description: The ID of the tour guide assigned to the booking
-                  example: "guide_98765"
-                number_visitors:
-                  type: integer
-                  description: The number of visitors for the booking
-                  example: 4
-                start_tour:
-                  type: string
-                  format: date-time
-                  description: The date and time when the tour starts
-                  example: "2024-12-01T09:00:00Z"
-                time:
-                  type: object
-                  required:
-                    - start_time
-                    - end_time
-                  properties:
-                    start_time:
-                      type: string
-                      format: date-time
-                      description: The start time of the tour
-                      example: "2024-12-01T09:00:00Z"
-                    end_time:
-                      type: string
-                      format: date-time
-                      description: The end time of the tour
-                      example: "2024-12-01T17:00:00Z"
+              type: array
+              items:
+                type: object
+                required:
+                  - user_id
+                  - tour_id
+                  - guide_id
+                  - number_visitors
+                  - start_tour
+                  - time
+                  - status
+                  - total_amount
+                  - card_number
+                properties:
+                  user_id:
+                    type: string
+                    description: The ID of the user booking the tour
+                    example: "605c72ef1532071f3f6c1d3b"
+                  tour_id:
+                    type: string
+                    description: The ID of the tour being booked
+                    example: "tour_12345"
+                  guide_id:
+                    type: string
+                    description: The ID of the tour guide assigned to the booking
+                    example: "guide_98765"
+                  number_visitors:
+                    type: integer
+                    description: The number of visitors for the booking
+                    example: 4
+                  start_tour:
+                    type: string
+                    format: date
+                    description: The date when the tour starts
+                    example: "2024-12-01"
+                  start_time:
+                    type: string
+                    format: time
+                    description: The start time of the tour
+                    example: "09:00"
+                  end_time:
+                    type: string
+                    format: time
+                    description: The end time of the tour
+                    example: "17:00"
+                  status:
+                    type: number
+                    description: 'Status of the booking: 0 - pending, 1 - done'
+                    example: 1
+                  total_amount:
+                    type: number
+                    format: float
+                    description: Total amount paid for the booking
+                    example: 2022.5
+                  card_number:
+                    type: string
+                    description: Card number used for the booking payment
+                    example: "1234123412341234"
       responses:
-        200:
-          description: Tour booking successful
+        '200':
+          description: Tour booking(s) successful
           content:
             application/json:
               schema:
@@ -814,11 +841,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Tour booked successfully"
-        400:
-          description: Bad request, invalid input
-        401:
-          description: Unauthorized, invalid or missing token
+                    example: "Tours booked successfully"
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
 
   /manage-booking/booking-detail/{id}:
     get:
@@ -904,13 +932,62 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - userId
+                - tourId
+                - guideId
+                - numberVisitors
+                - cardNumber
+                - startTour
+                - status
+                - totalAmount
+                - startTime
+                - endTime
               properties:
-                date:
+                userId:
                   type: string
-                  example: "2024-12-15"
-                numberOfPeople:
+                  description: The ID of the user booking the tour
+                  example: "6740a702d0ee941c7dbd9efd"
+                tourId:
+                  type: string
+                  description: The ID of the tour being booked
+                  example: "67456d6efbae142dc21b4fc6"
+                guideId:
+                  type: string
+                  description: The ID of the tour guide assigned to the booking
+                  example: "6740a702d0ee941c7dbd9efd"
+                numberVisitors:
                   type: integer
-                  example: 3
+                  description: The number of visitors for the booking
+                  example: 1
+                cardNumber:
+                  type: string
+                  description: The credit or payment card number used for the booking
+                  example: "321321321"
+                startTour:
+                  type: string
+                  format: date
+                  description: The date when the tour starts
+                  example: "2024-12-06"
+                status:
+                  type: string
+                  description: The booking status (e.g., 0 - pending, 1 - confirmed)
+                  example: "1"
+                totalAmount:
+                  type: number
+                  description: The total amount to be paid for the tour
+                  example: 2022
+                startTime:
+                  type: string
+                  format: time
+                  description: The start time of the tour
+                  example: "08:00"
+                endTime:
+                  type: string
+                  format: time
+                  description: The end time of the tour
+                  example: "08:00"
+
       responses:
         200:
           description: Booking updated successfully.
@@ -1012,20 +1089,46 @@ paths:
         - in: header
           name: token
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - payments
               properties:
-                userId:
-                  type: integer
-                  example: 1
-                amount:
-                  type: number
-                  example: 500
-                status:
-                  type: string
-                  example: "Completed"
+                payments:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - booking_id
+                      - card_number
+                      - status
+                      - total_amount
+                      - user_id
+                    properties:
+                      booking_id:
+                        type: string
+                        description: The ID of the booking
+                        example: "6808ddbbbda666dfb85ed90b"
+                      user_id:
+                        type: string
+                        description: The ID of the user
+                        example: "67436184a82d3da93cf61f5d"
+                      status:
+                        type: number
+                        description: 'Status of the booking: 0 - pending, 1 - done'
+                        example: 1
+                      total_amount:
+                        type: number
+                        format: float
+                        description: Total amount paid for the booking
+                        example: 2022.5
+                      card_number:
+                        type: string
+                        description: Card number used for the payment
+                        example: "1234123412341234"
       responses:
         200:
           description: Payment created successfully.
@@ -1055,13 +1158,33 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - userId
+                - bookingId
+                - status
+                - totalAmount
+                - cardNumber
               properties:
-                amount:
-                  type: number
-                  example: 600
+                userId:
+                  type: string
+                  description: The ID of the user booking the tour
+                  example: "6740a702d0ee941c7dbd9efd"
+                bookingId:
+                  type: string
+                  description: The ID of the tour being booked
+                  example: "67456d6efbae142dc21b4fc6"
+                cardNumber:
+                  type: string
+                  description: The credit or payment card number used for the booking
+                  example: "321321321"
                 status:
                   type: string
-                  example: "Pending"
+                  description: The booking status (e.g., 0 - pending, 1 - confirmed)
+                  example: "1"
+                totalAmount:
+                  type: number
+                  description: The total amount to be paid for the tour
+                  example: 2022
       responses:
         200:
           description: Payment updated successfully.

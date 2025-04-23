@@ -33,7 +33,6 @@ module.exports = infoUser = async (req, res, next) => {
       "number.base": "Age must be a number",
       "number.min": "Age must be at least 10",
       "number.max": "Age must be less than 90",
-
     }),
     city: Joi.string().min(2).max(30).trim().strict().required().messages({
       "any.required": "City is required",
@@ -45,7 +44,9 @@ module.exports = infoUser = async (req, res, next) => {
       .email()
       .pattern(/^[\w.-]+@[a-zA-Z\d-]+\.(com|edu|net|org|gov)$/)
       .required()
-      .trim().strict()
+      .empty("")
+      .trim()
+      .strict()
       .messages({
         "any.required": "Email is required",
         "string.email": "Email must be a valid email address",
@@ -55,16 +56,22 @@ module.exports = infoUser = async (req, res, next) => {
     phone: Joi.string()
       .pattern(/^[0-9]{11,20}$/)
       .required()
-      .trim().strict()
+      .empty("")
+      .trim()
+      .strict()
       .messages({
         "any.required": "Phone number is required",
         "string.pattern.base":
           "Phone number must contain only digits and be 11-20 characters long",
       }),
-    role: Joi.string().valid("Traveler", "Guide").required().messages({
-      "any.required": "Role is required",
-      "any.only": "Role must be one of Traveler, Guide, or moderator",
-    }),
+    role: Joi.string()
+      .valid("Traveler", "Guide")
+      .required()
+      .empty("")
+      .messages({
+        "any.required": "Role is required",
+        "any.only": "Role must be one of Traveler, Guide, or moderator",
+      }),
   });
 
   try {
@@ -96,7 +103,7 @@ module.exports = inputBookTour = async (req, res, next) => {
       "number.min": "Number of visitors must be at least 1",
       "number.max": "Number of visitors cannot exceed 60",
     }),
-    startTour: Joi.string().required().messages({
+    startTour: Joi.date().required().messages({
       "any.required": "Start date is required",
       "date.base": "Start date must be a valid date",
     }),

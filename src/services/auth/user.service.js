@@ -11,6 +11,7 @@ const { nowDate } = require("../../utils/formatDate");
 const { generateToken } = require("../../utils/tokenGenerator");
 const { responseStatus } = require("../../globals/handler");
 const { decodeToken } = require("../../utils/decodeToken");
+const tourModel = require("../../models/tour.model");
 class UserService {
   async decodeByUsername(username, token, res) {
     let decoded = await decodeToken(token, _tokenSecret);
@@ -264,6 +265,17 @@ class UserService {
       : null;
   }
   async tourPayment(infoBook, tourId, userId, res) {
+    let checkTourId = await tourModel.findById(tourId);
+
+    if (!checkTourId) {
+      return responseStatus(res, 400, "failed", "This tour not exited");
+    }
+
+    let checkGuideId = await User.findById(infoBook.guideId);
+    if (!checkGuideId) {
+      return responseStatus(res, 400, "failed", "This guide not exited");
+    }
+
     let createBook = new Booking({
       tour_id: tourId,
       user_id: userId,
