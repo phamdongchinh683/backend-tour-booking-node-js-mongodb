@@ -28,10 +28,12 @@ module.exports = infoUser = async (req, res, next) => {
       "string.min": "Last name must be at least 2 characters long",
       "string.max": "Last name cannot exceed 60 characters",
     }),
-    age: Joi.number().min(10).required().messages({
+    age: Joi.number().min(10).max(90).required().messages({
       "any.required": "Age is required",
       "number.base": "Age must be a number",
       "number.min": "Age must be at least 10",
+      "number.max": "Age must be less than 90",
+
     }),
     city: Joi.string().min(2).max(30).trim().strict().required().messages({
       "any.required": "City is required",
@@ -43,6 +45,7 @@ module.exports = infoUser = async (req, res, next) => {
       .email()
       .pattern(/^[\w.-]+@[a-zA-Z\d-]+\.(com|edu|net|org|gov)$/)
       .required()
+      .trim().strict()
       .messages({
         "any.required": "Email is required",
         "string.email": "Email must be a valid email address",
@@ -52,6 +55,7 @@ module.exports = infoUser = async (req, res, next) => {
     phone: Joi.string()
       .pattern(/^[0-9]{11,20}$/)
       .required()
+      .trim().strict()
       .messages({
         "any.required": "Phone number is required",
         "string.pattern.base":

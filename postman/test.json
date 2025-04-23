@@ -4,7 +4,7 @@
 		"name": "backend-booking-tour",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "27382888",
-		"_collection_link": "https://dark-spaceship-566068.postman.co/workspace/Team-Workspace~c5cfe44e-abe1-44e5-8e5a-1006bb6f4ab3/collection/27382888-405cdb22-7675-49d3-8141-a225e5fa721f?action=share&source=collection_link&creator=27382888"
+		"_collection_link": "https://dark-spaceship-566068.postman.co/workspace/c5cfe44e-abe1-44e5-8e5a-1006bb6f4ab3/collection/27382888-405cdb22-7675-49d3-8141-a225e5fa721f?action=share&source=collection_link&creator=27382888"
 	},
 	"item": [
 		{
@@ -739,6 +739,36 @@
 								"admin",
 								"manage-booking-tour",
 								"delete-booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get bookings",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiQ2hpbmg2ODIzIiwiaWQiOiI2NzQ0OWEwMzNlNzM5MDYzMTFiNWY2YmQifSwiaWF0IjoxNzM0NDUwMjcxLCJleHAiOjE3MzQ1MzY2NzF9.l9BfPUSTjnRJyiACk5rifXbJhlBwFsFUd1dmxh7-FRU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/admin/manage-booking-tour/get-booking-tours",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"manage-booking-tour",
+								"get-booking-tours"
 							]
 						}
 					},
@@ -2000,21 +2030,181 @@
 				},
 				{
 					"name": "signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"if (jsonData.status === \"success\") {",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    pm.test(\"Success response contains JWT token\", function () {",
+									"        const token = jsonData.data;",
+									"        pm.expect(token).to.be.a(\"string\");",
+									"",
+									"        const parts = token.split(\".\");",
+									"        pm.expect(parts.length).to.eql(3);",
+									"",
+									"        const payload = JSON.parse(atob(parts[1]));",
+									"        console.log(\"✅ Decoded JWT Payload:\", payload);",
+									"",
+									"        pm.expect(payload.payload).to.have.property(\"username\");",
+									"        pm.expect(payload.payload).to.have.property(\"id\");",
+									"    });",
+									"",
+									"    pm.environment.set(\"jwt_token\", jsonData.data);",
+									"",
+									"} else if (jsonData.status === \"failed\") {",
+									"    pm.test(\"Status code is 422 for failed signup\", function () {",
+									"        pm.response.to.have.status(422);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    const errorMessages = jsonData.message.split(\",\").map(msg => msg.trim());",
+									"",
+									"    const knownMessages = [",
+									"        \"Username is required\",",
+									"        \"Username cannot be an empty field\",",
+									"        \"Username length must be at least 8 characters long\",",
+									"        \"The maximum length of a username is 30\",",
+									"        \"Username must not have leading or trailing whitespace\",",
+									"        \"\\\"phone\\\" is not allowed to be empty\",",
+									"        \"Password is required\",",
+									"        \"Password cannot be an empty field\",",
+									"        \"Password length must be at least 10 characters long\",",
+									"        \"The maximum length of a password is 60\",",
+									"",
+									"        \"First name is required\",",
+									"        \"First name cannot be an empty field\",",
+									"        \"First name must be at least 2 characters long\",",
+									"        \"First name cannot exceed 60 characters\",",
+									"        \"\\\"email\\\" is not allowed to be empty\",",
+									"        \"Last name is required\",",
+									"        \"Last name cannot be an empty field\",",
+									"        \"Last name must be at least 2 characters long\",",
+									"        \"Last name cannot exceed 60 characters\",",
+									"",
+									"        \"Age is required\",",
+									"        \"Age must be a number\",",
+									"        \"Age must be at least 10\",",
+									"",
+									"        \"City is required\",",
+									"        \"City cannot be an empty field\",",
+									"        \"City must be at least 2 characters long\",",
+									"        \"City cannot exceed 30 characters\",",
+									"        \"Age must be less than 90\",",
+									"        \"Email is required\",",
+									"        \"Email must be a valid email address\",",
+									"        \"Email must be a valid address ending in .com\"",
+									"        , \".edu\"",
+									"        , \".net\"",
+									"        , \".org\"",
+									"        , \"or .gov\",",
+									"",
+									"        \"Phone number is required\",",
+									"        \"Phone number must contain only digits and be 11-20 characters long\",",
+									"",
+									"        \"Role is required\",",
+									"        \"Role must be one of Traveler, Guide, or moderator\",",
+									"        \"username existed\",",
+									"        \"contact.phone existed\",",
+									"        \"contact.email existed\"",
+									"    ];",
+									"",
+									"    pm.test(\"All error messages are valid\", function () {",
+									"        errorMessages.forEach(msg => {",
+									"            pm.expect(msg, `Unexpected error: ${msg}`).to.be.oneOf(knownMessages);",
+									"        });",
+									"    });",
+									"",
+									"    console.log(\"❌ Signup failed with messages:\", errorMessages);",
+									"",
+									"} else {",
+									"    console.warn(\"⚠️ Unknown response status:\", jsonData.status);",
+									"",
+									"    pm.test(\"Unknown status\", function () {",
+									"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"johndoe123\",\n  \"password\": \"strongpassword123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"age\": 25,\n  \"city\": \"New York\",\n  \"email\": \"johndoe@example.com\",\n  \"phone\": \"1234567890\",\n  \"role\": \"Traveler\"\n}\n"
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "chinhchinh1234567",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "chinhchinh123456",
+									"type": "text"
+								},
+								{
+									"key": "age",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Da nang",
+									"type": "text"
+								},
+								{
+									"key": "firstName",
+									"value": "Chinh",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Chinh",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "phamdongchinh7892@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "012345678912344",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "Traveler",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/auth/sign-up",
+							"raw": "{{NodeJS-TS}}/auth/sign-up",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"auth",
 								"sign-up"
 							]
@@ -2024,6 +2214,86 @@
 				},
 				{
 					"name": "login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"if (jsonData.status === \"success\") {",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    pm.test(\"Success response contains JWT token\", function () {",
+									"        const token = jsonData.data;",
+									"        pm.expect(token).to.be.a(\"string\");",
+									"",
+									"        const parts = token.split(\".\");",
+									"        pm.expect(parts.length).to.eql(3);",
+									"",
+									"        const payload = JSON.parse(atob(parts[1]));",
+									"        console.log(\"Decoded payload:\", payload);",
+									"",
+									"        pm.expect(payload.payload).to.have.property(\"username\");",
+									"        pm.expect(payload.payload).to.have.property(\"id\");",
+									"    });",
+									"",
+									"    pm.environment.set(\"jwt_token\", jsonData.data);",
+									"",
+									"} else if (jsonData.status === \"failed\") {",
+									"    pm.test(\"Status code is 400 for failed login\", function () {",
+									"        pm.response.to.have.status(400);",
+									"    });",
+									"",
+									"    pm.test(\"Response is JSON\", function () {",
+									"        pm.response.to.be.withBody;",
+									"        pm.response.to.be.json;",
+									"    });",
+									"",
+									"    console.log(\"❌ Login failed:\", jsonData.message);",
+									"",
+									"    pm.test(\"Login failed with appropriate message\", function () {",
+									"        pm.expect(jsonData.message).to.be.a(\"string\");",
+									"",
+									"        // Check for known error messages",
+									"        pm.expect(jsonData.message).to.be.oneOf([",
+									"            \"This account does not exist\",",
+									"            \"The password that you've entered is incorrect.\",",
+									"            \"Only Traveler or Guide can log in!\",",
+									"            \"Only administrators can log in!\"",
+									"        ]);",
+									"    });",
+									"} else {",
+									"    // Handle unexpected response",
+									"    console.warn(\"⚠️ Unknown response status:\", jsonData.status);",
+									"    pm.test(\"Unknown status\", function () {",
+									"        pm.expect(jsonData.status).to.be.oneOf([\"success\", \"failed\"]);",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -2032,24 +2302,22 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "chinh6823",
+									"value": "chinhchinh123",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "Chinh.789123",
+									"value": "chinhchinh123",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/auth/login",
+							"raw": "{{NodeJS-TS}}/auth/login",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"auth",
 								"login"
 							]
@@ -2061,15 +2329,19 @@
 					"name": "profile",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiY2hpbmhjaGluaDEyMyIsImlkIjoiNjgwNzQwNWY3ZDcyY2EzMTU4NjMxMzM4In0sImlhdCI6MTc0NTMwNTcwOSwiZXhwIjoxNzQ1MzkyMTA5fQ.90K0WEpgIyw-V3IBVb__wFZa_UAulFTdIr9Ms1DMJXg",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/auth/profile",
+							"raw": "{{NodeJS-TS}}/auth/profile",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"auth",
 								"profile"
 							]
@@ -2079,6 +2351,36 @@
 				},
 				{
 					"name": "send otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "312321",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{NodeJS-TS}}/api/v1/auth/send-otp",
+							"host": [
+								"{{NodeJS-TS}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"send-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get guideList",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -2174,26 +2476,36 @@
 					"response": []
 				},
 				{
-					"name": "{{NodeJS-TS}}/api/v1/admin/notes",
+					"name": "get tour",
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiQ2hpbmg2ODIzIiwiaWQiOiI2NzQ0OWEwMzNlNzM5MDYzMTFiNWY2YmQifSwiaWF0IjoxNzM0MTAzMzYxLCJleHAiOjE3MzQxODk3NjF9.iTNY-h4RC7SFEauim8tVGFi4GYI-im55WSiQdFYBFLg",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiY2hpbmhjaGluaDEyMyIsImlkIjoiNjc0NGFjY2U3ZmQ2OWNkMTg4MzBkNWZlIn0sImlhdCI6MTczNDEwODU1MSwiZXhwIjoxNzM0MTk0OTUxfQ.5wW-kdhjzyF3WQ-8VEj4kokGAO3cIxKFTMXTASUUppA",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{NodeJS-TS}}/api/v1/admin/notes",
+							"raw": "{{NodeJS-TS}}/api/v1/auth/tour-list?cursor=&direction=next",
 							"host": [
 								"{{NodeJS-TS}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"admin",
-								"notes"
+								"auth",
+								"tour-list"
+							],
+							"query": [
+								{
+									"key": "cursor",
+									"value": ""
+								},
+								{
+									"key": "direction",
+									"value": "next"
+								}
 							]
 						}
 					},
@@ -2253,6 +2565,13 @@
 				}
 			],
 			"description": "user can do"
+		}
+	],
+	"variable": [
+		{
+			"key": "adminToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJuYW1lIjoiQ2hpbmg2ODIzIiwiaWQiOiI2NzQ0OWEwMzNlNzM5MDYzMTFiNWY2YmQifSwiaWF0IjoxNzQ1MzA2NDA1LCJleHAiOjE3NDUzOTI4MDV9.iagDjBaqt9Mm48RpYVHW_DVgzOKB2r2WKFWWWW5-vzQ",
+			"type": "default"
 		}
 	]
 }

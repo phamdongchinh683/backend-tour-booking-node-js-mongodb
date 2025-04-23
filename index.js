@@ -23,7 +23,7 @@ const START_SERVER = () => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(morgan("combined"));
   router(app);
-
+  
   if (process.env.BUILD_MODE === "production") {
     app.listen(PORT, () => {
       console.log(

@@ -102,7 +102,7 @@ class UserService {
     if (!passwordMatch) {
       return responseStatus(
         res,
-        404,
+        400,
         "failed",
         "The password that you've entered is incorrect."
       );
